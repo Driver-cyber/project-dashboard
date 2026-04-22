@@ -12,6 +12,28 @@ Get the dashboard live on Cloudflare Pages, reading real tracker data from GitHu
 
 ## 📝 Decision Log
 
+### [2026-04-22] — GitHub API fetch integration shipped
+
+**Context:** Phase 1 core feature. Replaced the localStorage/drag-drop model with live fetches from GitHub.
+
+**Decisions:**
+
+**projects.json as project registry**
+- Rationale: Keeps the HTML focused on rendering. Adding a new project = one JSON line, no HTML edit. Simpler than auto-discovery, more maintainable than hardcoding in the script.
+- Fetched as a relative URL (`./projects.json`) from Cloudflare Pages — no extra GitHub API call needed.
+
+**Promise.allSettled for parallel fetches**
+- All tracker fetches fire simultaneously. Page shows pulsing skeleton cards while loading, then replaces them all at once.
+- Failed fetches show an error card with the repo name and status code visible — makes misconfigured entries easy to diagnose.
+
+**Removed: localStorage, drag-drop, + Add Tracker button**
+- Rationale: Those were scaffolding for a manual workflow. The GitHub fetch model supersedes them entirely. Less code, cleaner UI.
+
+**Initial projects.json** — five repos registered at launch:
+`project-dashboard`, `kasette`, `tiny-path`, `cadence`, `ordobook`
+
+---
+
 ### [2026-04-22] — Project initialized
 
 **Context:** Chad has tried project organization systems before. The two failure modes: (1) hard to access — not bookmarkable, lives on one machine; (2) manual to update — drag-and-drop gets skipped, system falls out of date and becomes useless.

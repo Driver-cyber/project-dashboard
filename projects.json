@@ -1,0 +1,7 @@
+[
+  { "repo": "project-dashboard", "tracker": "project-dashboard-tracker" },
+  { "repo": "kasette",           "tracker": "kasette-tracker"           },
+  { "repo": "tiny-path",         "tracker": "tiny-path-tracker"         },
+  { "repo": "cadence",           "tracker": "cadence-tracker"           },
+  { "repo": "ordobook",          "tracker": "ordobook-tracker"          }
+]
