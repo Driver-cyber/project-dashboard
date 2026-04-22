@@ -48,23 +48,25 @@
       color: var(--rust);
       margin-top: 2px;
     }
-    .add-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .refresh-btn {
       background: var(--walnut-mid);
       border: 1px solid var(--walnut-light);
       color: var(--wheat);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 8px 16px;
+      font-size: 18px;
+      width: 36px;
+      height: 36px;
       border-radius: 8px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: border-color 0.15s, color 0.15s;
-      user-select: none;
+      flex-shrink: 0;
     }
-    .add-btn:hover { border-color: var(--amber); color: var(--amber); }
+    .refresh-btn:hover:not(:disabled) { border-color: var(--amber); color: var(--amber); }
+    .refresh-btn:disabled { opacity: 0.4; cursor: default; }
+    .refresh-btn.spinning { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Grid */
     #grid {
@@ -117,18 +119,6 @@
       font-weight: 600;
       white-space: nowrap;
     }
-    .remove-btn {
-      background: none;
-      border: none;
-      color: var(--rust);
-      cursor: pointer;
-      font-size: 18px;
-      line-height: 1;
-      padding: 0 2px;
-      border-radius: 4px;
-      transition: color 0.1s;
-    }
-    .remove-btn:hover { color: var(--sienna); }
 
     /* Columns inside card */
     .cols {
@@ -184,6 +174,24 @@
       font-style: italic;
     }
 
+    /* Skeleton loading */
+    @keyframes pulse {
+      0%, 100% { opacity: 0.45; }
+      50%       { opacity: 0.85; }
+    }
+    .skeleton { animation: pulse 1.8s ease-in-out infinite; }
+    .skeleton-top  { height: 60px;  border-bottom: 1px solid var(--walnut-light); }
+    .skeleton-body { height: 112px; }
+
+    /* Error card */
+    .error-card .card-name { color: var(--sienna); }
+    .error-body {
+      padding: 14px;
+      font-size: 11px;
+      color: var(--rust);
+      font-style: italic;
+    }
+
     /* Empty state */
     #empty {
       display: none;
@@ -216,34 +224,6 @@
       font-size: 12px;
       color: var(--wheat);
     }
-
-    /* Drop overlay */
-    #drop-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(44,26,14,0.92);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-    }
-    .drop-box {
-      border: 2px dashed var(--amber);
-      border-radius: 16px;
-      padding: 52px 72px;
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-size: 22px;
-      color: var(--amber);
-      text-align: center;
-    }
-    .drop-box p {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-style: normal;
-      font-size: 12px;
-      color: var(--rust);
-      margin-top: 8px;
-    }
   </style>
 </head>
 <body>
@@ -253,45 +233,18 @@
     <h1>Projects</h1>
     <p id="subtitle">Loading…</p>
   </div>
-  <label class="add-btn">
-    + Add Tracker
-    <input id="file-input" type="file" accept=".html" multiple hidden />
-  </label>
+  <button class="refresh-btn" id="refresh-btn" title="Refresh all trackers">↻</button>
 </header>
 
 <div id="empty">
-  <h2>No projects yet</h2>
-  <p>Drop a <code>*-tracker.html</code> file here, or click <strong>+ Add Tracker</strong> to get started.</p>
-  <p>Each project's tracker file includes a machine-readable data block that populates this dashboard automatically.</p>
+  <h2>No projects configured</h2>
+  <p>Add entries to <code>projects.json</code> in this repo to populate the dashboard.</p>
 </div>
 
 <div id="grid"></div>
 
-<div id="drop-overlay">
-  <div class="drop-box">
-    Drop tracker files here
-    <p>*.html files with tracker-data blocks</p>
-  </div>
-</div>
-
 <script>
-  const STORE_KEY = 'ptrackers_v1'
-
-  function load() {
-    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || [] }
-    catch { return [] }
-  }
-
-  function save(data) {
-    localStorage.setItem(STORE_KEY, JSON.stringify(data))
-  }
-
-  function parseTrackerHTML(html) {
-    const doc = new DOMParser().parseFromString(html, 'text/html')
-    const el = doc.querySelector('#tracker-data')
-    if (!el) throw new Error('No #tracker-data block found. Is this a tracker file?')
-    return JSON.parse(el.textContent)
-  }
+  const ORG = 'Driver-cyber'
 
   function staleInfo(dateStr) {
     if (!dateStr) return { label: 'No date', color: 'var(--rust)' }
@@ -312,7 +265,7 @@
 
   function cardHTML(p) {
     const { label, color } = staleInfo(p.updated)
-    const cols = (p.columns || [])
+    const cols = p.columns || []
     const colsHTML = cols.map(col => {
       const items = (col.priorities || []).slice(0, 3)
       const list = items.length
@@ -334,88 +287,96 @@
         </div>
         <div class="card-meta">
           <span class="stale-badge" style="color:${color}">${esc(label)}</span>
-          <button class="remove-btn" data-id="${esc(p.project)}" title="Remove project">×</button>
         </div>
       </div>
       <div class="cols${cols.length === 1 ? ' single' : ''}">${colsHTML}</div>
     </div>`
   }
 
-  function render() {
-    const projects = load()
-    const grid = document.getElementById('grid')
-    const empty = document.getElementById('empty')
+  function skeletonHTML() {
+    return `<div class="card skeleton">
+      <div class="skeleton-top"></div>
+      <div class="skeleton-body"></div>
+    </div>`
+  }
+
+  function errorCardHTML(repo, msg) {
+    return `<div class="card error-card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">${esc(repo)}</div>
+          <div class="card-desc">${esc(msg)}</div>
+        </div>
+      </div>
+      <div class="error-body">Could not fetch tracker — check repo name and tracker filename in projects.json</div>
+    </div>`
+  }
+
+  async function fetchTracker({ repo, tracker }) {
+    const url = `https://api.github.com/repos/${ORG}/${repo}/contents/${tracker}.html`
+    const r = await fetch(url, { headers: { Accept: 'application/vnd.github.v3+json' } })
+    if (!r.ok) throw new Error(`GitHub ${r.status}`)
+    const { content } = await r.json()
+    const html = atob(content.replace(/\n/g, ''))
+    const doc = new DOMParser().parseFromString(html, 'text/html')
+    const el = doc.querySelector('#tracker-data')
+    if (!el) throw new Error('No #tracker-data block')
+    return JSON.parse(el.textContent)
+  }
+
+  async function init() {
+    const grid     = document.getElementById('grid')
+    const empty    = document.getElementById('empty')
     const subtitle = document.getElementById('subtitle')
+    const btn      = document.getElementById('refresh-btn')
 
-    subtitle.textContent = projects.length === 0
-      ? 'No projects'
-      : `${projects.length} project${projects.length > 1 ? 's' : ''}`
+    subtitle.textContent = 'Loading…'
+    btn.disabled = true
+    btn.classList.add('spinning')
 
-    if (projects.length === 0) {
-      grid.innerHTML = ''
+    let projects
+    try {
+      const r = await fetch('./projects.json')
+      if (!r.ok) throw new Error()
+      projects = await r.json()
+    } catch {
+      subtitle.textContent = 'Error: could not load projects.json'
+      btn.disabled = false
+      btn.classList.remove('spinning')
+      return
+    }
+
+    if (!projects.length) {
       empty.style.display = 'flex'
+      grid.innerHTML = ''
+      subtitle.textContent = 'No projects configured'
+      btn.disabled = false
+      btn.classList.remove('spinning')
       return
     }
 
     empty.style.display = 'none'
-    grid.innerHTML = projects.map(cardHTML).join('')
+    grid.innerHTML = projects.map(skeletonHTML).join('')
 
-    grid.querySelectorAll('.remove-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.id
-        if (!confirm(`Remove "${id}" from the dashboard?\n\nThis only removes it from the view — the tracker file is unchanged.`)) return
-        save(load().filter(p => p.project !== id))
-        render()
-      })
-    })
+    const results = await Promise.allSettled(projects.map(fetchTracker))
+
+    let ok = 0
+    grid.innerHTML = results.map((r, i) => {
+      if (r.status === 'fulfilled') { ok++; return cardHTML(r.value) }
+      return errorCardHTML(projects[i].repo, r.reason.message)
+    }).join('')
+
+    const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    subtitle.textContent = ok === projects.length
+      ? `${ok} project${ok !== 1 ? 's' : ''} · fetched ${t}`
+      : `${ok} of ${projects.length} fetched · ${t}`
+
+    btn.disabled = false
+    btn.classList.remove('spinning')
   }
 
-  async function handleFiles(files) {
-    const projects = load()
-    let added = 0
-    for (const file of [...files]) {
-      if (!file.name.endsWith('.html')) continue
-      try {
-        const data = parseTrackerHTML(await file.text())
-        if (!data.project) throw new Error('Missing "project" field in tracker data')
-        const idx = projects.findIndex(p => p.project === data.project)
-        if (idx >= 0) projects[idx] = data
-        else projects.push(data)
-        added++
-      } catch(e) {
-        alert(`Could not read ${file.name}:\n${e.message}`)
-      }
-    }
-    if (added > 0) { save(projects); render() }
-  }
-
-  // File input
-  document.getElementById('file-input').addEventListener('change', e => {
-    handleFiles(e.target.files)
-    e.target.value = ''
-  })
-
-  // Drag and drop
-  const overlay = document.getElementById('drop-overlay')
-  let dragDepth = 0
-  document.addEventListener('dragenter', e => {
-    if ([...( e.dataTransfer?.items || [])].some(i => i.kind === 'file')) {
-      dragDepth++
-      overlay.style.display = 'flex'
-    }
-  })
-  document.addEventListener('dragleave', () => {
-    if (--dragDepth <= 0) { dragDepth = 0; overlay.style.display = 'none' }
-  })
-  document.addEventListener('dragover', e => e.preventDefault())
-  document.addEventListener('drop', e => {
-    e.preventDefault()
-    dragDepth = 0
-    overlay.style.display = 'none'
-    handleFiles(e.dataTransfer.files)
-  })
-
-  render()
+  document.getElementById('refresh-btn').addEventListener('click', init)
+  init()
 </script>
 </body>
 </html>
