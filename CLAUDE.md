@@ -18,7 +18,7 @@ This repo is Chad's personal command center — a live, bookmarkable dashboard t
 
 | File / Folder | Purpose |
 |---|---|
-| `project-dashboard.html` | The dashboard UI — deployed via Cloudflare Pages |
+| `index.html` | The dashboard UI — deployed via Cloudflare Pages (served at site root) |
 | `learned-log.json` | Append-only record of completed priorities and learning milestones |
 | `workflow/` | Prompt templates for other projects: tracker setup, retrofit, etc. |
 | `CLAUDE.md` | This file — the project constitution |

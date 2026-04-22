@@ -61,7 +61,7 @@ Get the dashboard live on Cloudflare Pages, reading real tracker data from GitHu
 - Explicitly not a product. No auth, no multi-user, no CI automation beyond what Claude Code already does.
 
 **Existing files preserved:**
-- `project-dashboard.html` — kept as the base dashboard UI, will be evolved to fetch from GitHub API instead of localStorage
+- `index.html` — the dashboard UI (renamed from `project-dashboard.html` so Cloudflare Pages serves it at the site root)
 - `workflow/` — kept as-is, contains the prompt templates for other projects
 
 ---
@@ -79,7 +79,7 @@ Get the dashboard live on Cloudflare Pages, reading real tracker data from GitHu
 
 | File | Location | Notes |
 |---|---|---|
-| Dashboard UI | `project-dashboard.html` (root) | Cloudflare Pages serves this as the site root |
+| Dashboard UI | `index.html` (root) | Cloudflare Pages serves this as the site root |
 | Learning log | `learned-log.json` (root) | Append-only, Claude Code writes at session end |
 | Workflow templates | `workflow/` | For use in other project repos |
 | Build tracker | `project-dashboard-tracker.html` (root) | Tracks this repo's own priorities |
