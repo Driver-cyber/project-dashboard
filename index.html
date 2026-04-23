@@ -944,7 +944,7 @@
     <p class="np-sub">Capture ideas, bugs, and prompts per project. Export them to paste into Claude Code.</p>
     <div class="np-compose">
       <div class="np-row">
-        <select class="np-select" id="np-project"><option value="">Select project…</option></select>
+        <select class="np-select" id="np-project"><option value="">Select project…</option><option value="__tbd__">— Ideas / TBD —</option></select>
         <span class="np-hint">Cmd/Ctrl + Enter to add</span>
       </div>
       <textarea class="np-textarea" id="np-text" placeholder="Jot an idea, bug, or prompt…"></textarea>
@@ -1285,7 +1285,7 @@
     const ago = Math.floor((now - d) / 86400000);
     return ago < 7 ? `${ago}d ago` : d.toLocaleDateString([], {month:'short',day:'numeric'});
   }
-  function projName(repo) { return (loadedProjects.find(p => p.repo === repo) || {}).displayName || repo; }
+  function projName(repo) { if (repo === '__tbd__') return 'Ideas / TBD'; return (loadedProjects.find(p => p.repo === repo) || {}).displayName || repo; }
 
   function populateProjectSelects() {
     ['np-project','np-export-project'].forEach(id => {
@@ -1293,7 +1293,8 @@
       if (!sel) return;
       const prev = sel.value;
       const opts = loadedProjects.map(p => `<option value="${esc(p.repo)}">${esc(p.displayName)}</option>`).join('');
-      sel.innerHTML = id === 'np-project' ? `<option value="">Select project…</option>${opts}` : (opts || '<option value="">No projects</option>');
+      const tbd = `<option value="__tbd__">— Ideas / TBD —</option>`;
+      sel.innerHTML = id === 'np-project' ? `<option value="">Select project…</option>${tbd}${opts}` : `${tbd}${opts || ''}`;
       if (prev && [...sel.options].some(o => o.value === prev)) sel.value = prev;
     });
     updateAddBtn();
