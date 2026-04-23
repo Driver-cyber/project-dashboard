@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1" />
   <meta name="theme-color" content="#F6F2E8" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0F1511" media="(prefers-color-scheme: dark)" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -181,7 +181,7 @@
     .mode-toggle button {
       background: none;
       border: none;
-      width: 28px; height: 26px;
+      width: 36px; height: 34px;
       border-radius: 999px;
       display: flex;
       align-items: center;
@@ -238,10 +238,13 @@
       border: 1px solid var(--line);
       color: var(--ink);
       font-family: inherit;
-      font-size: 13px;
+      font-size: 16px;
       border-radius: 8px;
       padding: 8px 10px;
       transition: border-color 0.15s;
+    }
+    @media (min-width: 720px) {
+      .np-select, .np-textarea { font-size: 13px; }
     }
     .np-select { min-width: 180px; }
     .np-select:focus, .np-textarea:focus { outline: none; border-color: var(--sage-deep); }
@@ -790,7 +793,7 @@
       background: var(--paper);
       border: 1px solid var(--line);
       border-radius: 24px;
-      padding: 44px 52px;
+      padding: 28px 52px 44px;
       text-align: center;
       max-width: 340px;
       box-shadow: var(--shadow);
