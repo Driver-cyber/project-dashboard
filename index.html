@@ -248,7 +248,7 @@
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .card:hover {
+    .card:not([data-expanded="true"]):hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow);
       border-color: var(--sage-soft);
@@ -367,6 +367,76 @@
       font-style: italic;
       padding: 4px 0;
     }
+
+    /* EXPAND */
+    .card[data-expandable="true"] { cursor: pointer; }
+
+    .card-expand {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.32s ease;
+    }
+    .card[data-expanded="true"] .card-expand { grid-template-rows: 1fr; }
+    .card-expand-inner { overflow: hidden; }
+
+    .expand-body {
+      border-top: 1px solid var(--line);
+      margin-top: 14px;
+      padding-top: 14px;
+    }
+    .expand-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .backlog-label {
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      color: var(--sage-deep);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 9px;
+    }
+    ul.backlog-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    ul.backlog-list li {
+      font-size: 12.5px;
+      color: var(--ink-2);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.4;
+    }
+    ul.backlog-list li::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 8px;
+      width: 6px; height: 1px;
+      background: var(--sage);
+    }
+    .backlog-empty {
+      font-size: 12px;
+      color: var(--ink-3);
+      font-style: italic;
+    }
+    .card-footer {
+      display: flex;
+      justify-content: center;
+      padding-top: 10px;
+    }
+    .expand-chevron {
+      color: var(--ink-3);
+      transition: transform 0.32s ease, color 0.2s;
+    }
+    .card[data-expanded="true"] .expand-chevron {
+      transform: rotate(180deg);
+      color: var(--sage-deep);
+    }
+    .card[data-expandable="true"]:hover .expand-chevron { color: var(--sage-deep); }
 
     /* SKELETON */
     @keyframes pulse {
@@ -559,6 +629,7 @@
     const info = staleInfo(p.updated);
     const cols = p.columns || [];
     const twoCol = cols.length > 1;
+
     const colsHTML = cols.map(col => {
       const items = (col.priorities || []).slice(0, 3);
       const list = items.length
@@ -572,7 +643,43 @@
       </div>`;
     }).join('');
 
-    return `<article class="card" data-tier="${info.tier}">
+    const hasBacklog = cols.some(col => (col.backlog || []).length > 0);
+
+    const backlogContent = twoCol
+      ? `<div class="expand-cols">${cols.map(col => {
+          const items = col.backlog || [];
+          return `<div>
+            <div class="backlog-label">${esc(col.name || '')}</div>
+            ${items.length
+              ? `<ul class="backlog-list">${items.map(item => `<li>${esc(item)}</li>`).join('')}</ul>`
+              : `<p class="backlog-empty">Nothing queued</p>`}
+          </div>`;
+        }).join('')}</div>`
+      : (() => {
+          const items = cols[0]?.backlog || [];
+          return `<div class="backlog-label">Backlog</div>`
+            + (items.length
+              ? `<ul class="backlog-list">${items.map(item => `<li>${esc(item)}</li>`).join('')}</ul>`
+              : `<p class="backlog-empty">Nothing queued</p>`);
+        })();
+
+    const expandHTML = hasBacklog ? `
+      <div class="card-expand">
+        <div class="card-expand-inner">
+          <div class="expand-body">${backlogContent}</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <svg class="expand-chevron" width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true">
+          <path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>` : '';
+
+    const expandAttrs = hasBacklog
+      ? ' data-expandable="true" data-expanded="false" tabindex="0" aria-expanded="false"'
+      : '';
+
+    return `<article class="card" data-tier="${info.tier}"${expandAttrs}>
       ${leafHTML()}
       <div class="card-top">
         <div class="card-title-wrap">
@@ -582,6 +689,7 @@
         <span class="badge" data-tier="${info.tier}">${esc(info.label)}</span>
       </div>
       <div class="cols${twoCol ? ' two-col' : ''}">${colsHTML}</div>
+      ${expandHTML}
     </article>`;
   }
 
@@ -635,6 +743,21 @@
     return true;
   }
 
+  function toggleCard(card) {
+    const expanded = card.getAttribute('data-expanded') === 'true';
+    card.setAttribute('data-expanded', String(!expanded));
+    card.setAttribute('aria-expanded', String(!expanded));
+  }
+
+  function attachExpandListeners() {
+    document.querySelectorAll('.card[data-expandable="true"]').forEach(card => {
+      card.addEventListener('click', () => toggleCard(card));
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCard(card); }
+      });
+    });
+  }
+
   function render() {
     const grid = document.getElementById('grid');
     const visible = loadedResults.filter(r => {
@@ -652,6 +775,7 @@
     grid.innerHTML = visible.map(r =>
       r.status === 'fulfilled' ? cardHTML(r.value) : errorCardHTML(r.cfg.repo, r.reason.message)
     ).join('');
+    attachExpandListeners();
   }
 
   function updateCounts() {
