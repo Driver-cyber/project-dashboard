@@ -1416,8 +1416,9 @@
     currentExport = { repo, md, notes };
     hint.textContent = count ? `${count} note${count!==1?'s':''}` : 'No active notes';
     if (!count) { body.innerHTML = '<p class="np-empty">No active notes for this project.</p>'; return; }
-    body.innerHTML = `<div class="np-export"><pre>${esc(md)}</pre><div class="np-export-actions"><button class="np-btn" id="np-copy">Copy to clipboard</button><button class="np-btn ghost" id="np-download">Download .md</button></div><p class="np-hint" id="np-copy-status" style="margin-top:10px;"></p></div>`;
+    body.innerHTML = `<div class="np-export"><pre>${esc(md)}</pre><div class="np-export-actions"><button class="np-btn" id="np-copy">Copy markdown</button><button class="np-btn" id="np-copy-prompt">Copy as prompt</button><button class="np-btn ghost" id="np-download">Download .md</button></div><p class="np-hint" id="np-copy-status" style="margin-top:10px;"></p></div>`;
     document.getElementById('np-copy').addEventListener('click', doCopy);
+    document.getElementById('np-copy-prompt').addEventListener('click', doCopyPrompt);
     document.getElementById('np-download').addEventListener('click', doDownload);
   }
 
@@ -1426,6 +1427,19 @@
     try {
       await navigator.clipboard.writeText(currentExport.md);
       status.textContent = '✓ Copied'; status.style.color = 'var(--sage-deep)';
+    } catch {
+      status.textContent = 'Copy failed — select text above and copy manually'; status.style.color = 'var(--blush-deep)';
+    }
+    setTimeout(showArchivePicker, 600);
+  }
+
+  async function doCopyPrompt() {
+    const status = document.getElementById('np-copy-status');
+    const name = projName(currentExport.repo);
+    const prompt = `Here are my notes for ${name}. Please implement these:\n\n${currentExport.md}`;
+    try {
+      await navigator.clipboard.writeText(prompt);
+      status.textContent = '✓ Copied as prompt'; status.style.color = 'var(--sage-deep)';
     } catch {
       status.textContent = 'Copy failed — select text above and copy manually'; status.style.color = 'var(--blush-deep)';
     }
