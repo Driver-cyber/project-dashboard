@@ -1,0 +1,149 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2869
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # Handoff \'97 Garden Party Restyle\
+*Date: 2026-04-22 \'b7 Session summary for memory + Claude Code*\
+\
+---\
+\
+## What changed and why\
+\
+The `walnut/amber/wheat` palette was retired. It was hard on the eyes for daily use, especially on iPhone (60% of Chad's usage). Replaced with **"Garden Party"** \'97 a nature-inspired, editorial, pastel-friendly system with full light/dark support.\
+\
+The design was chosen from a 4-direction exploration (Sage Garden, Stone & Moss, Meadow, Conservatory) plus 2 remixes (Sage Meadow, Garden Party). Garden Party won \'97 it pairs Meadow's playful rounded cards and dot-filter chips with Sage Garden's Instrument Serif typography and a botanical leaf watermark on each card.\
+\
+---\
+\
+## Files modified\
+\
+| File | Change |\
+|---|---|\
+| `index.html` | Full restyle. Live GitHub fetch logic unchanged. Added light/dark toggle + filter chips (All / Fresh / Needs update) with counts, both persisted to localStorage. PWA meta tags + safe-area padding added. |\
+| `project-dashboard-tracker.html` | Restyled to match. `#tracker-data` JSON block preserved (dashboard still parses it). |\
+| `workflow/new-project-snippet.md` | Style spec replaced with Garden Party tokens. |\
+| `workflow/tracker-onboarding-prompt.md` | Style spec replaced with Garden Party tokens. |\
+| `workflow/tracker-retrofit-prompt.md` | Style spec replaced with Garden Party tokens. |\
+\
+Nothing else was touched. `projects.json`, `CLAUDE.md`, `DECISIONS.md`, `learned-log.json` are unchanged.\
+\
+---\
+\
+## Garden Party design system (source of truth)\
+\
+### Light mode tokens\
+```\
+--bg:        #F6F2E8    /* warm paper */\
+--bg-2:      #EFEADA\
+--paper:     #FDFAF2    /* card background */\
+--ink:       #1E2A20\
+--ink-2:     #4A5448\
+--ink-3:     #7E887C    /* muted */\
+--line:      #D9D2BF\
+--line-2:    #C6BEA6\
+--sage:      #6E8B6A\
+--sage-deep: #35523A    /* primary accent */\
+--sage-soft: #B4C9B0\
+--sage-tint: rgba(110,139,106,0.14)\
+\
+/* Secondary pastels \'97 used sparingly for badges only */\
+--sky-tint:    #DBE5EC   --sky-deep:    #3A5468\
+--lilac-tint:  #E7DCE7   --lilac-deep:  #4F3A65\
+--blush-tint:  #EBD2CF   --blush-deep:  #6E3A36\
+--butter-tint: #E2E8D0   --butter-deep: #5B6B2E\
+```\
+\
+### Dark mode tokens (activated by `[data-theme="dark"]` on `<html>`)\
+```\
+--bg:        #0F1511    /* deep forest night \'97 NOT brown */\
+--bg-2:      #151D17\
+--paper:     #18211B\
+--ink:       #E8EEE2\
+--ink-2:     #B4BEB0\
+--ink-3:     #7C867A\
+--line:      #25302A\
+--sage:      #8CAF87\
+--sage-deep: #B4D3AE    /* lifted for contrast on dark bg */\
+--sage-soft: #4D6B4F\
+```\
+\
+### Typography\
+- **Instrument Serif** \'97 headers, wordmarks, card project titles, priority strong text\
+- **Geist** \'97 all UI / body text\
+- **Geist Mono** \'97 numbered-priority badges, section labels, counts, tag-like meta\
+\
+All three are Google Fonts. Single import line:\
+```html\
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />\
+```\
+\
+### Signature elements\
+- **Wordmark pattern**: serif name with italic period in sage-deep, e.g. `Garden<em>.</em>` or `Project Name<em>.</em>`\
+- **Card numbered badges**: 20px circle, `--sage-tint` bg, `--sage-deep` mono numeral\
+- **Backlog lines**: dash prefix (hairline `::before` in sage), not bullets\
+- **Leaf watermark**: 96px botanical SVG, absolute-positioned bottom-right of cards, `opacity: 0.14` (light) / `0.18` (dark), fades up to `0.24` on hover. Template in `index.html` under `<template id="leaf-template">`.\
+- **Badges (staleness)**: pastel-tinted pills, `::before` dot in `currentColor`. Tiers: `fresh` (sage) / `recent` (butter) / `due` (lilac) / `stale` (blush).\
+- **Chips (filters)**: rounded pill, inactive = paper bg + line border, active = `--sage-deep` bg + paper text. Monospace count badge inline.\
+- **Mode toggle**: pill with sun + moon icons, active one = `--ink` bg + `--bg` fg.\
+- **Card radius**: 16\'9620px. **Grid gap**: 14px mobile, 18px desktop.\
+\
+### Persistence keys (localStorage)\
+- `gp.theme` \'97 `"light"` | `"dark"` (falls back to system preference on first visit)\
+- `gp.filter` \'97 `"all"` | `"fresh"` | `"stale"`\
+\
+---\
+\
+## Dashboard behaviors (index.html)\
+\
+- **Fetch**: `Promise.allSettled` over `projects.json`. Pulsing skeleton cards during load.\
+- **Staleness tiers** (driven by `updated` date in each tracker's `#tracker-data`):\
+  - `fresh` \'97 `<7 days`\
+  - `recent` \'97 `7\'9613 days` (update due)\
+  - `due` \'97 `14\'9627 days`\
+  - `stale` \'97 `28+ days`\
+- **Filter chips**: `fresh` filter shows `<7 days`, `stale` filter shows `14+ days`. Counts update after fetch.\
+- **Refresh button**: re-runs `init()` (spin animation while pending).\
+- **Errors**: per-project error card with blush-tinted mono error body, no global failure.\
+- **Theme**: first visit respects `prefers-color-scheme`; user's toggle choice wins thereafter.\
+\
+---\
+\
+## Claude Code \'97 rules going forward\
+\
+1. **Any new tracker HTML** created for a Driver-cyber project must use the Garden Party tokens above. Copy CSS directly from `project-dashboard-tracker.html` \'97 do not reinvent.\
+2. **The `#tracker-data` JSON schema has not changed.** Dashboard parsing is unchanged.\
+3. **CLAUDE.md line** ("The existing walnut/amber/wheat design system is locked \'97 don't drift from it.") is now stale. Update that line in a future session to reference Garden Party, or delete it \'97 Chad to decide.\
+4. **Workflow templates in `workflow/`** are the published spec other projects consume. Updating them ripples; don't change tokens casually. Any token change must update all three templates + both HTML files in one commit.\
+5. **Session-end protocol unchanged** \'97 still update `project-dashboard-tracker.html` priorities + bump date, append to `learned-log.json` for meaningful completions.\
+\
+---\
+\
+## Deployment\
+\
+Cloudflare Pages auto-deploys on push to `main`. No build step. The 5 changed files above are the full delta.\
+\
+## Suggested commit message\
+\
+```\
+Restyle dashboard to Garden Party \'97 sage-forward palette, light/dark toggle, filter chips\
+\
+- index.html: full restyle + filter chips (all/fresh/stale) + theme toggle (persists to localStorage)\
+- project-dashboard-tracker.html: matching Garden Party layout, #tracker-data preserved\
+- workflow/*.md: updated style spec in all 3 templates so new trackers match\
+```\
+\
+## Suggested learned-log.json entry\
+\
+```json\
+\{\
+  "date": "2026-04-22",\
+  "project": "Project Dashboard",\
+  "completed": "Restyled dashboard + tracker + workflow templates to Garden Party palette with light/dark toggle and filter chips.",\
+  "learned": "CSS container queries for previewing mobile layouts inside a parent iframe \'97 media queries on inner content trigger against viewport, not container, unless you opt into `container-type: inline-size`.",\
+  "session_note": "Retired the walnut/amber system for being hard on the eyes. New palette is sage-forward paper (light) / deep forest night (dark). Botanical leaf watermark + Instrument Serif wordmark are the signature elements."\
+\}\
+```\
+}

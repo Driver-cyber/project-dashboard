@@ -46,9 +46,14 @@ Use 1 column for single-repo projects, 2 columns for multi-repo or multi-workstr
 The "next 3 priorities" should reflect the actual current state of the project.
 Read DECISIONS.md (or equivalent) to understand current state before writing priorities.
 
-Visual style: dark walnut background (#2C1A0E), amber (#F2A24A) accents, wheat (#F5DEB3)
-text, Plus Jakarta Sans UI font, Fraunces serif for headers. Match the cassette-tracker.html
-pattern from the kasette repo if you have access to it.
+Visual style — "Garden Party" (matches project-dashboard):
+- Light: `--bg #F6F2E8` · `--paper #FDFAF2` · `--line #D9D2BF` · `--ink #1E2A20` · `--sage-deep #35523A`
+- Dark (via `[data-theme="dark"]` on <html>): `--bg #0F1511` · `--paper #18211B` · `--line #25302A` · `--ink #E8EEE2` · `--sage-deep #B4D3AE`
+- Fonts: Instrument Serif (headers/wordmark), Geist (UI), Geist Mono (numbers + tags) — Google Fonts
+- Wordmark pattern: serif with italic period in sage-deep, e.g. `Name<em>.</em>`
+- Sage-tinted circle badges for numbered priorities; dash-prefixed backlog lines
+- Light/dark toggle persisted to `localStorage['gp.theme']`
+- Copy CSS tokens + layout directly from `project-dashboard-tracker.html` in Driver-cyber/project-dashboard.
 
 **Step 2 — Update CLAUDE.md (or equivalent project instructions)**
 

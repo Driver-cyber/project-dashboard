@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Dashboard — Build Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --amber: #F2A24A;
+      --sienna: #E8855A;
+      --wheat: #F5DEB3;
+      --walnut: #2C1A0E;
+      --walnut-mid: #3D2410;
+      --walnut-light: #4A2E18;
+      --rust: #7A3B1E;
+      --green: #6FCF97;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--walnut);
+      color: var(--wheat);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+      padding-bottom: 64px;
+    }
+    header {
+      padding: 28px 32px 22px;
+      border-bottom: 1px solid var(--walnut-light);
+    }
+    header h1 {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 24px;
+      color: var(--amber);
+    }
+    .header-meta {
+      display: flex;
+      gap: 20px;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--rust);
+    }
+    main {
+      max-width: 700px;
+      margin: 32px auto;
+      padding: 0 32px;
+    }
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+    }
+    ol.priority-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+    ol.priority-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: var(--walnut-mid);
+      border: 1px solid var(--walnut-light);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .num {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      background: rgba(242,162,74,0.18);
+      color: var(--amber);
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .priority-text strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--wheat);
+      line-height: 1.3;
+    }
+    .priority-text span {
+      display: block;
+      font-size: 11px;
+      color: var(--rust);
+      margin-top: 3px;
+      line-height: 1.45;
+    }
+    ul.backlog-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    ul.backlog-list li {
+      font-size: 12px;
+      color: var(--rust);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.4;
+    }
+    ul.backlog-list li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--walnut-light);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Project Dashboard</h1>
+  <div class="header-meta">
+    <span>Personal command center — Driver-cyber/project-dashboard</span>
+    <span>Updated 2026-04-22</span>
+  </div>
+</header>
+
+<main>
+  <div class="section-label">Now — Top 3 Priorities</div>
+  <ol class="priority-list">
+    <li>
+      <span class="num">1</span>
+      <div class="priority-text">
+        <strong>Rewrite dashboard to fetch live from GitHub Contents API</strong>
+        <span>Replace the localStorage/drag-drop model with live fetches from Driver-cyber repos. Add a projects.json config so new projects can be added without touching dashboard HTML.</span>
+      </div>
+    </li>
+    <li>
+      <span class="num">2</span>
+      <div class="priority-text">
+        <strong>Configure Cloudflare Pages auto-deploy</strong>
+        <span>Connect Driver-cyber/project-dashboard to Cloudflare Pages. Verify that pushing to main deploys the dashboard to a bookmarkable URL automatically.</span>
+      </div>
+    </li>
+    <li>
+      <span class="num">3</span>
+      <div class="priority-text">
+        <strong>Wire up first project card (self-referential)</strong>
+        <span>Add this repo's own tracker to projects.json so the dashboard shows its own priorities — validating the full fetch-decode-render loop end to end.</span>
+      </div>
+    </li>
+  </ol>
+
+  <div class="section-label">Backlog</div>
+  <ul class="backlog-list">
+    <li>Staleness alerts — card badge turns red if tracker not updated in 14+ days</li>
+    <li>Initialize learned-log.json with first entries from founding session</li>
+    <li>Auto-discovery — scan all Driver-cyber repos for *-tracker.html without manual config</li>
+    <li>"Year in review" generator — Claude drafts a summary from learned-log.json on demand</li>
+    <li>Manual refresh button — re-fetch all trackers without a full page reload</li>
+  </ul>
+</main>
+
+<script id="tracker-data" type="application/json">
+{
+  "project": "Project Dashboard",
+  "description": "Personal command center — cross-project dashboard fetching live tracker data from GitHub",
+  "updated": "2026-04-22",
+  "columns": [
+    {
+      "name": "project-dashboard",
+      "sub": "Cloudflare Pages · GitHub API · Vanilla JS",
+      "priorities": [
+        {
+          "title": "Rewrite dashboard to fetch live from GitHub Contents API",
+          "note": "Replace localStorage/drag-drop with live fetches. Add projects.json config."
+        },
+        {
+          "title": "Configure Cloudflare Pages auto-deploy",
+          "note": "Connect repo, verify push-to-main deploys to a bookmarkable URL."
+        },
+        {
+          "title": "Wire up first project card (self-referential)",
+          "note": "Add this repo's tracker to projects.json — validate the full fetch-render loop."
+        }
+      ],
+      "backlog": [
+        "Staleness alerts — red badge after 14+ days without tracker update",
+        "Initialize learned-log.json with founding session entries",
+        "Auto-discovery of *-tracker.html across all Driver-cyber repos",
+        "Year-in-review generator from learned-log.json",
+        "Manual refresh button (re-fetch without full page reload)"
+      ]
+    }
+  ]
+}
+</script>
+
+</body>
+</html>
