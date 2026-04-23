@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1" />
   <meta name="theme-color" content="#F6F2E8" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0F1511" media="(prefers-color-scheme: dark)" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -181,7 +181,7 @@
     .mode-toggle button {
       background: none;
       border: none;
-      width: 28px; height: 26px;
+      width: 36px; height: 34px;
       border-radius: 999px;
       display: flex;
       align-items: center;
@@ -238,10 +238,13 @@
       border: 1px solid var(--line);
       color: var(--ink);
       font-family: inherit;
-      font-size: 13px;
+      font-size: 16px;
       border-radius: 8px;
       padding: 8px 10px;
       transition: border-color 0.15s;
+    }
+    @media (min-width: 720px) {
+      .np-select, .np-textarea { font-size: 13px; }
     }
     .np-select { min-width: 180px; }
     .np-select:focus, .np-textarea:focus { outline: none; border-color: var(--sage-deep); }
@@ -790,7 +793,7 @@
       background: var(--paper);
       border: 1px solid var(--line);
       border-radius: 24px;
-      padding: 44px 52px;
+      padding: 28px 52px 44px;
       text-align: center;
       max-width: 340px;
       box-shadow: var(--shadow);
@@ -941,7 +944,7 @@
     <p class="np-sub">Capture ideas, bugs, and prompts per project. Export them to paste into Claude Code.</p>
     <div class="np-compose">
       <div class="np-row">
-        <select class="np-select" id="np-project"><option value="">Select project…</option></select>
+        <select class="np-select" id="np-project"><option value="">Select project…</option><option value="__tbd__">— Ideas / TBD —</option></select>
         <span class="np-hint">Cmd/Ctrl + Enter to add</span>
       </div>
       <textarea class="np-textarea" id="np-text" placeholder="Jot an idea, bug, or prompt…"></textarea>
@@ -1282,7 +1285,7 @@
     const ago = Math.floor((now - d) / 86400000);
     return ago < 7 ? `${ago}d ago` : d.toLocaleDateString([], {month:'short',day:'numeric'});
   }
-  function projName(repo) { return (loadedProjects.find(p => p.repo === repo) || {}).displayName || repo; }
+  function projName(repo) { if (repo === '__tbd__') return 'Ideas / TBD'; return (loadedProjects.find(p => p.repo === repo) || {}).displayName || repo; }
 
   function populateProjectSelects() {
     ['np-project','np-export-project'].forEach(id => {
@@ -1290,7 +1293,8 @@
       if (!sel) return;
       const prev = sel.value;
       const opts = loadedProjects.map(p => `<option value="${esc(p.repo)}">${esc(p.displayName)}</option>`).join('');
-      sel.innerHTML = id === 'np-project' ? `<option value="">Select project…</option>${opts}` : (opts || '<option value="">No projects</option>');
+      const tbd = `<option value="__tbd__">— Ideas / TBD —</option>`;
+      sel.innerHTML = id === 'np-project' ? `<option value="">Select project…</option>${tbd}${opts}` : `${tbd}${opts || ''}`;
       if (prev && [...sel.options].some(o => o.value === prev)) sel.value = prev;
     });
     updateAddBtn();
@@ -1413,8 +1417,9 @@
     currentExport = { repo, md, notes };
     hint.textContent = count ? `${count} note${count!==1?'s':''}` : 'No active notes';
     if (!count) { body.innerHTML = '<p class="np-empty">No active notes for this project.</p>'; return; }
-    body.innerHTML = `<div class="np-export"><pre>${esc(md)}</pre><div class="np-export-actions"><button class="np-btn" id="np-copy">Copy to clipboard</button><button class="np-btn ghost" id="np-download">Download .md</button></div><p class="np-hint" id="np-copy-status" style="margin-top:10px;"></p></div>`;
+    body.innerHTML = `<div class="np-export"><pre>${esc(md)}</pre><div class="np-export-actions"><button class="np-btn" id="np-copy">Copy markdown</button><button class="np-btn" id="np-copy-prompt">Copy as prompt</button><button class="np-btn ghost" id="np-download">Download .md</button></div><p class="np-hint" id="np-copy-status" style="margin-top:10px;"></p></div>`;
     document.getElementById('np-copy').addEventListener('click', doCopy);
+    document.getElementById('np-copy-prompt').addEventListener('click', doCopyPrompt);
     document.getElementById('np-download').addEventListener('click', doDownload);
   }
 
@@ -1423,6 +1428,19 @@
     try {
       await navigator.clipboard.writeText(currentExport.md);
       status.textContent = '✓ Copied'; status.style.color = 'var(--sage-deep)';
+    } catch {
+      status.textContent = 'Copy failed — select text above and copy manually'; status.style.color = 'var(--blush-deep)';
+    }
+    setTimeout(showArchivePicker, 600);
+  }
+
+  async function doCopyPrompt() {
+    const status = document.getElementById('np-copy-status');
+    const name = projName(currentExport.repo);
+    const prompt = `Here are my notes for ${name}. Please implement these:\n\n${currentExport.md}`;
+    try {
+      await navigator.clipboard.writeText(prompt);
+      status.textContent = '✓ Copied as prompt'; status.style.color = 'var(--sage-deep)';
     } catch {
       status.textContent = 'Copy failed — select text above and copy manually'; status.style.color = 'var(--blush-deep)';
     }

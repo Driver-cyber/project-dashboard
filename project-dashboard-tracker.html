@@ -195,7 +195,7 @@
     <div class="logo">Project Dashboard<em>.</em></div>
     <div class="meta">
       <span>Driver-cyber / project-dashboard</span>
-      <span>Updated 2026-04-23</span>
+      <span>Updated 2026-04-23 · Phase 2</span>
     </div>
   </div>
   <div class="mode-toggle" role="group" aria-label="Theme">
@@ -224,22 +224,22 @@
     <li>
       <span class="num">1</span>
       <div class="priority-text">
-        <strong>Card link to project's GitHub repo</strong>
-        <span>Each card should link out to its GitHub repo — quick nav to the codebase from the dashboard. Small addition, high daily value.</span>
+        <strong>Auto-discovery of tracker files</strong>
+        <span>Scan all Driver-cyber repos for *-tracker.html without needing a manual projects.json entry. Needs GitHub API list-repos call plus per-repo contents check.</span>
       </div>
     </li>
     <li>
       <span class="num">2</span>
       <div class="priority-text">
-        <strong>Keyboard shortcut — R to refresh</strong>
-        <span>Press R anywhere on the page to re-fetch all trackers. Two lines of JS, makes the dashboard feel snappy for power use.</span>
+        <strong>Notepad persistence across devices</strong>
+        <span>Notes live in localStorage — device-only. Consider a lightweight sync option so notes are available on phone and desktop.</span>
       </div>
     </li>
     <li>
       <span class="num">3</span>
       <div class="priority-text">
-        <strong>Auto-discovery of tracker files</strong>
-        <span>Scan all Driver-cyber repos for *-tracker.html without needing a manual projects.json entry. Bigger feature — needs GitHub API list-repos call plus per-repo contents check.</span>
+        <strong>Staleness alert when tracker goes quiet</strong>
+        <span>Visual warning on the card when a project hasn't been updated in 14+ days. Already have the staleness data — just needs a stronger signal.</span>
       </div>
     </li>
   </ol>
@@ -247,21 +247,29 @@
   <div class="section-label">Backlog</div>
   <ul class="backlog-list">
     <li>"Year in review" generator — Claude drafts a summary from learned-log.json on demand</li>
-    <li>Staleness alert email / notification when a tracker goes 14+ days without update</li>
     <li>Collapse-all / expand-all keyboard shortcut</li>
+    <li>Notepad: tag notes with multiple projects</li>
   </ul>
 
   <div class="section-label">Shipped</div>
   <ul class="backlog-list">
+    <li>Notepad tab — per-project notes, filter chips, archive/restore, full export flow</li>
+    <li>Export: Copy markdown, Copy as prompt, Download .md, archive picker</li>
+    <li>Ideas / TBD catch-all category in notepad for unattached notes</li>
+    <li>Calm tab — wheat-field sway animation, frosted card, spring checkbox, confetti</li>
+    <li>Tabbed navigation — Dashboard / Notepad / Calm, tab state persisted in localStorage</li>
+    <li>Wild Stewart Homeschool added as 6th project card</li>
+    <li>GitHub repo link icon on each dashboard card</li>
+    <li>R keyboard shortcut to refresh Dashboard tab</li>
+    <li>Mobile fix — viewport max-scale, 16px inputs to prevent iOS auto-zoom</li>
+    <li>Mode toggle hit area enlarged for easier mobile tapping</li>
+    <li>ORDOBook duplicate removed from projects.json</li>
     <li>Expandable cards — click to reveal full backlog inline, CSS grid animation</li>
-    <li>ORDOBook tracker encoding fixed — all 5 cards rendering cleanly</li>
     <li>learned-log.json initialized — append-only session learning record</li>
     <li>GitHub API fetch — live tracker data replacing localStorage/drag-drop model</li>
     <li>Cloudflare Pages auto-deploy — bookmarkable URL, push-to-main deploys</li>
-    <li>All 5 project cards wired up — kasette, tiny-path, cadence, ORDOBook, project-dashboard</li>
     <li>Garden Party restyle — Instrument Serif, Geist, light/dark toggle, filter chips</li>
     <li>Staleness badges and filter chips — Fresh / Needs update with counts</li>
-    <li>UTF-8 base64 decode fix — TextDecoder pattern for special characters</li>
     <li>projects.json config — add a project with one JSON line, no HTML edit needed</li>
   </ul>
 </main>
@@ -295,22 +303,22 @@
       "sub": "Cloudflare Pages · GitHub API · Vanilla JS",
       "priorities": [
         {
-          "title": "Card link to project's GitHub repo",
-          "note": "Quick nav to codebase from each card."
-        },
-        {
-          "title": "Keyboard shortcut — R to refresh",
-          "note": "Two lines of JS, high power-user value."
-        },
-        {
           "title": "Auto-discovery of tracker files",
           "note": "Scan Driver-cyber repos for *-tracker.html — no manual projects.json entry needed."
+        },
+        {
+          "title": "Notepad persistence across devices",
+          "note": "Notes are localStorage-only right now — device-specific."
+        },
+        {
+          "title": "Staleness alert on quiet projects",
+          "note": "Stronger visual signal when a project hasn't updated in 14+ days."
         }
       ],
       "backlog": [
         "Year-in-review generator from learned-log.json",
-        "Staleness alert when tracker goes 14+ days without update",
-        "Collapse-all / expand-all keyboard shortcut"
+        "Collapse-all / expand-all keyboard shortcut",
+        "Notepad: tag notes with multiple projects"
       ]
     }
   ]

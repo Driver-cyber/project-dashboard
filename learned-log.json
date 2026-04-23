@@ -13,4 +13,12 @@
     "learned": "CSS grid-template-rows: 0fr → 1fr is the correct pattern for smooth expand animations on unknown-height content — no max-height hacks, no JS measurement needed.",
     "session_note": "Phase 1 complete. Dashboard is live, bookmarkable, and fully functional. Tracker onboarding prompt written and tested across 4 repos in one session."
   }
+  ,
+  {
+    "date": "2026-04-23",
+    "project": "Project Dashboard",
+    "completed": "Shipped Notepad tab (notes, export, archive flow), Calm tab (wheat animation, confetti checkbox), tabbed navigation, GitHub card links, R shortcut, Wild Stewart Homeschool added, mobile zoom fixes, Copy as prompt button, Ideas/TBD category.",
+    "learned": "iOS auto-zoom on input focus is triggered by font-size below 16px — setting inputs to 16px on mobile prevents it without disabling user zoom. CSS viewport maximum-scale=1 stops layout-breaking zoom on orientation change.",
+    "session_note": "Chad used the Notepad export flow in the same session it was built and immediately filed 3 real bugs with it. The Copy as prompt idea came from that first use. Notepad → export → Claude Code is the intended power loop."
+  }
 ]
