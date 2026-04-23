@@ -1,0 +1,9 @@
+[
+  {
+    "date": "2026-04-22",
+    "project": "Project Dashboard",
+    "completed": "Built the full dashboard from scratch — GitHub API fetch model, Cloudflare Pages deployment, 5 projects wired up, Garden Party restyle with light/dark mode.",
+    "learned": "Cloudflare Pages requires index.html at the root to serve the site root; atob() returns binary strings not UTF-8, requiring TextDecoder for any non-ASCII content from the GitHub API.",
+    "session_note": "Founding session. Replaced a localStorage/drag-drop prototype with a live GitHub fetch architecture. The projects.json config pattern (one JSON line to add a project) was a key design decision that keeps the HTML focused on rendering."
+  }
+]

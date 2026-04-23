@@ -195,7 +195,7 @@
     <div class="logo">Project Dashboard<em>.</em></div>
     <div class="meta">
       <span>Driver-cyber / project-dashboard</span>
-      <span>Updated 2026-04-22</span>
+      <span>Updated 2026-04-23</span>
     </div>
   </div>
   <div class="mode-toggle" role="group" aria-label="Theme">
@@ -224,33 +224,43 @@
     <li>
       <span class="num">1</span>
       <div class="priority-text">
-        <strong>Rewrite dashboard to fetch live from GitHub Contents API</strong>
-        <span>Replace the localStorage/drag-drop model with live fetches from Driver-cyber repos. Add a projects.json config so new projects can be added without touching dashboard HTML.</span>
+        <strong>Expandable cards — backlog drill-down on click</strong>
+        <span>Click any project card to expand it in-place and reveal the full backlog list. Collapse on second click. No modal, no routing — pure inline expand with smooth animation.</span>
       </div>
     </li>
     <li>
       <span class="num">2</span>
       <div class="priority-text">
-        <strong>Configure Cloudflare Pages auto-deploy</strong>
-        <span>Connect Driver-cyber/project-dashboard to Cloudflare Pages. Verify that pushing to main deploys the dashboard to a bookmarkable URL automatically.</span>
+        <strong>Fix ORDOBook tracker encoding</strong>
+        <span>The ordobook-tracker.html has baked-in mojibake (em dashes stored as garbled bytes). Open a Claude Code session in ORDOBook repo and fix the priority strings in the JSON block.</span>
       </div>
     </li>
     <li>
       <span class="num">3</span>
       <div class="priority-text">
-        <strong>Wire up first project card (self-referential)</strong>
-        <span>Add this repo's own tracker to projects.json so the dashboard shows its own priorities — validating the full fetch-decode-render loop end to end.</span>
+        <strong>Initialize learned-log.json with founding session entries</strong>
+        <span>Log was created this session. Add the key learnings: GitHub API fetch pattern, UTF-8 base64 decode fix, projects.json config pattern, Cloudflare Pages naming requirement.</span>
       </div>
     </li>
   </ol>
 
   <div class="section-label">Backlog</div>
   <ul class="backlog-list">
-    <li>Staleness alerts — card badge turns red if tracker not updated in 14+ days</li>
-    <li>Initialize learned-log.json with first entries from founding session</li>
     <li>Auto-discovery — scan all Driver-cyber repos for *-tracker.html without manual config</li>
     <li>"Year in review" generator — Claude drafts a summary from learned-log.json on demand</li>
-    <li>Manual refresh button — re-fetch all trackers without a full page reload</li>
+    <li>Keyboard shortcut to refresh (R key)</li>
+    <li>Card link to the project's GitHub repo</li>
+  </ul>
+
+  <div class="section-label">Shipped</div>
+  <ul class="backlog-list">
+    <li>GitHub API fetch — live tracker data replacing localStorage/drag-drop model</li>
+    <li>Cloudflare Pages auto-deploy — bookmarkable URL, push-to-main deploys</li>
+    <li>All 5 project cards wired up — kasette, tiny-path, cadence, ORDOBook, project-dashboard</li>
+    <li>Garden Party restyle — Instrument Serif, Geist, light/dark toggle, filter chips</li>
+    <li>Staleness badges and filter chips — Fresh / Needs update with counts</li>
+    <li>UTF-8 base64 decode fix — TextDecoder pattern for special characters</li>
+    <li>projects.json config — add a project with one JSON line, no HTML edit needed</li>
   </ul>
 </main>
 
@@ -276,31 +286,30 @@
 {
   "project": "Project Dashboard",
   "description": "Personal command center — cross-project dashboard fetching live tracker data from GitHub",
-  "updated": "2026-04-22",
+  "updated": "2026-04-23",
   "columns": [
     {
       "name": "project-dashboard",
       "sub": "Cloudflare Pages · GitHub API · Vanilla JS",
       "priorities": [
         {
-          "title": "Rewrite dashboard to fetch live from GitHub Contents API",
-          "note": "Replace localStorage/drag-drop with live fetches. Add projects.json config."
+          "title": "Expandable cards — backlog drill-down on click",
+          "note": "In-place expand, smooth animation, no modal."
         },
         {
-          "title": "Configure Cloudflare Pages auto-deploy",
-          "note": "Connect repo, verify push-to-main deploys to a bookmarkable URL."
+          "title": "Fix ORDOBook tracker encoding",
+          "note": "Baked-in mojibake in ordobook-tracker.html JSON block."
         },
         {
-          "title": "Wire up first project card (self-referential)",
-          "note": "Add this repo's tracker to projects.json — validate the full fetch-render loop."
+          "title": "Initialize learned-log.json with founding session entries",
+          "note": "Log the key patterns learned: GitHub API fetch, UTF-8 decode fix, projects.json."
         }
       ],
       "backlog": [
-        "Staleness alerts — red badge after 14+ days without tracker update",
-        "Initialize learned-log.json with founding session entries",
         "Auto-discovery of *-tracker.html across all Driver-cyber repos",
         "Year-in-review generator from learned-log.json",
-        "Manual refresh button (re-fetch without full page reload)"
+        "Keyboard shortcut to refresh (R key)",
+        "Card link to the project GitHub repo"
       ]
     }
   ]
