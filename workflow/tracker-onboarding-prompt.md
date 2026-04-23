@@ -63,11 +63,14 @@ Schema rules:
 - Priorities are the actual top 3 — read the docs before writing them
 - "updated" date must match today's date
 
-Visual style for the HTML:
-- Background: #2C1A0E (walnut), accents: #F2A24A (amber), text: #F5DEB3 (wheat)
-- Fonts: Plus Jakarta Sans (UI), Fraunces italic (headers)
-- Match the visual structure of project-dashboard-tracker.html in the
-  Driver-cyber/project-dashboard repo if you want a reference
+Visual style — "Garden Party" (match project-dashboard):
+- Light: bg `#F6F2E8` · paper `#FDFAF2` · line `#D9D2BF` · ink `#1E2A20` · accent sage-deep `#35523A`
+- Dark (via `[data-theme="dark"]` on <html>): bg `#0F1511` · paper `#18211B` · line `#25302A` · ink `#E8EEE2` · accent `#B4D3AE`
+- Fonts: **Instrument Serif** (headers), **Geist** (UI), **Geist Mono** (numbers/tags)
+- Wordmark with italic period, e.g. `<span class="logo">Name<em>.</em></span>` (em in sage-deep)
+- Sage-tinted circle badges around mono numerals for priorities; dash-prefixed backlog
+- Light/dark toggle in top-right, persisted to `localStorage` key `gp.theme`
+- Reference: `project-dashboard-tracker.html` in Driver-cyber/project-dashboard — copy its CSS tokens + layout
 
 **Step 3 — Update CLAUDE.md (or equivalent project instructions)**
 

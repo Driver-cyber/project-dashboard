@@ -2,132 +2,219 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Dashboard — Build Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F6F2E8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0F1511" media="(prefers-color-scheme: dark)" />
+  <title>Project Dashboard · Build Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --amber: #F2A24A;
-      --sienna: #E8855A;
-      --wheat: #F5DEB3;
-      --walnut: #2C1A0E;
-      --walnut-mid: #3D2410;
-      --walnut-light: #4A2E18;
-      --rust: #7A3B1E;
-      --green: #6FCF97;
+      --bg:        #F6F2E8;
+      --bg-2:      #EFEADA;
+      --paper:     #FDFAF2;
+      --ink:       #1E2A20;
+      --ink-2:     #4A5448;
+      --ink-3:     #7E887C;
+      --line:      #D9D2BF;
+      --sage:      #6E8B6A;
+      --sage-deep: #35523A;
+      --sage-soft: #B4C9B0;
+      --sage-tint: rgba(110,139,106,0.14);
+      --blush:     #DDB2AE;
+      --blush-deep:#6E3A36;
+    }
+    [data-theme="dark"] {
+      --bg:        #0F1511;
+      --bg-2:      #151D17;
+      --paper:     #18211B;
+      --ink:       #E8EEE2;
+      --ink-2:     #B4BEB0;
+      --ink-3:     #7C867A;
+      --line:      #25302A;
+      --sage:      #8CAF87;
+      --sage-deep: #B4D3AE;
+      --sage-soft: #4D6B4F;
+      --sage-tint: rgba(140,175,135,0.16);
+      --blush-deep:#ECBDB6;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--walnut);
-      color: var(--wheat);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
       font-size: 14px;
       min-height: 100vh;
-      padding-bottom: 64px;
+      padding-bottom: max(48px, env(safe-area-inset-bottom, 0));
+      -webkit-font-smoothing: antialiased;
     }
     header {
-      padding: 28px 32px 22px;
-      border-bottom: 1px solid var(--walnut-light);
-    }
-    header h1 {
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-size: 24px;
-      color: var(--amber);
-    }
-    .header-meta {
+      padding: max(28px, env(safe-area-inset-top, 0)) 22px 18px;
       display: flex;
-      gap: 20px;
-      margin-top: 6px;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 14px;
+    }
+    .logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 42px;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+    .logo em { font-style: italic; color: var(--sage-deep); }
+    .meta {
       font-size: 11px;
-      color: var(--rust);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-top: 6px;
+      font-weight: 500;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .mode-toggle {
+      display: inline-flex;
+      gap: 2px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px;
+      flex-shrink: 0;
+    }
+    .mode-toggle button {
+      background: none;
+      border: none;
+      width: 28px; height: 26px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--ink-3);
+    }
+    .mode-toggle button[data-on="true"] {
+      background: var(--ink);
+      color: var(--bg);
     }
     main {
-      max-width: 700px;
-      margin: 32px auto;
-      padding: 0 32px;
+      max-width: 680px;
+      margin: 20px auto;
+      padding: 0 22px 40px;
     }
     .section-label {
+      font-family: 'Geist Mono', ui-monospace, monospace;
       font-size: 10px;
       font-weight: 600;
-      color: var(--amber);
+      color: var(--sage-deep);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 14px;
+      letter-spacing: 0.12em;
+      margin: 28px 0 14px;
     }
+    .section-label:first-child { margin-top: 0; }
     ol.priority-list {
       list-style: none;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-bottom: 36px;
     }
     ol.priority-list li {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       align-items: flex-start;
-      background: var(--walnut-mid);
-      border: 1px solid var(--walnut-light);
-      border-radius: 10px;
-      padding: 14px 16px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 18px;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    ol.priority-list li:hover {
+      border-color: var(--sage-soft);
+      box-shadow: 0 10px 24px -20px rgba(30,42,32,0.25);
+      transform: translateY(-1px);
     }
     .num {
       flex-shrink: 0;
-      width: 22px;
-      height: 22px;
-      background: rgba(242,162,74,0.18);
-      color: var(--amber);
+      width: 24px; height: 24px;
       border-radius: 50%;
-      font-size: 11px;
-      font-weight: 700;
+      background: var(--sage-tint);
+      color: var(--sage-deep);
+      font-size: 12px;
+      font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-family: 'Geist Mono', ui-monospace, monospace;
       margin-top: 1px;
     }
     .priority-text strong {
+      font-family: 'Instrument Serif', serif;
+      font-size: 19px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.2;
+      letter-spacing: -0.005em;
       display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--wheat);
-      line-height: 1.3;
     }
     .priority-text span {
       display: block;
-      font-size: 11px;
-      color: var(--rust);
-      margin-top: 3px;
-      line-height: 1.45;
+      font-size: 13px;
+      color: var(--ink-2);
+      margin-top: 5px;
+      line-height: 1.5;
     }
     ul.backlog-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 8px;
     }
     ul.backlog-list li {
-      font-size: 12px;
-      color: var(--rust);
-      padding-left: 14px;
+      font-size: 13px;
+      color: var(--ink-2);
+      padding-left: 18px;
       position: relative;
-      line-height: 1.4;
+      line-height: 1.5;
     }
     ul.backlog-list li::before {
-      content: '–';
+      content: "";
       position: absolute;
       left: 0;
-      color: var(--walnut-light);
+      top: 9px;
+      width: 8px; height: 1px;
+      background: var(--sage);
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Project Dashboard</h1>
-  <div class="header-meta">
-    <span>Personal command center — Driver-cyber/project-dashboard</span>
-    <span>Updated 2026-04-22</span>
+  <div>
+    <div class="logo">Project Dashboard<em>.</em></div>
+    <div class="meta">
+      <span>Driver-cyber / project-dashboard</span>
+      <span>Updated 2026-04-22</span>
+    </div>
+  </div>
+  <div class="mode-toggle" role="group" aria-label="Theme">
+    <button id="mode-light" data-on="true" aria-label="Light mode">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <circle cx="7" cy="7" r="2.5" fill="currentColor"/>
+        <g stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+          <line x1="7" y1="0.5" x2="7" y2="2.5"/><line x1="7" y1="11.5" x2="7" y2="13.5"/>
+          <line x1="0.5" y1="7" x2="2.5" y2="7"/><line x1="11.5" y1="7" x2="13.5" y2="7"/>
+          <line x1="2.4" y1="2.4" x2="3.8" y2="3.8"/><line x1="10.2" y1="10.2" x2="11.6" y2="11.6"/>
+          <line x1="2.4" y1="11.6" x2="3.8" y2="10.2"/><line x1="10.2" y1="3.8" x2="11.6" y2="2.4"/>
+        </g>
+      </svg>
+    </button>
+    <button id="mode-dark" data-on="false" aria-label="Dark mode">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M10.8 9.6 A 4.2 4.2 0 1 1 5.4 2.8 A 3.2 3.2 0 0 0 10.8 9.6 Z" fill="currentColor"/>
+      </svg>
+    </button>
   </div>
 </header>
 
@@ -166,6 +253,24 @@
     <li>Manual refresh button — re-fetch all trackers without a full page reload</li>
   </ul>
 </main>
+
+<script>
+  const STORAGE = 'gp.theme';
+  function applyTheme(mode) {
+    document.documentElement.setAttribute('data-theme', mode);
+    document.getElementById('mode-light').setAttribute('data-on', mode === 'light');
+    document.getElementById('mode-dark').setAttribute('data-on', mode === 'dark');
+    try { localStorage.setItem(STORAGE, mode); } catch {}
+  }
+  (function initTheme() {
+    let saved;
+    try { saved = localStorage.getItem(STORAGE); } catch {}
+    if (!saved) saved = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    applyTheme(saved);
+  })();
+  document.getElementById('mode-light').addEventListener('click', () => applyTheme('light'));
+  document.getElementById('mode-dark').addEventListener('click',  () => applyTheme('dark'));
+</script>
 
 <script id="tracker-data" type="application/json">
 {

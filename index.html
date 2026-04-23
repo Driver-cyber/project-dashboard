@@ -2,382 +2,734 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projects</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F6F2E8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0F1511" media="(prefers-color-scheme: dark)" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Garden" />
+  <title>Garden · Projects</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --amber: #F2A24A;
-      --sienna: #E8855A;
-      --wheat: #F5DEB3;
-      --walnut: #2C1A0E;
-      --walnut-mid: #3D2410;
-      --walnut-light: #4A2E18;
-      --rust: #7A3B1E;
-      --green: #6FCF97;
+      /* LIGHT — sage-forward paper */
+      --bg:        #F6F2E8;
+      --bg-2:      #EFEADA;
+      --paper:     #FDFAF2;
+      --ink:       #1E2A20;
+      --ink-2:     #4A5448;
+      --ink-3:     #7E887C;
+      --line:      #D9D2BF;
+      --line-2:    #C6BEA6;
+      --sage:      #6E8B6A;
+      --sage-deep: #35523A;
+      --sage-soft: #B4C9B0;
+      --sage-tint: rgba(110,139,106,0.14);
+      --sky:       #A6BFCA;
+      --sky-deep:  #3A5468;
+      --sky-tint:  #DBE5EC;
+      --lilac:     #BFB0D0;
+      --lilac-deep:#4F3A65;
+      --lilac-tint:#E7DCE7;
+      --blush:     #DDB2AE;
+      --blush-deep:#6E3A36;
+      --blush-tint:#EBD2CF;
+      --butter:    #E6D296;
+      --butter-deep:#5B6B2E;
+      --butter-tint:#E2E8D0;
+      --shadow:    0 14px 32px -22px rgba(30,42,32,0.25);
+    }
+    [data-theme="dark"] {
+      /* DARK — deep forest night, not brown */
+      --bg:        #0F1511;
+      --bg-2:      #151D17;
+      --paper:     #18211B;
+      --ink:       #E8EEE2;
+      --ink-2:     #B4BEB0;
+      --ink-3:     #7C867A;
+      --line:      #25302A;
+      --line-2:    #2E3A33;
+      --sage:      #8CAF87;
+      --sage-deep: #B4D3AE;
+      --sage-soft: #4D6B4F;
+      --sage-tint: rgba(140,175,135,0.16);
+      --sky:       #9DB8C6;
+      --sky-deep:  #B8D1DF;
+      --sky-tint:  #24323C;
+      --lilac:     #B7A8C8;
+      --lilac-deep:#D2C4E0;
+      --lilac-tint:#2E2836;
+      --blush:     #D6A8A2;
+      --blush-deep:#ECBDB6;
+      --blush-tint:#33211F;
+      --butter:    #D8C48A;
+      --butter-deep:#D4DBA3;
+      --butter-tint:#222B20;
+      --shadow:    0 14px 32px -20px rgba(0,0,0,0.5);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--bg); }
     body {
-      background: var(--walnut);
-      color: var(--wheat);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
       font-size: 14px;
       min-height: 100vh;
-      padding-bottom: 64px;
+      padding-bottom: max(48px, env(safe-area-inset-bottom, 0));
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.25s ease, color 0.25s ease;
     }
+
+    /* HEADER */
     header {
+      padding: max(26px, env(safe-area-inset-top, 0)) 22px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 14px;
+    }
+    .logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 44px;
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+    .logo em {
+      font-style: italic;
+      color: var(--sage-deep);
+    }
+    .sub {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-top: 6px;
+      font-weight: 500;
+      font-feature-settings: "tnum";
+    }
+    .header-right {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 22px 28px 18px;
-      border-bottom: 1px solid var(--walnut-light);
-      position: sticky;
-      top: 0;
-      background: var(--walnut);
-      z-index: 10;
+      gap: 8px;
     }
-    .header-left h1 {
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-size: 22px;
-      color: var(--amber);
-    }
-    .header-left p {
-      font-size: 11px;
-      color: var(--rust);
-      margin-top: 2px;
-    }
-    .refresh-btn {
-      background: var(--walnut-mid);
-      border: 1px solid var(--walnut-light);
-      color: var(--wheat);
-      font-size: 18px;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      cursor: pointer;
+    .icon-btn {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink-2);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: border-color 0.15s, color 0.15s;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.4s ease, border-color 0.2s, color 0.2s, background 0.2s;
       flex-shrink: 0;
     }
-    .refresh-btn:hover:not(:disabled) { border-color: var(--amber); color: var(--amber); }
-    .refresh-btn:disabled { opacity: 0.4; cursor: default; }
-    .refresh-btn.spinning { animation: spin 0.8s linear infinite; }
+    .icon-btn:hover:not(:disabled) {
+      border-color: var(--sage-deep);
+      color: var(--sage-deep);
+    }
+    .icon-btn.refresh:hover:not(:disabled) {
+      transform: rotate(180deg);
+    }
+    .icon-btn.refresh.spinning {
+      animation: spin 0.9s linear infinite;
+    }
+    .icon-btn:disabled { opacity: 0.4; cursor: default; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Grid */
-    #grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
-      gap: 16px;
-      padding: 24px 28px;
+    .mode-toggle {
+      display: inline-flex;
+      gap: 2px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px;
     }
-    @media (max-width: 500px) {
-      #grid { grid-template-columns: 1fr; padding: 14px; }
-      header { padding: 16px 14px 14px; }
+    .mode-toggle button {
+      background: none;
+      border: none;
+      width: 28px; height: 26px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--ink-3);
+      transition: background 0.2s, color 0.2s;
+    }
+    .mode-toggle button[data-on="true"] {
+      background: var(--ink);
+      color: var(--bg);
     }
 
-    /* Card */
-    .card {
-      background: var(--walnut-mid);
-      border: 1px solid var(--walnut-light);
-      border-radius: 12px;
-      overflow: hidden;
+    /* FILTER CHIPS */
+    .chips {
+      padding: 4px 22px 14px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
     }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip {
+      font-size: 13px;
+      font-weight: 500;
+      padding: 7px 13px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink-2);
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .chip:hover:not([data-active="true"]) {
+      border-color: var(--line-2);
+      color: var(--ink);
+    }
+    .chip[data-active="true"] {
+      background: var(--sage-deep);
+      color: var(--paper);
+      border-color: var(--sage-deep);
+    }
+    .chip .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+    }
+    .chip[data-kind="fresh"] .dot { background: var(--sage-deep); }
+    .chip[data-kind="stale"] .dot { background: var(--blush-deep); }
+    .chip[data-active="true"] .dot { background: currentColor; opacity: 0.8; }
+    .chip-count {
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 11px;
+      opacity: 0.7;
+      margin-left: 2px;
+    }
+
+    /* GRID */
+    #grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 4px 22px 40px;
+    }
+    @media (min-width: 720px) {
+      #grid {
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 18px;
+        padding: 4px 28px 48px;
+      }
+      header { padding: 32px 28px 18px; }
+      .chips { padding: 4px 28px 16px; }
+      .logo { font-size: 56px; }
+    }
+
+    /* CARD */
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px 18px 16px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.3s;
+      animation: fade-up 0.45s ease both;
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: var(--sage-soft);
+    }
+    .leaf-watermark {
+      position: absolute;
+      bottom: -14px;
+      right: -14px;
+      width: 96px; height: 96px;
+      opacity: 0.14;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    [data-theme="dark"] .leaf-watermark { opacity: 0.18; }
+    .card:hover .leaf-watermark { opacity: 0.24; }
+
     .card-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      padding: 14px 16px 12px;
-      border-bottom: 1px solid var(--walnut-light);
-      gap: 12px;
+      gap: 14px;
+      margin-bottom: 14px;
+      position: relative;
     }
-    .card-name {
-      font-family: 'Fraunces', serif;
-      font-size: 16px;
-      color: var(--amber);
-      font-weight: 600;
-      line-height: 1.2;
+    .card-title-wrap { min-width: 0; flex: 1; }
+    .card-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 26px;
+      line-height: 1;
+      letter-spacing: -0.008em;
+      color: var(--ink);
     }
     .card-desc {
-      font-size: 11px;
-      color: var(--rust);
-      margin-top: 3px;
+      font-size: 12px;
+      color: var(--ink-3);
+      margin-top: 4px;
+      line-height: 1.45;
     }
-    .card-meta {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
+    .badge {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
       gap: 5px;
       flex-shrink: 0;
+      letter-spacing: 0.01em;
     }
-    .stale-badge {
-      font-size: 11px;
-      font-weight: 600;
-      white-space: nowrap;
+    .badge::before {
+      content: "";
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
     }
+    .badge[data-tier="fresh"]  { background: #DAE8D5; color: var(--sage-deep); }
+    .badge[data-tier="recent"] { background: var(--butter-tint); color: var(--butter-deep); }
+    .badge[data-tier="due"]    { background: var(--lilac-tint); color: var(--lilac-deep); }
+    .badge[data-tier="stale"]  { background: var(--blush-tint); color: var(--blush-deep); }
+    [data-theme="dark"] .badge[data-tier="fresh"] { background: rgba(140,175,135,0.18); color: var(--sage-deep); }
 
-    /* Columns inside card */
     .cols {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+    .cols.two-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      gap: 16px;
     }
-    .cols.single { grid-template-columns: 1fr; }
-    .mini-col {
-      padding: 12px 14px 14px;
-      border-right: 1px solid var(--walnut-light);
-    }
-    .mini-col:last-child { border-right: none; }
     .mini-col-header {
       font-size: 10px;
       font-weight: 600;
-      color: var(--amber);
+      color: var(--sage-deep);
       text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin-bottom: 10px;
-      line-height: 1.3;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+      font-family: 'Geist Mono', ui-monospace, monospace;
     }
-    ol.mini-list {
+    .cols:not(.two-col) .mini-col-header { display: none; }
+
+    ol.priorities {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 9px;
     }
-    ol.mini-list li {
+    ol.priorities li {
       display: flex;
-      gap: 7px;
+      gap: 12px;
       align-items: flex-start;
-      font-size: 12px;
-      color: var(--wheat);
-      line-height: 1.35;
+      font-size: 13px;
+      line-height: 1.42;
+      color: var(--ink-2);
     }
     .num {
       flex-shrink: 0;
-      width: 16px;
-      height: 16px;
-      background: rgba(242,162,74,0.18);
-      color: var(--amber);
+      width: 20px; height: 20px;
       border-radius: 50%;
-      font-size: 10px;
-      font-weight: 700;
+      background: var(--sage-tint);
+      color: var(--sage-deep);
+      font-size: 11px;
+      font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-family: 'Geist Mono', ui-monospace, monospace;
       margin-top: 1px;
     }
     .no-priorities {
-      font-size: 11px;
-      color: var(--rust);
+      font-size: 12px;
+      color: var(--ink-3);
       font-style: italic;
+      padding: 4px 0;
     }
 
-    /* Skeleton loading */
+    /* SKELETON */
     @keyframes pulse {
       0%, 100% { opacity: 0.45; }
-      50%       { opacity: 0.85; }
+      50%      { opacity: 0.85; }
     }
-    .skeleton { animation: pulse 1.8s ease-in-out infinite; }
-    .skeleton-top  { height: 60px;  border-bottom: 1px solid var(--walnut-light); }
-    .skeleton-body { height: 112px; }
+    .skeleton {
+      animation: pulse 1.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .skel-title { height: 24px; width: 55%; background: var(--bg-2); border-radius: 8px; margin-bottom: 8px; }
+    .skel-desc  { height: 12px; width: 80%; background: var(--bg-2); border-radius: 6px; }
+    .skel-line  { height: 12px; background: var(--bg-2); border-radius: 6px; margin-top: 10px; }
+    .skel-line.s { width: 60%; }
+    .skel-line.m { width: 85%; }
+    .skel-line.l { width: 95%; }
 
-    /* Error card */
-    .error-card .card-name { color: var(--sienna); }
+    /* ERROR CARD */
+    .card.error .card-title { color: var(--blush-deep); font-size: 20px; }
     .error-body {
-      padding: 14px;
-      font-size: 11px;
-      color: var(--rust);
-      font-style: italic;
+      font-size: 12px;
+      color: var(--ink-3);
+      line-height: 1.5;
+      background: var(--blush-tint);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-family: 'Geist Mono', ui-monospace, monospace;
     }
 
-    /* Empty state */
+    /* EMPTY */
     #empty {
       display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 65vh;
+      min-height: 55vh;
       text-align: center;
       padding: 32px;
       gap: 14px;
     }
     #empty h2 {
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-size: 20px;
-      color: var(--amber);
-      opacity: 0.55;
+      font-family: 'Instrument Serif', serif;
+      font-size: 34px;
+      color: var(--ink);
+      letter-spacing: -0.01em;
     }
+    #empty h2 em { font-style: italic; color: var(--sage-deep); }
     #empty p {
-      font-size: 13px;
-      color: var(--rust);
-      line-height: 1.65;
-      max-width: 300px;
+      font-size: 14px;
+      color: var(--ink-3);
+      line-height: 1.6;
+      max-width: 340px;
     }
     #empty code {
-      font-family: monospace;
-      background: var(--walnut-mid);
-      padding: 1px 5px;
-      border-radius: 4px;
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      background: var(--paper);
+      padding: 2px 6px;
+      border-radius: 6px;
       font-size: 12px;
-      color: var(--wheat);
+      color: var(--sage-deep);
+      border: 1px solid var(--line);
+    }
+
+    /* FILTER-EMPTY */
+    .filter-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--ink-3);
+      font-size: 13px;
+      font-style: italic;
+    }
+    .filter-empty em {
+      font-family: 'Instrument Serif', serif;
+      font-size: 20px;
+      display: block;
+      color: var(--ink-2);
+      margin-bottom: 4px;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="header-left">
-    <h1>Projects</h1>
-    <p id="subtitle">Loading…</p>
+  <div>
+    <div class="logo">Garden<em>.</em></div>
+    <div class="sub" id="subtitle">Loading…</div>
   </div>
-  <button class="refresh-btn" id="refresh-btn" title="Refresh all trackers">↻</button>
+  <div class="header-right">
+    <div class="mode-toggle" role="group" aria-label="Theme">
+      <button id="mode-light" data-on="true" aria-label="Light mode">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="2.5" fill="currentColor"/>
+          <g stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+            <line x1="7" y1="0.5" x2="7" y2="2.5"/>
+            <line x1="7" y1="11.5" x2="7" y2="13.5"/>
+            <line x1="0.5" y1="7" x2="2.5" y2="7"/>
+            <line x1="11.5" y1="7" x2="13.5" y2="7"/>
+            <line x1="2.4" y1="2.4" x2="3.8" y2="3.8"/>
+            <line x1="10.2" y1="10.2" x2="11.6" y2="11.6"/>
+            <line x1="2.4" y1="11.6" x2="3.8" y2="10.2"/>
+            <line x1="10.2" y1="3.8" x2="11.6" y2="2.4"/>
+          </g>
+        </svg>
+      </button>
+      <button id="mode-dark" data-on="false" aria-label="Dark mode">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M10.8 9.6 A 4.2 4.2 0 1 1 5.4 2.8 A 3.2 3.2 0 0 0 10.8 9.6 Z" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+    <button class="icon-btn refresh" id="refresh-btn" title="Refresh all trackers" aria-label="Refresh">↻</button>
+  </div>
 </header>
 
+<div class="chips" role="tablist" aria-label="Filter projects">
+  <button class="chip" data-filter="all"   data-active="true"  data-kind="all">All <span class="chip-count" id="count-all">–</span></button>
+  <button class="chip" data-filter="fresh" data-active="false" data-kind="fresh"><span class="dot"></span>Fresh <span class="chip-count" id="count-fresh">–</span></button>
+  <button class="chip" data-filter="stale" data-active="false" data-kind="stale"><span class="dot"></span>Needs update <span class="chip-count" id="count-stale">–</span></button>
+</div>
+
 <div id="empty">
-  <h2>No projects configured</h2>
-  <p>Add entries to <code>projects.json</code> in this repo to populate the dashboard.</p>
+  <h2>A quiet <em>garden</em>.</h2>
+  <p>No projects planted yet. Add entries to <code>projects.json</code> in this repo to populate the dashboard.</p>
 </div>
 
 <div id="grid"></div>
 
-<script>
-  const ORG = 'Driver-cyber'
+<!-- Leaf watermark SVG, reused as a <template> -->
+<template id="leaf-template">
+  <svg class="leaf-watermark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+    <path d="M15 85 C 25 50, 45 25, 88 18 C 82 48, 60 72, 20 88"
+          stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+    <path d="M20 85 C 30 65, 50 45, 80 30"
+          stroke="currentColor" stroke-width="0.9" stroke-linecap="round" fill="none"/>
+    <path d="M30 78 L 28 70 M 40 68 L 36 60 M 52 56 L 47 48 M 66 44 L 60 38"
+          stroke="currentColor" stroke-width="0.7" stroke-linecap="round" fill="none"/>
+  </svg>
+</template>
 
+<script>
+  const ORG = 'Driver-cyber';
+
+  /* ---------- THEME ---------- */
+  const STORAGE_THEME = 'gp.theme';
+  const STORAGE_FILTER = 'gp.filter';
+
+  function applyTheme(mode) {
+    document.documentElement.setAttribute('data-theme', mode);
+    document.getElementById('mode-light').setAttribute('data-on', mode === 'light');
+    document.getElementById('mode-dark').setAttribute('data-on', mode === 'dark');
+    try { localStorage.setItem(STORAGE_THEME, mode); } catch {}
+  }
+  (function initTheme() {
+    let saved;
+    try { saved = localStorage.getItem(STORAGE_THEME); } catch {}
+    if (!saved) {
+      saved = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    applyTheme(saved);
+  })();
+  document.getElementById('mode-light').addEventListener('click', () => applyTheme('light'));
+  document.getElementById('mode-dark').addEventListener('click',  () => applyTheme('dark'));
+
+  /* ---------- STALENESS ---------- */
   function staleInfo(dateStr) {
-    if (!dateStr) return { label: 'No date', color: 'var(--rust)' }
-    const days = Math.floor((Date.now() - new Date(dateStr)) / 86400000)
-    if (days <= 0)  return { label: 'Updated today',           color: 'var(--green)'  }
-    if (days === 1) return { label: 'Updated yesterday',        color: 'var(--amber)'  }
-    if (days < 7)   return { label: `${days} days ago`,         color: 'var(--amber)'  }
-    if (days < 14)  return { label: '1 week ago — update due',  color: 'var(--sienna)' }
-    const w = Math.floor(days / 7)
-    return { label: `${w} weeks ago — stale`, color: 'var(--sienna)' }
+    if (!dateStr) return { tier: 'stale', label: 'No date', days: 999 };
+    const days = Math.floor((Date.now() - new Date(dateStr)) / 86400000);
+    if (days <= 0)  return { tier: 'fresh',  label: 'Updated today',          days };
+    if (days === 1) return { tier: 'fresh',  label: 'Yesterday',              days };
+    if (days < 7)   return { tier: 'fresh',  label: `${days} days ago`,       days };
+    if (days < 14)  return { tier: 'recent', label: '1 week ago · update due',days };
+    const w = Math.floor(days / 7);
+    return { tier: days < 28 ? 'due' : 'stale', label: `${w} weeks ago · stale`, days };
   }
 
   function esc(s) {
     return String(s ?? '')
       .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function leafHTML() {
+    return document.getElementById('leaf-template').innerHTML.replace('currentColor',
+      'var(--sage-deep)').replace('currentColor','var(--sage-deep)').replace('currentColor','var(--sage-deep)');
   }
 
   function cardHTML(p) {
-    const { label, color } = staleInfo(p.updated)
-    const cols = p.columns || []
+    const info = staleInfo(p.updated);
+    const cols = p.columns || [];
+    const twoCol = cols.length > 1;
     const colsHTML = cols.map(col => {
-      const items = (col.priorities || []).slice(0, 3)
+      const items = (col.priorities || []).slice(0, 3);
       const list = items.length
-        ? `<ol class="mini-list">${items.map((pr, i) =>
-            `<li><span class="num">${i+1}</span>${esc(pr.title)}</li>`
+        ? `<ol class="priorities">${items.map((pr, i) =>
+            `<li><span class="num">${i+1}</span><span>${esc(pr.title)}</span></li>`
           ).join('')}</ol>`
-        : `<p class="no-priorities">No priorities set</p>`
+        : `<p class="no-priorities">No priorities set</p>`;
       return `<div class="mini-col">
-        <div class="mini-col-header">${esc(col.name)}</div>
+        ${twoCol ? `<div class="mini-col-header">${esc(col.name || '')}</div>` : ''}
         ${list}
-      </div>`
-    }).join('')
+      </div>`;
+    }).join('');
 
-    return `<div class="card">
+    return `<article class="card" data-tier="${info.tier}">
+      ${leafHTML()}
       <div class="card-top">
-        <div>
-          <div class="card-name">${esc(p.project)}</div>
+        <div class="card-title-wrap">
+          <div class="card-title">${esc(p.project)}</div>
           <div class="card-desc">${esc(p.description || '')}</div>
         </div>
-        <div class="card-meta">
-          <span class="stale-badge" style="color:${color}">${esc(label)}</span>
-        </div>
+        <span class="badge" data-tier="${info.tier}">${esc(info.label)}</span>
       </div>
-      <div class="cols${cols.length === 1 ? ' single' : ''}">${colsHTML}</div>
-    </div>`
+      <div class="cols${twoCol ? ' two-col' : ''}">${colsHTML}</div>
+    </article>`;
   }
 
   function skeletonHTML() {
     return `<div class="card skeleton">
-      <div class="skeleton-top"></div>
-      <div class="skeleton-body"></div>
-    </div>`
+      <div class="skel-title"></div>
+      <div class="skel-desc"></div>
+      <div class="skel-line l"></div>
+      <div class="skel-line m"></div>
+      <div class="skel-line s"></div>
+    </div>`;
   }
 
   function errorCardHTML(repo, msg) {
-    return `<div class="card error-card">
+    return `<article class="card error">
       <div class="card-top">
-        <div>
-          <div class="card-name">${esc(repo)}</div>
-          <div class="card-desc">${esc(msg)}</div>
+        <div class="card-title-wrap">
+          <div class="card-title">${esc(repo)}</div>
+          <div class="card-desc">Couldn't fetch tracker</div>
         </div>
       </div>
-      <div class="error-body">Could not fetch tracker — check repo name and tracker filename in projects.json</div>
-    </div>`
+      <div class="error-body">${esc(msg)} · check repo name + tracker filename in projects.json</div>
+    </article>`;
   }
 
+  /* ---------- FETCH ---------- */
   async function fetchTracker({ repo, tracker }) {
-    const url = `https://api.github.com/repos/${ORG}/${repo}/contents/${tracker}.html`
-    const r = await fetch(url, { headers: { Accept: 'application/vnd.github.v3+json' } })
-    if (!r.ok) throw new Error(`GitHub ${r.status}`)
-    const { content } = await r.json()
-    const bytes = Uint8Array.from(atob(content.replace(/\n/g, '')), c => c.charCodeAt(0))
-    const html = new TextDecoder('utf-8').decode(bytes)
-    const doc = new DOMParser().parseFromString(html, 'text/html')
-    const el = doc.querySelector('#tracker-data')
-    if (!el) throw new Error('No #tracker-data block')
-    return JSON.parse(el.textContent)
+    const url = `https://api.github.com/repos/${ORG}/${repo}/contents/${tracker}.html`;
+    const r = await fetch(url, { headers: { Accept: 'application/vnd.github.v3+json' } });
+    if (!r.ok) throw new Error(`GitHub ${r.status}`);
+    const { content } = await r.json();
+    const bytes = Uint8Array.from(atob(content.replace(/\n/g, '')), c => c.charCodeAt(0));
+    const html = new TextDecoder('utf-8').decode(bytes);
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const el = doc.querySelector('#tracker-data');
+    if (!el) throw new Error('No #tracker-data block');
+    return JSON.parse(el.textContent);
   }
 
+  /* ---------- FILTER ---------- */
+  let currentFilter = 'all';
+  let loadedResults = []; // [{ status, value|reason, cfg }]
+
+  try { currentFilter = localStorage.getItem(STORAGE_FILTER) || 'all'; } catch {}
+
+  function projectMatchesFilter(p, filter) {
+    if (filter === 'all') return true;
+    const info = staleInfo(p.updated);
+    if (filter === 'fresh') return info.days < 7;
+    if (filter === 'stale') return info.days >= 14;
+    return true;
+  }
+
+  function render() {
+    const grid = document.getElementById('grid');
+    const visible = loadedResults.filter(r => {
+      if (r.status !== 'fulfilled') return currentFilter === 'all';
+      return projectMatchesFilter(r.value, currentFilter);
+    });
+
+    if (!visible.length && loadedResults.length) {
+      grid.innerHTML = `<div class="filter-empty">
+        <em>Nothing here.</em>
+        No projects match this filter.
+      </div>`;
+      return;
+    }
+    grid.innerHTML = visible.map(r =>
+      r.status === 'fulfilled' ? cardHTML(r.value) : errorCardHTML(r.cfg.repo, r.reason.message)
+    ).join('');
+  }
+
+  function updateCounts() {
+    const fulfilled = loadedResults.filter(r => r.status === 'fulfilled').map(r => r.value);
+    const fresh = fulfilled.filter(p => staleInfo(p.updated).days < 7).length;
+    const stale = fulfilled.filter(p => staleInfo(p.updated).days >= 14).length;
+    document.getElementById('count-all').textContent = fulfilled.length;
+    document.getElementById('count-fresh').textContent = fresh;
+    document.getElementById('count-stale').textContent = stale;
+  }
+
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      currentFilter = chip.dataset.filter;
+      document.querySelectorAll('.chip').forEach(c => {
+        c.setAttribute('data-active', c.dataset.filter === currentFilter);
+      });
+      try { localStorage.setItem(STORAGE_FILTER, currentFilter); } catch {}
+      render();
+    });
+    if (chip.dataset.filter === currentFilter) chip.setAttribute('data-active', 'true');
+    else chip.setAttribute('data-active', 'false');
+  });
+
+  /* ---------- INIT ---------- */
   async function init() {
-    const grid     = document.getElementById('grid')
-    const empty    = document.getElementById('empty')
-    const subtitle = document.getElementById('subtitle')
-    const btn      = document.getElementById('refresh-btn')
+    const grid     = document.getElementById('grid');
+    const empty    = document.getElementById('empty');
+    const subtitle = document.getElementById('subtitle');
+    const btn      = document.getElementById('refresh-btn');
 
-    subtitle.textContent = 'Loading…'
-    btn.disabled = true
-    btn.classList.add('spinning')
+    subtitle.textContent = 'tending the rows…';
+    btn.disabled = true;
+    btn.classList.add('spinning');
+    empty.style.display = 'none';
 
-    let projects
+    let projects;
     try {
-      const r = await fetch('./projects.json')
-      if (!r.ok) throw new Error()
-      projects = await r.json()
+      const r = await fetch('./projects.json');
+      if (!r.ok) throw new Error();
+      projects = await r.json();
     } catch {
-      subtitle.textContent = 'Error: could not load projects.json'
-      btn.disabled = false
-      btn.classList.remove('spinning')
-      return
+      subtitle.textContent = 'error — could not load projects.json';
+      btn.disabled = false;
+      btn.classList.remove('spinning');
+      return;
     }
 
     if (!projects.length) {
-      empty.style.display = 'flex'
-      grid.innerHTML = ''
-      subtitle.textContent = 'No projects configured'
-      btn.disabled = false
-      btn.classList.remove('spinning')
-      return
+      empty.style.display = 'flex';
+      grid.innerHTML = '';
+      subtitle.textContent = 'no projects configured';
+      btn.disabled = false;
+      btn.classList.remove('spinning');
+      return;
     }
 
-    empty.style.display = 'none'
-    grid.innerHTML = projects.map(skeletonHTML).join('')
+    grid.innerHTML = projects.map(skeletonHTML).join('');
 
-    const results = await Promise.allSettled(projects.map(fetchTracker))
+    const settled = await Promise.allSettled(projects.map(fetchTracker));
+    loadedResults = settled.map((r, i) => ({ ...r, cfg: projects[i] }));
 
-    let ok = 0
-    grid.innerHTML = results.map((r, i) => {
-      if (r.status === 'fulfilled') { ok++; return cardHTML(r.value) }
-      return errorCardHTML(projects[i].repo, r.reason.message)
-    }).join('')
+    updateCounts();
+    render();
 
-    const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    const ok = loadedResults.filter(r => r.status === 'fulfilled').length;
+    const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     subtitle.textContent = ok === projects.length
       ? `${ok} project${ok !== 1 ? 's' : ''} · fetched ${t}`
-      : `${ok} of ${projects.length} fetched · ${t}`
+      : `${ok} of ${projects.length} fetched · ${t}`;
 
-    btn.disabled = false
-    btn.classList.remove('spinning')
+    btn.disabled = false;
+    btn.classList.remove('spinning');
   }
 
-  document.getElementById('refresh-btn').addEventListener('click', init)
-  init()
+  document.getElementById('refresh-btn').addEventListener('click', init);
+  init();
 </script>
+
 </body>
 </html>

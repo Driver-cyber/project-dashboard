@@ -51,11 +51,26 @@ The file must contain:
 Use 1 column for single-repo / single-track projects.
 Use 2 columns for multi-repo, multi-platform, or clearly separated workstreams.
 
-**Visual style (non-negotiable for consistency):**
-- Background: #2C1A0E (walnut), Cards: #3D2410, Borders: #4A2E18
-- Accent: #F2A24A (amber), Text: #F5DEB3 (wheat), Muted: #7A3B1E (rust)
-- Fonts: Fraunces (serif, headers) + Plus Jakarta Sans (UI text) — both from Google Fonts
-- Numbered priorities with amber circle badges, bulleted backlog in rust
+**Visual style — "Garden Party" (non-negotiable for consistency):**
+
+Light mode tokens:
+- Background: `#F6F2E8` (warm paper), Cards: `#FDFAF2`, Borders: `#D9D2BF`
+- Ink: `#1E2A20`, Ink-2: `#4A5448`, Ink-3 (muted): `#7E887C`
+- Sage-deep (primary accent): `#35523A`, Sage: `#6E8B6A`, Sage-soft: `#B4C9B0`
+- Sage tint for number badges: `rgba(110,139,106,0.14)`
+
+Dark mode tokens (toggle via `[data-theme="dark"]` on `<html>`):
+- Background: `#0F1511`, Cards: `#18211B`, Borders: `#25302A`
+- Ink: `#E8EEE2`, Ink-2: `#B4BEB0`, Ink-3: `#7C867A`
+- Sage-deep: `#B4D3AE`, Sage: `#8CAF87`, Sage-soft: `#4D6B4F`
+
+Type + motifs:
+- Fonts: **Instrument Serif** (headers, project titles, wordmark) + **Geist** (UI) + **Geist Mono** (numbers, tags) — all from Google Fonts
+- Wordmark pattern: serif with italic period, e.g. `Project Name<em>.</em>` — italic in `--sage-deep`
+- Numbered priorities: small sage-tinted circle badges with mono numerals
+- Backlog: dash-prefixed items, not bullets (`::before` hairline in sage)
+- Rounded cards (16–20px radius), subtle botanical leaf watermark optional
+- Include light/dark toggle in top-right, persist to `localStorage` key `gp.theme`
 
 **CLAUDE.md / project instructions must include:**
 
