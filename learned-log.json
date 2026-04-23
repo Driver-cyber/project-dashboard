@@ -5,5 +5,12 @@
     "completed": "Built the full dashboard from scratch — GitHub API fetch model, Cloudflare Pages deployment, 5 projects wired up, Garden Party restyle with light/dark mode.",
     "learned": "Cloudflare Pages requires index.html at the root to serve the site root; atob() returns binary strings not UTF-8, requiring TextDecoder for any non-ASCII content from the GitHub API.",
     "session_note": "Founding session. Replaced a localStorage/drag-drop prototype with a live GitHub fetch architecture. The projects.json config pattern (one JSON line to add a project) was a key design decision that keeps the HTML focused on rendering."
+  },
+  {
+    "date": "2026-04-23",
+    "project": "Project Dashboard",
+    "completed": "Expandable cards with inline backlog reveal, ORDOBook encoding fixed, all 5 cards rendering cleanly.",
+    "learned": "CSS grid-template-rows: 0fr → 1fr is the correct pattern for smooth expand animations on unknown-height content — no max-height hacks, no JS measurement needed.",
+    "session_note": "Phase 1 complete. Dashboard is live, bookmarkable, and fully functional. Tracker onboarding prompt written and tested across 4 repos in one session."
   }
 ]

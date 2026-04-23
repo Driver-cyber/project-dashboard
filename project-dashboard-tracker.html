@@ -224,36 +224,38 @@
     <li>
       <span class="num">1</span>
       <div class="priority-text">
-        <strong>Expandable cards — backlog drill-down on click</strong>
-        <span>Click any project card to expand it in-place and reveal the full backlog list. Collapse on second click. No modal, no routing — pure inline expand with smooth animation.</span>
+        <strong>Card link to project's GitHub repo</strong>
+        <span>Each card should link out to its GitHub repo — quick nav to the codebase from the dashboard. Small addition, high daily value.</span>
       </div>
     </li>
     <li>
       <span class="num">2</span>
       <div class="priority-text">
-        <strong>Fix ORDOBook tracker encoding</strong>
-        <span>The ordobook-tracker.html has baked-in mojibake (em dashes stored as garbled bytes). Open a Claude Code session in ORDOBook repo and fix the priority strings in the JSON block.</span>
+        <strong>Keyboard shortcut — R to refresh</strong>
+        <span>Press R anywhere on the page to re-fetch all trackers. Two lines of JS, makes the dashboard feel snappy for power use.</span>
       </div>
     </li>
     <li>
       <span class="num">3</span>
       <div class="priority-text">
-        <strong>Initialize learned-log.json with founding session entries</strong>
-        <span>Log was created this session. Add the key learnings: GitHub API fetch pattern, UTF-8 base64 decode fix, projects.json config pattern, Cloudflare Pages naming requirement.</span>
+        <strong>Auto-discovery of tracker files</strong>
+        <span>Scan all Driver-cyber repos for *-tracker.html without needing a manual projects.json entry. Bigger feature — needs GitHub API list-repos call plus per-repo contents check.</span>
       </div>
     </li>
   </ol>
 
   <div class="section-label">Backlog</div>
   <ul class="backlog-list">
-    <li>Auto-discovery — scan all Driver-cyber repos for *-tracker.html without manual config</li>
     <li>"Year in review" generator — Claude drafts a summary from learned-log.json on demand</li>
-    <li>Keyboard shortcut to refresh (R key)</li>
-    <li>Card link to the project's GitHub repo</li>
+    <li>Staleness alert email / notification when a tracker goes 14+ days without update</li>
+    <li>Collapse-all / expand-all keyboard shortcut</li>
   </ul>
 
   <div class="section-label">Shipped</div>
   <ul class="backlog-list">
+    <li>Expandable cards — click to reveal full backlog inline, CSS grid animation</li>
+    <li>ORDOBook tracker encoding fixed — all 5 cards rendering cleanly</li>
+    <li>learned-log.json initialized — append-only session learning record</li>
     <li>GitHub API fetch — live tracker data replacing localStorage/drag-drop model</li>
     <li>Cloudflare Pages auto-deploy — bookmarkable URL, push-to-main deploys</li>
     <li>All 5 project cards wired up — kasette, tiny-path, cadence, ORDOBook, project-dashboard</li>
@@ -293,23 +295,22 @@
       "sub": "Cloudflare Pages · GitHub API · Vanilla JS",
       "priorities": [
         {
-          "title": "Expandable cards — backlog drill-down on click",
-          "note": "In-place expand, smooth animation, no modal."
+          "title": "Card link to project's GitHub repo",
+          "note": "Quick nav to codebase from each card."
         },
         {
-          "title": "Fix ORDOBook tracker encoding",
-          "note": "Baked-in mojibake in ordobook-tracker.html JSON block."
+          "title": "Keyboard shortcut — R to refresh",
+          "note": "Two lines of JS, high power-user value."
         },
         {
-          "title": "Initialize learned-log.json with founding session entries",
-          "note": "Log the key patterns learned: GitHub API fetch, UTF-8 decode fix, projects.json."
+          "title": "Auto-discovery of tracker files",
+          "note": "Scan Driver-cyber repos for *-tracker.html — no manual projects.json entry needed."
         }
       ],
       "backlog": [
-        "Auto-discovery of *-tracker.html across all Driver-cyber repos",
         "Year-in-review generator from learned-log.json",
-        "Keyboard shortcut to refresh (R key)",
-        "Card link to the project GitHub repo"
+        "Staleness alert when tracker goes 14+ days without update",
+        "Collapse-all / expand-all keyboard shortcut"
       ]
     }
   ]

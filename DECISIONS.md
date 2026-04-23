@@ -5,12 +5,33 @@
 ---
 
 ## 🎯 Current Phase
-**Phase 1 — Foundation**
-Get the dashboard live on Cloudflare Pages, reading real tracker data from GitHub, with the learning log structure in place. Nothing fancy — working and bookmarkable is the goal.
+**Phase 2 — Quality of life**
+Phase 1 complete as of 2026-04-23. Next: card GitHub links, R-to-refresh keyboard shortcut, auto-discovery of tracker files across Driver-cyber repos.
 
 ---
 
 ## 📝 Decision Log
+
+### [2026-04-23] — Phase 1 complete · expandable cards shipped
+
+**Phase 1 declared done.** All founding priorities delivered:
+- Live GitHub API fetch replacing localStorage
+- Cloudflare Pages auto-deploy at project-dashboard-6a7.pages.dev
+- 5 project cards live (kasette, tiny-path, cadence, ORDOBook, project-dashboard)
+- Garden Party restyle (Instrument Serif, Geist, sage/paper/ink tokens, light/dark)
+- Expandable cards — click any card to reveal its full backlog inline
+
+**Expandable cards decision:**
+- In-place expand (no modal, no routing) — keeps focus, no context switch
+- CSS `grid-template-rows: 0fr → 1fr` for smooth animation on unknown-height content
+- Two-column cards expand their backlog in matching two-column layout
+- Cards with empty backlogs show no expand affordance — no clutter
+- Keyboard accessible (Enter/Space)
+
+**Phase 2 — Quality of life** (next session)
+Card GitHub links, R-to-refresh shortcut, auto-discovery of tracker files.
+
+---
 
 ### [2026-04-22] — GitHub API fetch integration shipped
 
