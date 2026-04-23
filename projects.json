@@ -1,26 +1,8 @@
 [
-  {
-    "repo": "project-dashboard",
-    "tracker": "project-dashboard-tracker"
-  },
-  {
-    "repo": "kasette",
-    "tracker": "cassette-tracker"
-  },
-  {
-    "repo": "tiny-path",
-    "tracker": "tiny-path-tracker"
-  },
-  {
-    "repo": "cadence",
-    "tracker": "cadence-tracker"
-  },
-  {
-    "repo": "ORDOBook",
-    "tracker": "ordobook-tracker"
-  },
-  {
-    "repo": "ORDOBook",
-    "tracker": "ordobook-tracker"
-  }
+  { "repo": "project-dashboard", "tracker": "project-dashboard-tracker" },
+  { "repo": "kasette",           "tracker": "cassette-tracker"          },
+  { "repo": "tiny-path",         "tracker": "tiny-path-tracker"         },
+  { "repo": "cadence",           "tracker": "cadence-tracker"           },
+  { "repo": "ORDOBook",          "tracker": "ordobook-tracker"          },
+  { "repo": "wild-stewart-homeschool", "tracker": "wild-stewart-tracker"  }
 ]

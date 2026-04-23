@@ -141,6 +141,35 @@
     .icon-btn:disabled { opacity: 0.4; cursor: default; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* TAB BAR */
+    nav.tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 22px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+    }
+    @media (min-width: 720px) { nav.tabs { padding: 0 28px; } }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--ink-3);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 12px 2px;
+      margin-right: 22px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab-btn:hover { color: var(--ink); }
+    .tab-btn.active { color: var(--sage-deep); border-bottom-color: var(--sage-deep); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    #panel-calm.active { display: flex; }
+
     .mode-toggle {
       display: inline-flex;
       gap: 2px;
@@ -165,6 +194,228 @@
       background: var(--ink);
       color: var(--bg);
     }
+
+    /* REPO LINK */
+    .repo-link {
+      color: var(--ink-3);
+      display: inline-flex;
+      align-items: center;
+      margin-left: 8px;
+      vertical-align: middle;
+      transition: color 0.15s;
+    }
+    .repo-link:hover { color: var(--sage-deep); }
+    .repo-link svg { width: 14px; height: 14px; }
+
+    /* NOTEPAD */
+    #panel-notepad { padding: 20px 22px; max-width: 800px; margin: 0 auto; }
+    @media (min-width: 720px) { #panel-notepad { padding: 28px 28px; } }
+    .np-title {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 28px;
+      color: var(--ink);
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+    .np-sub { font-size: 12px; color: var(--ink-3); margin-bottom: 20px; line-height: 1.5; }
+    .np-compose {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 24px;
+    }
+    .np-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .np-select, .np-textarea {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 13px;
+      border-radius: 8px;
+      padding: 8px 10px;
+      transition: border-color 0.15s;
+    }
+    .np-select { min-width: 180px; }
+    .np-select:focus, .np-textarea:focus { outline: none; border-color: var(--sage-deep); }
+    .np-textarea {
+      width: 100%;
+      min-height: 80px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    .np-btn {
+      background: var(--sage-deep);
+      color: var(--paper);
+      border: none;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: opacity 0.15s;
+    }
+    .np-btn:hover:not(:disabled) { opacity: 0.82; }
+    .np-btn:disabled { opacity: 0.35; cursor: default; }
+    .np-btn.ghost {
+      background: transparent;
+      color: var(--ink-2);
+      border: 1px solid var(--line);
+    }
+    .np-btn.ghost:hover:not(:disabled) { border-color: var(--sage-deep); color: var(--sage-deep); opacity: 1; }
+    .np-hint { font-size: 11px; color: var(--ink-3); }
+    .np-section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .np-section-head h3 {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 18px;
+      color: var(--ink);
+    }
+    .np-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .np-chip {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      color: var(--ink-3);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 5px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .np-chip:hover { color: var(--ink); border-color: var(--line-2); }
+    .np-chip.active { color: var(--sage-deep); border-color: var(--sage-deep); }
+    .np-note {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+    .np-note-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .np-note-proj {
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--sage-deep);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .np-note-date { font-size: 10px; color: var(--ink-3); }
+    .np-note-text {
+      font-size: 13px;
+      color: var(--ink-2);
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .np-note-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .np-note-actions button {
+      background: none;
+      border: none;
+      color: var(--ink-3);
+      cursor: pointer;
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0;
+    }
+    .np-note-actions button:hover { color: var(--sage-deep); }
+    .np-empty { font-size: 12px; color: var(--ink-3); font-style: italic; padding: 16px 0; }
+    .np-archive-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+      margin-top: 20px;
+    }
+    .np-archive-head h3 {
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .np-archive-head:hover h3 { color: var(--ink-2); }
+    .np-caret { color: var(--ink-3); font-size: 12px; transition: transform 0.2s; display: inline-block; }
+    .np-archive.open .np-caret { transform: rotate(90deg); }
+    .np-archive-body { display: none; padding-top: 8px; }
+    .np-archive.open .np-archive-body { display: block; }
+    .np-archive .np-note { opacity: 0.65; }
+    .np-export {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+    .np-export pre {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 12px;
+      color: var(--ink-2);
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      max-height: 320px;
+      overflow-y: auto;
+      margin: 12px 0;
+      line-height: 1.55;
+    }
+    .np-export-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .np-archive-picker label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .np-archive-picker label:hover { background: var(--bg); }
+    .np-archive-picker input { margin-top: 3px; flex-shrink: 0; accent-color: var(--sage-deep); }
+    .np-archive-picker .note-snip { color: var(--ink-2); }
+    .np-archive-picker .note-snip-date { color: var(--ink-3); font-size: 10px; margin-left: 6px; }
 
     /* FILTER CHIPS */
     .chips {
@@ -500,6 +751,116 @@
       border: 1px solid var(--line);
     }
 
+    /* CALM */
+    #panel-calm {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 160px);
+      position: relative;
+      overflow: hidden;
+      padding: 40px 20px;
+    }
+    .wheat-field {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 45%;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .blade {
+      flex: 1;
+      background: linear-gradient(to top, var(--sage) 0%, var(--sage-soft) 55%, var(--butter) 100%);
+      transform-origin: 50% 100%;
+      animation: sway 3.2s ease-in-out infinite;
+      border-radius: 2px 2px 0 0;
+      margin: 0 0.4px;
+      opacity: 0.65;
+    }
+    [data-theme="dark"] .blade { opacity: 0.45; }
+    @keyframes sway {
+      0%, 100% { transform: rotate(-6deg); }
+      50%       { transform: rotate(6deg); }
+    }
+    .calm-card {
+      position: relative;
+      z-index: 2;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 44px 52px;
+      text-align: center;
+      max-width: 340px;
+      box-shadow: var(--shadow);
+    }
+    .calm-title {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 36px;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+    .calm-sub {
+      font-size: 13px;
+      color: var(--ink-3);
+      margin-bottom: 32px;
+      line-height: 1.55;
+    }
+    .calm-check-wrap { display: flex; justify-content: center; margin-bottom: 18px; }
+    .calm-check {
+      width: 72px; height: 72px;
+      border: 1.5px solid var(--line-2);
+      border-radius: 18px;
+      cursor: pointer;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .calm-check:hover { border-color: var(--sage-deep); }
+    .calm-check.checked {
+      background: var(--sage-deep);
+      border-color: var(--sage-deep);
+      animation: bounce 0.45s cubic-bezier(.34,1.8,.64,1);
+    }
+    @keyframes bounce {
+      0%  { transform: scale(1); }
+      40% { transform: scale(1.22); }
+      70% { transform: scale(0.93); }
+      100%{ transform: scale(1); }
+    }
+    .calm-check svg {
+      width: 36px; height: 36px;
+      stroke: var(--paper);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      opacity: 0;
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      transition: opacity 0.15s;
+    }
+    .calm-check.checked svg { opacity: 1; animation: draw 0.35s ease-out 0.1s forwards; }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    .calm-caption { font-size: 11px; color: var(--ink-3); font-style: italic; }
+    .confetti {
+      position: fixed;
+      width: 7px; height: 7px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 100;
+      animation: fly-out 1s ease-out forwards;
+    }
+    @keyframes fly-out {
+      0%   { transform: translate(0,0) scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: translate(var(--dx),var(--dy)) scale(0) rotate(360deg); opacity: 0; }
+    }
+
     /* FILTER-EMPTY */
     .filter-empty {
       grid-column: 1 / -1;
@@ -553,18 +914,97 @@
   </div>
 </header>
 
-<div class="chips" role="tablist" aria-label="Filter projects">
-  <button class="chip" data-filter="all"   data-active="true"  data-kind="all">All <span class="chip-count" id="count-all">–</span></button>
-  <button class="chip" data-filter="fresh" data-active="false" data-kind="fresh"><span class="dot"></span>Fresh <span class="chip-count" id="count-fresh">–</span></button>
-  <button class="chip" data-filter="stale" data-active="false" data-kind="stale"><span class="dot"></span>Needs update <span class="chip-count" id="count-stale">–</span></button>
-</div>
+<nav class="tabs" id="tabs">
+  <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+  <button class="tab-btn" data-tab="notepad">Notepad</button>
+  <button class="tab-btn" data-tab="calm">Calm</button>
+</nav>
 
-<div id="empty">
-  <h2>A quiet <em>garden</em>.</h2>
-  <p>No projects planted yet. Add entries to <code>projects.json</code> in this repo to populate the dashboard.</p>
-</div>
+<section id="panel-dashboard" class="tab-panel active">
+  <div class="chips" role="tablist" aria-label="Filter projects">
+    <button class="chip" data-filter="all"   data-active="true"  data-kind="all">All <span class="chip-count" id="count-all">–</span></button>
+    <button class="chip" data-filter="fresh" data-active="false" data-kind="fresh"><span class="dot"></span>Fresh <span class="chip-count" id="count-fresh">–</span></button>
+    <button class="chip" data-filter="stale" data-active="false" data-kind="stale"><span class="dot"></span>Needs update <span class="chip-count" id="count-stale">–</span></button>
+  </div>
 
-<div id="grid"></div>
+  <div id="empty">
+    <h2>A quiet <em>garden</em>.</h2>
+    <p>No projects planted yet. Add entries to <code>projects.json</code> in this repo to populate the dashboard.</p>
+  </div>
+
+  <div id="grid"></div>
+</section>
+
+<section id="panel-notepad" class="tab-panel">
+  <div id="notepad-main" style="padding:20px 22px; max-width:800px; margin:0 auto;">
+    <div class="np-title">Notepad</div>
+    <p class="np-sub">Capture ideas, bugs, and prompts per project. Export them to paste into Claude Code.</p>
+    <div class="np-compose">
+      <div class="np-row">
+        <select class="np-select" id="np-project"><option value="">Select project…</option></select>
+        <span class="np-hint">Cmd/Ctrl + Enter to add</span>
+      </div>
+      <textarea class="np-textarea" id="np-text" placeholder="Jot an idea, bug, or prompt…"></textarea>
+      <div class="np-row" style="margin-top:10px;margin-bottom:0;">
+        <button class="np-btn" id="np-add" disabled>Add note</button>
+        <button class="np-btn ghost" id="np-export-btn">Export project…</button>
+      </div>
+    </div>
+    <div class="np-section-head">
+      <h3>Active notes</h3>
+      <span class="np-hint" id="np-count"></span>
+    </div>
+    <div class="np-chips" id="np-chips"></div>
+    <div id="np-list"></div>
+    <div class="np-archive" id="np-archive">
+      <div class="np-archive-head" id="np-archive-toggle">
+        <h3><span id="np-archive-count">0</span> archived</h3>
+        <span class="np-caret">›</span>
+      </div>
+      <div class="np-archive-body" id="np-archive-list"></div>
+    </div>
+  </div>
+  <div id="notepad-export" style="display:none; padding:20px 22px; max-width:800px; margin:0 auto;">
+    <div class="np-section-head">
+      <h3 id="np-export-title">Export notes</h3>
+      <button class="np-btn ghost" id="np-export-back">← Back</button>
+    </div>
+    <div id="np-export-step1">
+      <div class="np-compose">
+        <div class="np-row" style="margin-bottom:0;">
+          <select class="np-select" id="np-export-project"></select>
+          <span class="np-hint" id="np-export-hint"></span>
+        </div>
+      </div>
+      <div id="np-export-body"></div>
+    </div>
+    <div id="np-export-step2" style="display:none;">
+      <div class="np-export">
+        <p style="font-size:13px;color:var(--ink);margin-bottom:4px;">Which notes should be archived?</p>
+        <p class="np-hint" style="margin-bottom:12px;">Checked = archived. Uncheck to keep active.</p>
+        <div class="np-archive-picker" id="np-archive-picker"></div>
+        <div class="np-export-actions" style="margin-top:14px;">
+          <button class="np-btn" id="np-archive-confirm">Archive checked</button>
+          <button class="np-btn ghost" id="np-archive-skip">Keep all active</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="panel-calm" class="tab-panel">
+  <div class="wheat-field" id="wheat-field"></div>
+  <div class="calm-card">
+    <div class="calm-title">Breathe.</div>
+    <p class="calm-sub">One thing. One breath. One check.</p>
+    <div class="calm-check-wrap">
+      <button class="calm-check" id="calm-check" aria-label="Mark done">
+        <svg viewBox="0 0 24 24"><polyline points="5 12 10 17 19 7"></polyline></svg>
+      </button>
+    </div>
+    <p class="calm-caption">Tap when you've done the one thing.</p>
+  </div>
+</section>
 
 <!-- Leaf watermark SVG, reused as a <template> -->
 <template id="leaf-template">
@@ -625,10 +1065,13 @@
       'var(--sage-deep)').replace('currentColor','var(--sage-deep)').replace('currentColor','var(--sage-deep)');
   }
 
-  function cardHTML(p) {
+  function cardHTML(p, repo) {
     const info = staleInfo(p.updated);
     const cols = p.columns || [];
     const twoCol = cols.length > 1;
+    const repoLink = repo
+      ? `<a class="repo-link" href="https://github.com/${ORG}/${esc(repo)}" target="_blank" rel="noopener" title="Open on GitHub" onclick="event.stopPropagation()"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>`
+      : '';
 
     const colsHTML = cols.map(col => {
       const items = (col.priorities || []).slice(0, 3);
@@ -683,7 +1126,7 @@
       ${leafHTML()}
       <div class="card-top">
         <div class="card-title-wrap">
-          <div class="card-title">${esc(p.project)}</div>
+          <div class="card-title">${esc(p.project)}${repoLink}</div>
           <div class="card-desc">${esc(p.description || '')}</div>
         </div>
         <span class="badge" data-tier="${info.tier}">${esc(info.label)}</span>
@@ -773,7 +1216,7 @@
       return;
     }
     grid.innerHTML = visible.map(r =>
-      r.status === 'fulfilled' ? cardHTML(r.value) : errorCardHTML(r.cfg.repo, r.reason.message)
+      r.status === 'fulfilled' ? cardHTML(r.value, r.cfg.repo) : errorCardHTML(r.cfg.repo, r.reason.message)
     ).join('');
     attachExpandListeners();
   }
@@ -799,6 +1242,260 @@
     if (chip.dataset.filter === currentFilter) chip.setAttribute('data-active', 'true');
     else chip.setAttribute('data-active', 'false');
   });
+
+  /* ---------- TAB SYSTEM ---------- */
+  let loadedProjects = [];
+
+  function setTab(name) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `panel-${name}`));
+    try { localStorage.setItem('gp.tab', name); } catch {}
+    if (name === 'calm') startCalm();
+    if (name === 'notepad') renderNotes();
+  }
+  document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+  (() => {
+    let saved = 'dashboard';
+    try { saved = localStorage.getItem('gp.tab') || 'dashboard'; } catch {}
+    setTab(saved);
+  })();
+
+  // R to refresh on Dashboard tab
+  document.addEventListener('keydown', e => {
+    if ((e.key !== 'r' && e.key !== 'R') || e.metaKey || e.ctrlKey || e.altKey) return;
+    const tag = e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target.isContentEditable) return;
+    if (document.querySelector('.tab-btn.active')?.dataset.tab !== 'dashboard') return;
+    e.preventDefault();
+    init();
+  });
+
+  /* ---------- NOTES ---------- */
+  const NOTES_KEY = 'gp.notes';
+  const NP_FILTER_KEY = 'gp.note_filter';
+  function loadNotes() { try { return JSON.parse(localStorage.getItem(NOTES_KEY) || '[]'); } catch { return []; } }
+  function saveNotes(a) { try { localStorage.setItem(NOTES_KEY, JSON.stringify(a)); } catch {} }
+  function noteId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+  function fmtDate(iso) {
+    const d = new Date(iso), now = new Date();
+    if (d.toDateString() === now.toDateString()) return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    const ago = Math.floor((now - d) / 86400000);
+    return ago < 7 ? `${ago}d ago` : d.toLocaleDateString([], {month:'short',day:'numeric'});
+  }
+  function projName(repo) { return (loadedProjects.find(p => p.repo === repo) || {}).displayName || repo; }
+
+  function populateProjectSelects() {
+    ['np-project','np-export-project'].forEach(id => {
+      const sel = document.getElementById(id);
+      if (!sel) return;
+      const prev = sel.value;
+      const opts = loadedProjects.map(p => `<option value="${esc(p.repo)}">${esc(p.displayName)}</option>`).join('');
+      sel.innerHTML = id === 'np-project' ? `<option value="">Select project…</option>${opts}` : (opts || '<option value="">No projects</option>');
+      if (prev && [...sel.options].some(o => o.value === prev)) sel.value = prev;
+    });
+    updateAddBtn();
+  }
+
+  function updateAddBtn() {
+    const btn = document.getElementById('np-add');
+    if (btn) btn.disabled = !document.getElementById('np-project')?.value || !document.getElementById('np-text')?.value.trim();
+  }
+
+  document.getElementById('np-project').addEventListener('change', updateAddBtn);
+  document.getElementById('np-text').addEventListener('input', updateAddBtn);
+  document.getElementById('np-text').addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); addNote(); }
+  });
+  document.getElementById('np-add').addEventListener('click', addNote);
+
+  function addNote() {
+    const proj = document.getElementById('np-project').value;
+    const ta = document.getElementById('np-text');
+    const text = ta.value.trim();
+    if (!proj || !text) return;
+    const notes = loadNotes();
+    notes.unshift({ id: noteId(), project: proj, text, createdAt: new Date().toISOString(), status: 'active' });
+    saveNotes(notes);
+    ta.value = '';
+    updateAddBtn();
+    renderNotes();
+  }
+
+  function renderNotes() {
+    const notes = loadNotes();
+    const active = notes.filter(n => n.status === 'active');
+    const archived = notes.filter(n => n.status === 'archived');
+    let filter = 'all';
+    try { filter = localStorage.getItem(NP_FILTER_KEY) || 'all'; } catch {}
+    const repos = [...new Set(active.map(n => n.project))];
+    if (filter !== 'all' && !repos.includes(filter)) filter = 'all';
+
+    const chipsEl = document.getElementById('np-chips');
+    if (repos.length > 1) {
+      chipsEl.innerHTML = [
+        `<button class="np-chip ${filter==='all'?'active':''}" data-filter="all">All (${active.length})</button>`,
+        ...repos.map(r => `<button class="np-chip ${filter===r?'active':''}" data-filter="${esc(r)}">${esc(projName(r))} (${active.filter(n=>n.project===r).length})</button>`)
+      ].join('');
+    } else { chipsEl.innerHTML = ''; }
+    chipsEl.querySelectorAll('.np-chip').forEach(c => c.addEventListener('click', () => {
+      try { localStorage.setItem(NP_FILTER_KEY, c.dataset.filter); } catch {}
+      renderNotes();
+    }));
+
+    const shown = filter === 'all' ? active : active.filter(n => n.project === filter);
+    const listEl = document.getElementById('np-list');
+    document.getElementById('np-count').textContent = active.length ? `${active.length} note${active.length!==1?'s':''}` : '';
+    listEl.innerHTML = shown.length
+      ? shown.map(n => `<div class="np-note"><div class="np-note-head"><span class="np-note-proj">${esc(projName(n.project))}</span><span class="np-note-date">${esc(fmtDate(n.createdAt))}</span></div><div class="np-note-text">${esc(n.text)}</div><div class="np-note-actions"><button data-act="archive" data-id="${n.id}">Archive</button><button data-act="delete" data-id="${n.id}">Delete</button></div></div>`).join('')
+      : `<p class="np-empty">${active.length?'No notes for this project.':'No notes yet. Jot one above.'}</p>`;
+    listEl.querySelectorAll('button[data-act]').forEach(b => b.addEventListener('click', () => noteAction(b.dataset.act, b.dataset.id)));
+
+    const archEl = document.getElementById('np-archive');
+    const archBody = document.getElementById('np-archive-list');
+    document.getElementById('np-archive-count').textContent = archived.length;
+    archEl.style.display = archived.length ? 'block' : 'none';
+    if (archived.length) {
+      archBody.innerHTML = archived.map(n => `<div class="np-note"><div class="np-note-head"><span class="np-note-proj">${esc(projName(n.project))}</span><span class="np-note-date">${esc(fmtDate(n.createdAt))}</span></div><div class="np-note-text">${esc(n.text)}</div><div class="np-note-actions"><button data-act="restore" data-id="${n.id}">Restore</button><button data-act="delete" data-id="${n.id}">Delete</button></div></div>`).join('');
+      archBody.querySelectorAll('button[data-act]').forEach(b => b.addEventListener('click', () => noteAction(b.dataset.act, b.dataset.id)));
+    }
+  }
+
+  function noteAction(act, id) {
+    const notes = loadNotes(), idx = notes.findIndex(n => n.id === id);
+    if (idx < 0) return;
+    if (act === 'archive') notes[idx].status = 'archived';
+    else if (act === 'restore') notes[idx].status = 'active';
+    else if (act === 'delete') notes.splice(idx, 1);
+    saveNotes(notes);
+    renderNotes();
+  }
+
+  document.getElementById('np-archive-toggle').addEventListener('click', () => {
+    document.getElementById('np-archive').classList.toggle('open');
+  });
+
+  /* ---------- EXPORT ---------- */
+  let currentExport = { repo: '', md: '', notes: [] };
+
+  document.getElementById('np-export-btn').addEventListener('click', () => {
+    const prev = document.getElementById('np-project').value;
+    document.getElementById('notepad-main').style.display = 'none';
+    document.getElementById('notepad-export').style.display = 'block';
+    document.getElementById('np-export-step1').style.display = 'block';
+    document.getElementById('np-export-step2').style.display = 'none';
+    const expSel = document.getElementById('np-export-project');
+    if (prev && [...expSel.options].some(o => o.value === prev)) expSel.value = prev;
+    renderExportPreview();
+  });
+  document.getElementById('np-export-back').addEventListener('click', () => {
+    document.getElementById('notepad-main').style.display = 'block';
+    document.getElementById('notepad-export').style.display = 'none';
+    renderNotes();
+  });
+  document.getElementById('np-export-project').addEventListener('change', renderExportPreview);
+
+  function buildMarkdown(repo) {
+    const notes = loadNotes().filter(n => n.project === repo && n.status === 'active');
+    const name = projName(repo);
+    const today = new Date().toLocaleDateString([], {year:'numeric',month:'long',day:'numeric'});
+    if (!notes.length) return { md: '', count: 0, notes: [] };
+    const items = notes.map(n => `- ${n.text}\n  *(${new Date(n.createdAt).toLocaleDateString([],{month:'short',day:'numeric'})})*`).join('\n');
+    return { md: `## Session Notes — ${name}\n*Exported ${today}*\n\n---\n\n${items}\n\n---`, count: notes.length, notes };
+  }
+
+  function renderExportPreview() {
+    const repo = document.getElementById('np-export-project').value;
+    const body = document.getElementById('np-export-body');
+    const hint = document.getElementById('np-export-hint');
+    document.getElementById('np-export-title').textContent = 'Export notes';
+    if (!repo) { body.innerHTML = '<p class="np-empty">Select a project.</p>'; hint.textContent = ''; currentExport = {repo:'',md:'',notes:[]}; return; }
+    const { md, count, notes } = buildMarkdown(repo);
+    currentExport = { repo, md, notes };
+    hint.textContent = count ? `${count} note${count!==1?'s':''}` : 'No active notes';
+    if (!count) { body.innerHTML = '<p class="np-empty">No active notes for this project.</p>'; return; }
+    body.innerHTML = `<div class="np-export"><pre>${esc(md)}</pre><div class="np-export-actions"><button class="np-btn" id="np-copy">Copy to clipboard</button><button class="np-btn ghost" id="np-download">Download .md</button></div><p class="np-hint" id="np-copy-status" style="margin-top:10px;"></p></div>`;
+    document.getElementById('np-copy').addEventListener('click', doCopy);
+    document.getElementById('np-download').addEventListener('click', doDownload);
+  }
+
+  async function doCopy() {
+    const status = document.getElementById('np-copy-status');
+    try {
+      await navigator.clipboard.writeText(currentExport.md);
+      status.textContent = '✓ Copied'; status.style.color = 'var(--sage-deep)';
+    } catch {
+      status.textContent = 'Copy failed — select text above and copy manually'; status.style.color = 'var(--blush-deep)';
+    }
+    setTimeout(showArchivePicker, 600);
+  }
+
+  function doDownload() {
+    const slug = projName(currentExport.repo).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    const date = new Date().toISOString().slice(0,10);
+    const blob = new Blob([currentExport.md], {type:'text/markdown'});
+    const url = URL.createObjectURL(blob);
+    const a = Object.assign(document.createElement('a'), {href:url, download:`${slug}-notes-${date}.md`});
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    setTimeout(showArchivePicker, 400);
+  }
+
+  function showArchivePicker() {
+    if (!currentExport.notes.length) return;
+    document.getElementById('np-export-step1').style.display = 'none';
+    document.getElementById('np-export-step2').style.display = 'block';
+    document.getElementById('np-export-title').textContent = 'Archive exported notes?';
+    document.getElementById('np-archive-picker').innerHTML = currentExport.notes.map(n => {
+      const d = new Date(n.createdAt).toLocaleDateString([],{month:'short',day:'numeric'});
+      const snip = n.text.length > 110 ? n.text.slice(0,110)+'…' : n.text;
+      return `<label><input type="checkbox" checked data-id="${n.id}"><span><span class="note-snip">${esc(snip)}</span><span class="note-snip-date">${esc(d)}</span></span></label>`;
+    }).join('');
+  }
+
+  document.getElementById('np-archive-confirm').addEventListener('click', () => {
+    const ids = new Set([...document.querySelectorAll('#np-archive-picker input:checked')].map(c => c.dataset.id));
+    const notes = loadNotes();
+    notes.forEach(n => { if (ids.has(n.id)) n.status = 'archived'; });
+    saveNotes(notes);
+    document.getElementById('np-export-back').click();
+  });
+  document.getElementById('np-archive-skip').addEventListener('click', () => document.getElementById('np-export-back').click());
+
+  /* ---------- CALM ---------- */
+  let calmBuilt = false;
+  function startCalm() {
+    if (calmBuilt) return;
+    calmBuilt = true;
+    const field = document.getElementById('wheat-field');
+    const N = 80, waves = 3, period = 3.2;
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < N; i++) {
+      const b = document.createElement('div');
+      b.className = 'blade';
+      b.style.height = (60 + Math.random() * 40) + '%';
+      b.style.animationDelay = `-${(i / N) * waves * period}s`;
+      b.style.animationDuration = (period + (Math.random() - 0.5) * 0.4) + 's';
+      frag.appendChild(b);
+    }
+    field.appendChild(frag);
+    document.getElementById('calm-check').addEventListener('click', function() {
+      if (this.classList.toggle('checked')) burstConfetti(this);
+    });
+  }
+  function burstConfetti(el) {
+    const r = el.getBoundingClientRect(), cx = r.left + r.width/2, cy = r.top + r.height/2;
+    const colors = ['#6E8B6A','#B4C9B0','#E6D296','#A6BFCA','#BFB0D0'];
+    for (let i = 0; i < 30; i++) {
+      const d = document.createElement('div');
+      d.className = 'confetti';
+      d.style.cssText = `left:${cx}px;top:${cy}px;background:${colors[i%colors.length]};`;
+      const angle = (Math.PI * 2 * i / 30) + (Math.random() - 0.5) * 0.4;
+      const dist = 120 + Math.random() * 90;
+      d.style.setProperty('--dx', Math.cos(angle)*dist+'px');
+      d.style.setProperty('--dy', Math.sin(angle)*dist+'px');
+      document.body.appendChild(d);
+      setTimeout(() => d.remove(), 1100);
+    }
+  }
 
   /* ---------- INIT ---------- */
   async function init() {
@@ -837,6 +1534,12 @@
 
     const settled = await Promise.allSettled(projects.map(fetchTracker));
     loadedResults = settled.map((r, i) => ({ ...r, cfg: projects[i] }));
+
+    loadedProjects = loadedResults.map(r => ({
+      repo: r.cfg.repo,
+      displayName: r.status === 'fulfilled' ? (r.value.project || r.cfg.repo) : r.cfg.repo,
+    }));
+    populateProjectSelects();
 
     updateCounts();
     render();
