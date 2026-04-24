@@ -5,12 +5,45 @@
 ---
 
 ## 🎯 Current Phase
-**Phase 2 — Quality of life**
-Phase 1 complete as of 2026-04-23. Next: card GitHub links, R-to-refresh keyboard shortcut, auto-discovery of tracker files across Driver-cyber repos.
+**Phase 2 — Quality of life** (in progress)
+Phase 1 complete 2026-04-23. Phase 2 deliverables shipped 2026-04-24: Notepad tab, Calm tab, tabbed nav, GitHub card links, R-to-refresh, mobile zoom fixes, dashboard backburner + recency sort, notes Gist sync with resilience, favicon/apple-touch-icon, garden-app registered. Remaining: auto-discovery of tracker files, staleness alerts, year-in-review generator.
 
 ---
 
 ## 📝 Decision Log
+
+### [2026-04-24] — Phase 2 push · backburner, notes resilience, garden-app, icons
+
+**Dashboard redesign — backburner pattern**
+- Cards auto-sort by `updated` date, most recent first
+- Top 4 featured and always expanded; remainder collapsed under a single "Backburner" disclosure row with open/closed state persisted to `gp.backburner` in localStorage
+- Rationale: Chad typically touches 1–3 projects/day. Equal-weight rendering of 6+ cards buried the day's active work. Featured-top-4 aligns the default view with actual work; backburner preserves "remember what's parked" without clutter.
+- "Pin/unpin a project to force it into the featured top 4" — parked as future enhancement
+
+**Notepad sync — resilience improvements**
+- `initSync` now compares local note IDs against the Gist and auto-pushes any local-only notes on successful pull — closes the orphan-write data-loss window
+- Sync indicator shows live note count: `5 notes · synced 2:39pm` for at-a-glance reassurance
+- Context: Chad reported losing 2 notes after a PWA reinstall. Root cause was local-only notes that never made it upstream before localStorage was wiped. This fix closes that window.
+
+**Decision: keep GitHub Gist as the notepad backend**
+- Evaluated migrating `functions/api/gist.js` to Cloudflare KV. Decision: defer.
+- Rationale: GitHub Gist with a no-expiration token is working reliably, and it gives free version history (every prior state of the gist is recoverable via the GitHub API). KV would eliminate one external dependency but costs a schema rewrite and loses the free version-history safety net. Revisit only if Gist misbehaves.
+
+**Decision: `projects.json` is the sole source of truth for notepad categories**
+- Considered adding a "+ New category…" affordance inside the notepad dropdown for ad-hoc categories. Rejected.
+- Rationale: the friction of adding an entry to `projects.json` (and, by extension, having a real tracker in a real repo) is the feature. Every note has a home, no orphan categories accumulate, and the dashboard and notepad stay conceptually aligned. `Ideas / TBD` remains the escape hatch for captures not yet tied to a project.
+
+**garden-app — registered as 7th project**
+- Added to `projects.json`; automatically appears as a dashboard card and a notepad category
+- Founding docs including a SwiftUI constitution (`workflow/garden-app-constitution.md`) live in the garden-app repo — first project registered that will not have a Cloudflare deployment (standalone SwiftUI iOS app, Chad's Swift/Xcode learning vector)
+
+**Visual identity**
+- `favicon.svg` (browser tab) + `apple-touch-icon.png` 180×180 (iOS home screen) — both sage-deep green `#35523A` with a two-leaf plant mark
+- PNG generated from pure-stdlib Python (struct + zlib) — no image library dependency
+
+**Learning meta-note:** Offline-first sync has two distinct failure modes worth distinguishing — silent failed pushes (visible red dot, user can retry) and orphan writes (note exists locally but never made it upstream — looks synced because there's nothing to retry). The orphan case is the dangerous one; detecting it requires comparing local IDs against remote IDs on every init, not just tracking push failures.
+
+---
 
 ### [2026-04-23] — Phase 1 complete · expandable cards shipped
 
