@@ -1347,8 +1347,18 @@
   function setCred(key, val) {
     try { localStorage.setItem(key, val); } catch {}
     try { document.cookie = `${key.replace(/\./g,'_')}=${encodeURIComponent(val)};max-age=31536000;SameSite=Strict`; } catch {}
+    if (key === GIST_ID_KEY && val) {
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('gist', val);
+        history.replaceState(null, '', url);
+      } catch {}
+    }
   }
   function getCred(key) {
+    if (key === GIST_ID_KEY) {
+      try { const p = new URLSearchParams(window.location.search).get('gist'); if (p) return p; } catch {}
+    }
     try { const v = localStorage.getItem(key); if (v) return v; } catch {}
     try {
       const m = document.cookie.match(new RegExp('(?:^|; )' + key.replace(/\./g,'_') + '=([^;]*)'));
@@ -1371,8 +1381,20 @@
     else if (state === 'busy') txt.textContent = 'Syncing…';
     else if (state === 'auth') txt.textContent = 'Auth failed — reconnect via Manage sync';
     else if (state === 'err') {
-      txt.innerHTML = 'Sync failed — <button class="np-sync-link" id="np-sync-retry-btn" style="font-size:11px;">retry</button>';
+      txt.innerHTML = 'Sync failed — <button class="np-sync-link" id="np-sync-retry-btn">retry</button>';
       document.getElementById('np-sync-retry-btn')?.addEventListener('click', () => { syncInitialized = false; initSync(); });
+    }
+    else if (state === 'notoken') {
+      dot.className = 'np-sync-dot err';
+      txt.innerHTML = 'Token cleared by iOS — <button class="np-sync-link" id="np-sync-retoken-btn">re-enter token</button>';
+      document.getElementById('np-sync-retoken-btn')?.addEventListener('click', () => {
+        const form = document.getElementById('np-sync-form');
+        const { id } = gistAuth();
+        document.getElementById('np-gist-id-input').value = id;
+        document.getElementById('np-token-input').value = '';
+        form.style.display = 'block';
+        document.getElementById('np-token-input').focus();
+      });
     }
   }
 
@@ -1426,7 +1448,8 @@
   async function initSync() {
     if (syncInitialized) return;
     syncInitialized = true;
-    const { token } = gistAuth();
+    const { token, id } = gistAuth();
+    if (!token && id) { setSyncState('notoken'); return; }
     if (!token) { setSyncState('off'); return; }
     const setupBtn = document.getElementById('np-sync-setup-btn');
     if (setupBtn) setupBtn.textContent = 'Manage sync';
@@ -1677,10 +1700,12 @@
     }
     const { id } = gistAuth();
     if (syncState === 'ok') {
-      status.textContent = id ? `✓ Connected — Gist ID: ${id}` : '✓ Connected';
+      try { if (navigator.storage?.persist) await navigator.storage.persist(); } catch {}
+      const syncUrl = window.location.href.split('#')[0];
+      status.innerHTML = `✓ Connected — <a href="${syncUrl}" style="color:var(--sage-deep);font-size:10px;" onclick="navigator.clipboard?.writeText('${syncUrl}');this.textContent='URL copied!';return false;">copy sync URL</a> (add to iOS Home Screen with this URL to keep sync permanent)`;
       status.style.color = 'var(--sage-deep)';
       document.getElementById('np-sync-setup-btn').textContent = 'Manage sync';
-      setTimeout(() => { document.getElementById('np-sync-form').style.display = 'none'; }, 3000);
+      setTimeout(() => { document.getElementById('np-sync-form').style.display = 'none'; }, 6000);
     } else {
       status.textContent = 'Failed — check your token and try again';
       status.style.color = 'var(--blush-deep)';
