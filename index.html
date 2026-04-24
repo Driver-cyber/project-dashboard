@@ -897,6 +897,75 @@
       margin-bottom: 4px;
       font-style: italic;
     }
+
+    /* BACKBURNER */
+    .backburner {
+      grid-column: 1 / -1;
+      margin-top: 6px;
+    }
+    .backburner-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 20px;
+      background: transparent;
+      border: 1px dashed var(--line-2);
+      border-radius: 14px;
+      color: var(--ink-2);
+      font: inherit;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    }
+    .backburner-toggle:hover {
+      background: var(--sage-tint);
+      color: var(--ink);
+      border-color: var(--sage);
+    }
+    .backburner-toggle .bb-label {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .backburner-toggle .bb-name {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 20px;
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+    .backburner-toggle .bb-count {
+      color: var(--ink-3);
+      font-variant-numeric: tabular-nums;
+    }
+    .backburner-toggle .chev {
+      color: var(--ink-3);
+      transition: transform 0.28s ease, color 0.18s ease;
+    }
+    .backburner-toggle:hover .chev { color: var(--sage-deep); }
+    .backburner[data-open="true"] .backburner-toggle .chev { transform: rotate(180deg); }
+
+    .backburner-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.35s ease;
+    }
+    .backburner[data-open="true"] .backburner-content { grid-template-rows: 1fr; }
+    .backburner-inner {
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      padding-top: 18px;
+    }
+    @media (min-width: 700px) {
+      .backburner-inner {
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      }
+    }
   </style>
 </head>
 <body>
@@ -1047,6 +1116,8 @@
   /* ---------- THEME ---------- */
   const STORAGE_THEME = 'gp.theme';
   const STORAGE_FILTER = 'gp.filter';
+  const STORAGE_BB = 'gp.backburner';
+  const FEATURED_COUNT = 4;
 
   function applyTheme(mode) {
     document.documentElement.setAttribute('data-theme', mode);
@@ -1224,12 +1295,40 @@
     });
   }
 
+  function renderCardResult(r) {
+    return r.status === 'fulfilled'
+      ? cardHTML(r.value, r.cfg.repo)
+      : errorCardHTML(r.cfg.repo, r.reason.message);
+  }
+
+  function sortByRecency(results) {
+    return results.slice().sort((a, b) => {
+      const aOk = a.status === 'fulfilled';
+      const bOk = b.status === 'fulfilled';
+      if (aOk !== bOk) return aOk ? -1 : 1;
+      if (!aOk) return 0;
+      return (b.value.updated || '').localeCompare(a.value.updated || '');
+    });
+  }
+
+  function attachBackburnerListener() {
+    const sec = document.querySelector('.backburner');
+    if (!sec) return;
+    const btn = sec.querySelector('.backburner-toggle');
+    btn.addEventListener('click', () => {
+      const open = sec.getAttribute('data-open') === 'true';
+      sec.setAttribute('data-open', String(!open));
+      btn.setAttribute('aria-expanded', String(!open));
+      try { localStorage.setItem(STORAGE_BB, String(!open)); } catch {}
+    });
+  }
+
   function render() {
     const grid = document.getElementById('grid');
-    const visible = loadedResults.filter(r => {
+    const visible = sortByRecency(loadedResults.filter(r => {
       if (r.status !== 'fulfilled') return currentFilter === 'all';
       return projectMatchesFilter(r.value, currentFilter);
-    });
+    }));
 
     if (!visible.length && loadedResults.length) {
       grid.innerHTML = `<div class="filter-empty">
@@ -1238,10 +1337,39 @@
       </div>`;
       return;
     }
-    grid.innerHTML = visible.map(r =>
-      r.status === 'fulfilled' ? cardHTML(r.value, r.cfg.repo) : errorCardHTML(r.cfg.repo, r.reason.message)
-    ).join('');
+
+    const useBackburner = currentFilter === 'all' && visible.length > FEATURED_COUNT;
+
+    if (!useBackburner) {
+      grid.innerHTML = visible.map(renderCardResult).join('');
+      attachExpandListeners();
+      return;
+    }
+
+    const featured = visible.slice(0, FEATURED_COUNT);
+    const backburner = visible.slice(FEATURED_COUNT);
+    let bbOpen = false;
+    try { bbOpen = localStorage.getItem(STORAGE_BB) === 'true'; } catch {}
+
+    grid.innerHTML =
+      featured.map(renderCardResult).join('') +
+      `<section class="backburner" data-open="${bbOpen}">
+        <button class="backburner-toggle" type="button" aria-expanded="${bbOpen}">
+          <span class="bb-label">
+            <span class="bb-name">Backburner</span>
+            <span class="bb-count">${backburner.length} ${backburner.length === 1 ? 'project' : 'projects'}</span>
+          </span>
+          <svg class="chev" width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true">
+            <path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="backburner-content">
+          <div class="backburner-inner">${backburner.map(renderCardResult).join('')}</div>
+        </div>
+      </section>`;
+
     attachExpandListeners();
+    attachBackburnerListener();
   }
 
   function updateCounts() {
