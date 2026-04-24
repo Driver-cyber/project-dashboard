@@ -1140,6 +1140,7 @@
   function staleInfo(dateStr) {
     if (!dateStr) return { tier: 'stale', label: 'No date', days: 999 };
     const days = Math.floor((Date.now() - new Date(dateStr)) / 86400000);
+    if (Number.isNaN(days)) return { tier: 'stale', label: 'Bad date format', days: 999 };
     if (days <= 0)  return { tier: 'fresh',  label: 'Updated today',          days };
     if (days === 1) return { tier: 'fresh',  label: 'Yesterday',              days };
     if (days < 7)   return { tier: 'fresh',  label: `${days} days ago`,       days };
