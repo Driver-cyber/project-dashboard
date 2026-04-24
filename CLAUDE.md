@@ -18,9 +18,12 @@ This repo is Chad's personal command center — a live, bookmarkable dashboard t
 
 | File / Folder | Purpose |
 |---|---|
-| `index.html` | The dashboard UI — deployed via Cloudflare Pages (served at site root) |
+| `index.html` | The dashboard UI (Dashboard / Notepad / Calm tabs) — deployed via Cloudflare Pages, served at site root |
+| `projects.json` | The registry. Single source of truth for both dashboard cards AND notepad category dropdown. One-line-per-project: `{repo, tracker}`. |
 | `learned-log.json` | Append-only record of completed priorities and learning milestones |
-| `workflow/` | Prompt templates for other projects: tracker setup, retrofit, etc. |
+| `functions/api/gist.js` | Cloudflare Pages Function — server-side proxy for the notepad's GitHub Gist sync (hides the token from the client) |
+| `favicon.svg` / `apple-touch-icon.png` | Sage-deep green plant-mark icons |
+| `workflow/` | Prompt templates for other projects: tracker setup, retrofit, garden-app SwiftUI constitution, etc. |
 | `CLAUDE.md` | This file — the project constitution |
 | `DECISIONS.md` | Living decision log — the current source of truth for "what we decided" |
 
@@ -28,12 +31,18 @@ This repo is Chad's personal command center — a live, bookmarkable dashboard t
 
 ## 🛠 Architecture
 
-**Hosting:** Cloudflare Pages — auto-deploys on push to `main`.
+**Hosting:** Cloudflare Pages — auto-deploys on push to `main`. Custom domain: `garden.chadstewartcpa.com`.
 
-**Data flow:**
-- The dashboard fetches tracker data live from other public repos under `Driver-cyber` via the unauthenticated GitHub Contents API
-- No backend, no token, no Cloudflare Worker needed — all repos are public
-- `learned-log.json` lives in this repo and is the single source of truth for the progress/learning record
+**Data flow — dashboard cards:**
+- Fetches tracker data live from public repos under `Driver-cyber` via the unauthenticated GitHub Contents API
+- No client token needed — all repos are public
+- `projects.json` drives which repos are fetched; it also populates the notepad's category dropdown so "category" and "project" stay the same concept
+
+**Data flow — notepad sync:**
+- Notes save to `localStorage` first (bulletproof on-device)
+- Then push to a GitHub Gist via `/api/gist` — a Cloudflare Pages Function that holds the `GITHUB_TOKEN` + `GIST_ID` env vars server-side (no client-side credentials, no setup UI)
+- On app open, `initSync` pulls the Gist and merges with local. Local-only notes are auto-pushed on successful pull (rescues offline creates).
+- GitHub Gist's version history is a free safety net — every prior state is recoverable.
 
 **GitHub API pattern for reading tracker files:**
 ```
