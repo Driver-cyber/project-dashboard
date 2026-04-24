@@ -1437,7 +1437,11 @@
     const txt = document.getElementById('np-sync-text');
     if (!dot || !txt) return;
     dot.className = 'np-sync-dot' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : '');
-    if (state === 'ok')   txt.textContent = `Synced ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+    if (state === 'ok') {
+      const count = loadNotes().length;
+      const time = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      txt.textContent = `${count} ${count === 1 ? 'note' : 'notes'} · synced ${time}`;
+    }
     else if (state === 'busy') txt.textContent = 'Syncing…';
     else if (state === 'err') {
       txt.innerHTML = 'Sync failed — <button class="np-sync-link" id="np-sync-retry-btn">retry</button>';
@@ -1481,13 +1485,19 @@
     if (gistNotes === null) return;
     syncEnabled = true;
     const local = loadNotes();
+    const gistIds = new Set(gistNotes.map(n => n.id));
+    const hasLocalOrphans = local.some(n => !gistIds.has(n.id));
     const byId = new Map();
     local.forEach(n => byId.set(n.id, n));
     gistNotes.forEach(n => byId.set(n.id, n));
     const merged = [...byId.values()].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     saveNotes(merged);
-    setSyncState('ok');
     renderNotes();
+    if (hasLocalOrphans) {
+      gistPush(merged).catch(() => {});
+    } else {
+      setSyncState('ok');
+    }
   }
   /* --- end Gist sync --- */
 

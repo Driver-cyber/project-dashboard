@@ -27,5 +27,12 @@
     "completed": "Dashboard backburner — cards auto-sort by updated date, top 4 featured, rest collapsed behind a carrot. Added garden-app as 7th project. Shipped favicon and apple-touch-icon in sage-deep green.",
     "learned": "PNG files can be generated from pure Python with only stdlib (struct + zlib) — no PIL needed for simple shapes. iOS apple-touch-icon requires a real PNG (SVG not supported) but browser favicons accept SVG directly via <link rel='icon' type='image/svg+xml'>.",
     "session_note": "First use of collapsible sub-sections inside the main grid. The backburner pattern (default-closed, localStorage-persisted open state) keeps the default view clean while preserving intentional exploration. garden-app is the first project registered that will NOT have a Cloudflare deployment — it's a standalone SwiftUI/iOS app, a new learning vector for Chad."
+  },
+  {
+    "date": "2026-04-24",
+    "project": "Project Dashboard",
+    "completed": "Notes sync resilience: initSync now detects local-only notes (created while offline or not yet pushed) and auto-pushes them on reconnect. Sync indicator now shows live note count for at-a-glance reassurance.",
+    "learned": "Offline-first sync has two failure modes worth distinguishing: silent failed pushes (red-dot visible, user can retry) and orphan writes (note exists locally but never made it to the remote). The orphan case is the dangerous one — it looks synced because there's nothing to retry. Detecting it requires comparing local IDs against remote IDs on every init, not just tracking push failures.",
+    "session_note": "Verified notes persistence by pulling the live /api/gist endpoint — found all notes intact plus 3 commits of gist version history (GitHub retains every prior state of the gist indefinitely, so even corruption is undoable). Confirmed Gist backend is fine to keep long-term with a no-expiration token; KV migration deferred as unnecessary."
   }
 ]
