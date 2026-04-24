@@ -20,5 +20,12 @@
     "completed": "Shipped Notepad tab (notes, export, archive flow), Calm tab (wheat animation, confetti checkbox), tabbed navigation, GitHub card links, R shortcut, Wild Stewart Homeschool added, mobile zoom fixes, Copy as prompt button, Ideas/TBD category.",
     "learned": "iOS auto-zoom on input focus is triggered by font-size below 16px — setting inputs to 16px on mobile prevents it without disabling user zoom. CSS viewport maximum-scale=1 stops layout-breaking zoom on orientation change.",
     "session_note": "Chad used the Notepad export flow in the same session it was built and immediately filed 3 real bugs with it. The Copy as prompt idea came from that first use. Notepad → export → Claude Code is the intended power loop."
+  },
+  {
+    "date": "2026-04-24",
+    "project": "Project Dashboard",
+    "completed": "Dashboard backburner — cards auto-sort by updated date, top 4 featured, rest collapsed behind a carrot. Added garden-app as 7th project. Shipped favicon and apple-touch-icon in sage-deep green.",
+    "learned": "PNG files can be generated from pure Python with only stdlib (struct + zlib) — no PIL needed for simple shapes. iOS apple-touch-icon requires a real PNG (SVG not supported) but browser favicons accept SVG directly via <link rel='icon' type='image/svg+xml'>.",
+    "session_note": "First use of collapsible sub-sections inside the main grid. The backburner pattern (default-closed, localStorage-persisted open state) keeps the default view clean while preserving intentional exploration. garden-app is the first project registered that will NOT have a Cloudflare deployment — it's a standalone SwiftUI/iOS app, a new learning vector for Chad."
   }
 ]

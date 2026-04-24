@@ -195,7 +195,7 @@
     <div class="logo">Project Dashboard<em>.</em></div>
     <div class="meta">
       <span>Driver-cyber / project-dashboard</span>
-      <span>Updated 2026-04-23 · Phase 2</span>
+      <span>Updated 2026-04-24 · Phase 2</span>
     </div>
   </div>
   <div class="mode-toggle" role="group" aria-label="Theme">
@@ -231,28 +231,34 @@
     <li>
       <span class="num">2</span>
       <div class="priority-text">
-        <strong>Notepad persistence across devices</strong>
-        <span>Notes live in localStorage — device-only. Consider a lightweight sync option so notes are available on phone and desktop.</span>
+        <strong>Staleness alert when tracker goes quiet</strong>
+        <span>Visual warning on the card when a project hasn't been updated in 14+ days. Already have the staleness data — just needs a stronger signal.</span>
       </div>
     </li>
     <li>
       <span class="num">3</span>
       <div class="priority-text">
-        <strong>Staleness alert when tracker goes quiet</strong>
-        <span>Visual warning on the card when a project hasn't been updated in 14+ days. Already have the staleness data — just needs a stronger signal.</span>
+        <strong>Year-in-review generator from learned-log.json</strong>
+        <span>Claude drafts a quarterly or yearly summary of shipped work and skills acquired, on demand from the dashboard.</span>
       </div>
     </li>
   </ol>
 
   <div class="section-label">Backlog</div>
   <ul class="backlog-list">
-    <li>"Year in review" generator — Claude drafts a summary from learned-log.json on demand</li>
     <li>Collapse-all / expand-all keyboard shortcut</li>
     <li>Notepad: tag notes with multiple projects</li>
+    <li>Notepad: search across all notes</li>
+    <li>Pin/unpin a project to force it into the featured top 4</li>
   </ul>
 
   <div class="section-label">Shipped</div>
   <ul class="backlog-list">
+    <li>Dashboard backburner — top 4 by recency auto-featured, rest collapsed behind a carrot</li>
+    <li>Cards auto-sort by most-recent updated date — fresh work floats to top</li>
+    <li>garden-app registered as 7th project card (native iOS notes app, Swift/SwiftData)</li>
+    <li>Favicon and apple-touch-icon — sage-deep green with two-leaf plant mark</li>
+    <li>Notepad sync moved server-side via Cloudflare Pages Function — no client-side tokens, survives PWA reinstall</li>
     <li>Notepad tab — per-project notes, filter chips, archive/restore, full export flow</li>
     <li>Export: Copy markdown, Copy as prompt, Download .md, archive picker</li>
     <li>Ideas / TBD catch-all category in notepad for unattached notes</li>
@@ -296,7 +302,7 @@
 {
   "project": "Project Dashboard",
   "description": "Personal command center — cross-project dashboard fetching live tracker data from GitHub",
-  "updated": "2026-04-23",
+  "updated": "2026-04-24",
   "columns": [
     {
       "name": "project-dashboard",
@@ -307,18 +313,19 @@
           "note": "Scan Driver-cyber repos for *-tracker.html — no manual projects.json entry needed."
         },
         {
-          "title": "Notepad persistence across devices",
-          "note": "Notes are localStorage-only right now — device-specific."
-        },
-        {
           "title": "Staleness alert on quiet projects",
           "note": "Stronger visual signal when a project hasn't updated in 14+ days."
+        },
+        {
+          "title": "Year-in-review generator from learned-log.json",
+          "note": "Claude drafts a quarterly/yearly summary of shipped work and skills acquired."
         }
       ],
       "backlog": [
-        "Year-in-review generator from learned-log.json",
         "Collapse-all / expand-all keyboard shortcut",
-        "Notepad: tag notes with multiple projects"
+        "Notepad: tag notes with multiple projects",
+        "Notepad: search across all notes",
+        "Pin/unpin a project to force it into the featured top 4"
       ]
     }
   ]
