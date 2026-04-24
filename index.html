@@ -420,6 +420,47 @@
     .np-archive-picker .note-snip { color: var(--ink-2); }
     .np-archive-picker .note-snip-date { color: var(--ink-3); font-size: 10px; margin-left: 6px; }
 
+    .np-sync-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      font-size: 11px;
+      color: var(--ink-3);
+    }
+    .np-sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-3); flex-shrink: 0; }
+    .np-sync-dot.ok { background: var(--sage-deep); }
+    .np-sync-dot.err { background: var(--blush-deep); }
+    .np-sync-link { background: none; border: none; padding: 0; color: var(--sage-deep); font-size: 11px; font-family: inherit; cursor: pointer; text-decoration: underline; margin-left: auto; }
+    .np-sync-form {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 18px;
+      font-size: 12px;
+      color: var(--ink-2);
+      line-height: 1.5;
+    }
+    .np-sync-form p { margin-bottom: 10px; }
+    .np-sync-label { font-size: 11px; color: var(--ink-3); display: block; margin-bottom: 2px; }
+    .np-sync-input {
+      width: 100%;
+      font-size: 16px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    @media (min-width: 720px) { .np-sync-input { font-size: 13px; } }
+    .np-sync-input:focus { outline: none; border-color: var(--sage-deep); }
+    .np-sync-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .np-sync-form-status { font-size: 11px; }
+
     /* FILTER CHIPS */
     .chips {
       padding: 4px 22px 14px;
@@ -942,6 +983,23 @@
   <div id="notepad-main" style="padding:20px 22px; max-width:800px; margin:0 auto;">
     <div class="np-title">Notepad</div>
     <p class="np-sub">Capture ideas, bugs, and prompts per project. Export them to paste into Claude Code.</p>
+    <div id="np-sync-bar">
+      <span class="np-sync-dot" id="np-sync-dot"></span>
+      <span id="np-sync-text">Notes stored locally only</span>
+      <button class="np-sync-link" id="np-sync-setup-btn">Set up sync</button>
+    </div>
+    <div id="np-sync-form" style="display:none;">
+      <p>Save notes to a private GitHub Gist — survives reinstalls, syncs across devices.</p>
+      <label class="np-sync-label" for="np-token-input">GitHub Personal Access Token <span style="opacity:0.7">(gists scope only — <a href="https://github.com/settings/tokens/new?scopes=gist&description=Garden+Notes" target="_blank" rel="noopener" style="color:var(--sage-deep)">create one</a>)</span></label>
+      <input class="np-sync-input" type="password" id="np-token-input" placeholder="ghp_…" autocomplete="off" spellcheck="false">
+      <label class="np-sync-label" for="np-gist-id-input">Gist ID <span style="opacity:0.7">(leave blank on first setup; paste to reconnect on a new device)</span></label>
+      <input class="np-sync-input" type="text" id="np-gist-id-input" placeholder="leave blank to create new" autocomplete="off" spellcheck="false">
+      <div class="np-sync-row">
+        <button class="np-btn" id="np-sync-connect-btn">Connect</button>
+        <button class="np-btn ghost" id="np-sync-cancel-btn">Cancel</button>
+        <span class="np-sync-form-status" id="np-sync-form-status"></span>
+      </div>
+    </div>
     <div class="np-compose">
       <div class="np-row">
         <select class="np-select" id="np-project"><option value="">Select project…</option><option value="__tbd__">— Ideas / TBD —</option></select>
@@ -1254,7 +1312,7 @@
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `panel-${name}`));
     try { localStorage.setItem('gp.tab', name); } catch {}
     if (name === 'calm') startCalm();
-    if (name === 'notepad') renderNotes();
+    if (name === 'notepad') { initSync(); renderNotes(); }
   }
   document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
   (() => {
@@ -1278,6 +1336,98 @@
   const NP_FILTER_KEY = 'gp.note_filter';
   function loadNotes() { try { return JSON.parse(localStorage.getItem(NOTES_KEY) || '[]'); } catch { return []; } }
   function saveNotes(a) { try { localStorage.setItem(NOTES_KEY, JSON.stringify(a)); } catch {} }
+
+  /* --- Gist sync --- */
+  const GIST_TOKEN_KEY = 'gp.gist.token';
+  const GIST_ID_KEY    = 'gp.gist.id';
+  const GIST_FILE      = 'garden-notes.json';
+  let syncState = 'off';
+  let syncInitialized = false;
+
+  function gistAuth() {
+    try { return { token: localStorage.getItem(GIST_TOKEN_KEY) || '', id: localStorage.getItem(GIST_ID_KEY) || '' }; }
+    catch { return { token: '', id: '' }; }
+  }
+
+  function setSyncState(state) {
+    syncState = state;
+    const dot = document.getElementById('np-sync-dot');
+    const txt = document.getElementById('np-sync-text');
+    if (!dot || !txt) return;
+    dot.className = 'np-sync-dot' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : '');
+    if (state === 'off')  txt.textContent = 'Notes stored locally only';
+    else if (state === 'ok')   txt.textContent = `Synced ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+    else if (state === 'busy') txt.textContent = 'Syncing…';
+    else if (state === 'err')  txt.textContent = 'Sync failed — check token';
+  }
+
+  async function gistPush(notes) {
+    const { token, id } = gistAuth();
+    if (!token) return;
+    setSyncState('busy');
+    try {
+      const content = JSON.stringify(notes, null, 2);
+      if (!id) {
+        const r = await fetch('https://api.github.com/gists', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ description: 'Garden Notes', public: false, files: { [GIST_FILE]: { content } } })
+        });
+        if (!r.ok) throw new Error();
+        const data = await r.json();
+        try { localStorage.setItem(GIST_ID_KEY, data.id); } catch {}
+      } else {
+        const r = await fetch(`https://api.github.com/gists/${id}`, {
+          method: 'PATCH',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ files: { [GIST_FILE]: { content } } })
+        });
+        if (!r.ok) throw new Error();
+      }
+      setSyncState('ok');
+    } catch { setSyncState('err'); }
+  }
+
+  async function gistPull() {
+    const { token, id } = gistAuth();
+    if (!token || !id) return null;
+    try {
+      const r = await fetch(`https://api.github.com/gists/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!r.ok) return null;
+      const data = await r.json();
+      const content = data.files?.[GIST_FILE]?.content;
+      return content ? JSON.parse(content) : null;
+    } catch { return null; }
+  }
+
+  async function syncSave(notes) {
+    saveNotes(notes);
+    if (gistAuth().token) gistPush(notes).catch(() => {});
+  }
+
+  async function initSync() {
+    if (syncInitialized) return;
+    syncInitialized = true;
+    const { token } = gistAuth();
+    if (!token) { setSyncState('off'); return; }
+    const setupBtn = document.getElementById('np-sync-setup-btn');
+    if (setupBtn) setupBtn.textContent = 'Manage sync';
+    setSyncState('busy');
+    const gistNotes = await gistPull();
+    if (!gistNotes) { setSyncState('err'); return; }
+    const local = loadNotes();
+    const byId = new Map();
+    local.forEach(n => byId.set(n.id, n));
+    gistNotes.forEach(n => byId.set(n.id, n));
+    const merged = [...byId.values()].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    saveNotes(merged);
+    setSyncState('ok');
+    renderNotes();
+  }
+  /* --- end Gist sync --- */
+
   function noteId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
   function fmtDate(iso) {
     const d = new Date(iso), now = new Date();
@@ -1319,7 +1469,7 @@
     if (!proj || !text) return;
     const notes = loadNotes();
     notes.unshift({ id: noteId(), project: proj, text, createdAt: new Date().toISOString(), status: 'active' });
-    saveNotes(notes);
+    syncSave(notes);
     ta.value = '';
     updateAddBtn();
     renderNotes();
@@ -1370,7 +1520,7 @@
     if (act === 'archive') notes[idx].status = 'archived';
     else if (act === 'restore') notes[idx].status = 'active';
     else if (act === 'delete') notes.splice(idx, 1);
-    saveNotes(notes);
+    syncSave(notes);
     renderNotes();
   }
 
@@ -1473,10 +1623,53 @@
     const ids = new Set([...document.querySelectorAll('#np-archive-picker input:checked')].map(c => c.dataset.id));
     const notes = loadNotes();
     notes.forEach(n => { if (ids.has(n.id)) n.status = 'archived'; });
-    saveNotes(notes);
+    syncSave(notes);
     document.getElementById('np-export-back').click();
   });
   document.getElementById('np-archive-skip').addEventListener('click', () => document.getElementById('np-export-back').click());
+
+  /* --- Sync form handlers --- */
+  document.getElementById('np-sync-setup-btn').addEventListener('click', () => {
+    const form = document.getElementById('np-sync-form');
+    const showing = form.style.display !== 'none';
+    form.style.display = showing ? 'none' : 'block';
+    if (!showing) {
+      const { id } = gistAuth();
+      document.getElementById('np-gist-id-input').value = id;
+      document.getElementById('np-token-input').value = '';
+      document.getElementById('np-sync-form-status').textContent = '';
+    }
+  });
+  document.getElementById('np-sync-cancel-btn').addEventListener('click', () => {
+    document.getElementById('np-sync-form').style.display = 'none';
+  });
+  document.getElementById('np-sync-connect-btn').addEventListener('click', async () => {
+    const token = document.getElementById('np-token-input').value.trim();
+    const gistId = document.getElementById('np-gist-id-input').value.trim();
+    const status = document.getElementById('np-sync-form-status');
+    if (!token) { status.textContent = 'Token required'; status.style.color = 'var(--blush-deep)'; return; }
+    status.textContent = 'Connecting…'; status.style.color = 'var(--ink-3)';
+    try { localStorage.setItem(GIST_TOKEN_KEY, token); } catch {}
+    if (gistId) {
+      try { localStorage.setItem(GIST_ID_KEY, gistId); } catch {}
+      syncInitialized = false;
+      await initSync();
+    } else {
+      try { localStorage.removeItem(GIST_ID_KEY); } catch {}
+      await gistPush(loadNotes());
+      syncInitialized = true;
+    }
+    const { id } = gistAuth();
+    if (syncState === 'ok') {
+      status.textContent = id ? `✓ Connected — Gist ID: ${id}` : '✓ Connected';
+      status.style.color = 'var(--sage-deep)';
+      document.getElementById('np-sync-setup-btn').textContent = 'Manage sync';
+      setTimeout(() => { document.getElementById('np-sync-form').style.display = 'none'; }, 3000);
+    } else {
+      status.textContent = 'Failed — check your token and try again';
+      status.style.color = 'var(--blush-deep)';
+    }
+  });
 
   /* ---------- CALM ---------- */
   let calmBuilt = false;
