@@ -966,6 +966,126 @@
         grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
       }
     }
+
+    /* COMPOSER IMPROVEMENTS */
+    .np-textarea { min-height: 120px; }
+    .np-compose { padding: 16px; }
+    .np-edit-banner {
+      font-size: 11px;
+      color: var(--sage-deep);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: none;
+    }
+    .np-edit-banner.visible { display: block; }
+
+    /* LINKS TAB */
+    #panel-links { padding: 20px 22px; max-width: 600px; margin: 0 auto; }
+    @media (min-width: 720px) { #panel-links { padding: 28px 28px; } }
+    .links-title {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 28px;
+      color: var(--ink);
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+    .links-sub { font-size: 12px; color: var(--ink-3); margin-bottom: 20px; }
+    .link-item {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+    .link-item:hover { border-color: var(--sage-soft); transform: translateY(-1px); box-shadow: var(--shadow); }
+    .link-item-left { min-width: 0; flex: 1; }
+    .link-item-label { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+    .link-item-url { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; color: var(--ink-3); }
+    .link-item-note { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+    .link-item-arrow { color: var(--ink-3); font-size: 18px; flex-shrink: 0; line-height: 1; transition: color 0.15s; }
+    .link-item:hover .link-item-arrow { color: var(--sage-deep); }
+
+    /* ACTION SHEET */
+    #link-sheet {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    #link-sheet-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.38);
+    }
+    #link-sheet-card {
+      position: relative;
+      background: var(--paper);
+      border-radius: 20px 20px 0 0;
+      padding: 8px 16px max(24px, env(safe-area-inset-bottom, 0));
+      width: 100%;
+      max-width: 480px;
+      z-index: 1;
+      animation: sheet-up 0.22s ease;
+    }
+    @media (min-width: 520px) {
+      #link-sheet-card { border-radius: 20px; margin-bottom: 24px; padding-bottom: 16px; }
+    }
+    @keyframes sheet-up {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+    #link-sheet-handle {
+      width: 36px; height: 4px;
+      background: var(--line-2);
+      border-radius: 99px;
+      margin: 8px auto 14px;
+    }
+    #link-sheet-label {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--ink);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    #link-sheet-url {
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 11px;
+      color: var(--sage-deep);
+      text-align: center;
+      margin-bottom: 16px;
+      word-break: break-all;
+    }
+    .sheet-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: background 0.15s, border-color 0.15s;
+      text-align: center;
+    }
+    .sheet-btn:hover { border-color: var(--sage-soft); background: var(--bg-2); }
+    .sheet-btn.primary { background: var(--sage-deep); color: var(--paper); border-color: var(--sage-deep); }
+    .sheet-btn.primary:hover { opacity: 0.88; }
+    .sheet-btn.cancel { color: var(--ink-3); margin-bottom: 0; }
   </style>
 </head>
 <body>
@@ -1006,6 +1126,7 @@
   <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
   <button class="tab-btn" data-tab="notepad">Notepad</button>
   <button class="tab-btn" data-tab="calm">Calm</button>
+  <button class="tab-btn" data-tab="links">Links</button>
 </nav>
 
 <section id="panel-dashboard" class="tab-panel active">
@@ -1036,9 +1157,11 @@
         <select class="np-select" id="np-project"><option value="">Select project…</option><option value="__tbd__">— Ideas / TBD —</option></select>
         <span class="np-hint">Cmd/Ctrl + Enter to add</span>
       </div>
+      <div class="np-edit-banner" id="np-edit-banner">Editing note</div>
       <textarea class="np-textarea" id="np-text" placeholder="Jot an idea, bug, or prompt…"></textarea>
       <div class="np-row" style="margin-top:10px;margin-bottom:0;">
         <button class="np-btn" id="np-add" disabled>Add note</button>
+        <button class="np-btn ghost" id="np-cancel-edit" style="display:none;">Cancel edit</button>
         <button class="np-btn ghost" id="np-export-btn">Export project…</button>
       </div>
     </div>
@@ -1097,6 +1220,26 @@
     <p class="calm-caption">Tap when you've done the one thing.</p>
   </div>
 </section>
+
+<section id="panel-links" class="tab-panel">
+  <div style="padding:20px 22px; max-width:600px; margin:0 auto;">
+    <div class="links-title">Quick Links</div>
+    <p class="links-sub">Tap a link to open in browser or copy to clipboard.</p>
+    <div id="links-list"></div>
+  </div>
+</section>
+
+<div id="link-sheet" style="display:none;" role="dialog" aria-modal="true">
+  <div id="link-sheet-backdrop"></div>
+  <div id="link-sheet-card">
+    <div id="link-sheet-handle"></div>
+    <div id="link-sheet-label"></div>
+    <div id="link-sheet-url"></div>
+    <button class="sheet-btn primary" id="link-sheet-open">Open in browser</button>
+    <button class="sheet-btn" id="link-sheet-copy">Copy URL</button>
+    <button class="sheet-btn cancel" id="link-sheet-cancel">Cancel</button>
+  </div>
+</div>
 
 <!-- Leaf watermark SVG, reused as a <template> -->
 <template id="leaf-template">
@@ -1404,6 +1547,7 @@
     try { localStorage.setItem('gp.tab', name); } catch {}
     if (name === 'calm') startCalm();
     if (name === 'notepad') { initSync(); renderNotes(); }
+    if (name === 'links') renderLinks();
   }
   document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
   (() => {
@@ -1425,6 +1569,7 @@
   /* ---------- NOTES ---------- */
   const NOTES_KEY = 'gp.notes';
   const NP_FILTER_KEY = 'gp.note_filter';
+  let editingNoteId = null;
   function loadNotes() { try { return JSON.parse(localStorage.getItem(NOTES_KEY) || '[]'); } catch { return []; } }
   function saveNotes(a) { try { localStorage.setItem(NOTES_KEY, JSON.stringify(a)); } catch {} }
 
@@ -1535,6 +1680,10 @@
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); addNote(); }
   });
   document.getElementById('np-add').addEventListener('click', addNote);
+  document.getElementById('np-cancel-edit').addEventListener('click', () => {
+    document.getElementById('np-text').value = '';
+    cancelEdit();
+  });
 
   function addNote() {
     const proj = document.getElementById('np-project').value;
@@ -1542,11 +1691,39 @@
     const text = ta.value.trim();
     if (!proj || !text) return;
     const notes = loadNotes();
-    notes.unshift({ id: noteId(), project: proj, text, createdAt: new Date().toISOString(), status: 'active' });
+    if (editingNoteId) {
+      const idx = notes.findIndex(n => n.id === editingNoteId);
+      if (idx >= 0) { notes[idx].text = text; notes[idx].project = proj; }
+      cancelEdit();
+    } else {
+      notes.unshift({ id: noteId(), project: proj, text, createdAt: new Date().toISOString(), status: 'active' });
+    }
     syncSave(notes);
     ta.value = '';
     updateAddBtn();
     renderNotes();
+  }
+
+  function startEditNote(id) {
+    const note = loadNotes().find(n => n.id === id);
+    if (!note) return;
+    editingNoteId = id;
+    document.getElementById('np-project').value = note.project;
+    document.getElementById('np-text').value = note.text;
+    document.getElementById('np-add').textContent = 'Update note';
+    document.getElementById('np-add').disabled = false;
+    document.getElementById('np-cancel-edit').style.display = '';
+    document.getElementById('np-edit-banner').classList.add('visible');
+    document.querySelector('.np-compose').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById('np-text').focus();
+  }
+
+  function cancelEdit() {
+    editingNoteId = null;
+    document.getElementById('np-add').textContent = 'Add note';
+    document.getElementById('np-cancel-edit').style.display = 'none';
+    document.getElementById('np-edit-banner').classList.remove('visible');
+    updateAddBtn();
   }
 
   function renderNotes() {
@@ -1566,7 +1743,12 @@
       ].join('');
     } else { chipsEl.innerHTML = ''; }
     chipsEl.querySelectorAll('.np-chip').forEach(c => c.addEventListener('click', () => {
-      try { localStorage.setItem(NP_FILTER_KEY, c.dataset.filter); } catch {}
+      const f = c.dataset.filter;
+      try { localStorage.setItem(NP_FILTER_KEY, f); } catch {}
+      if (f !== 'all') {
+        const sel = document.getElementById('np-project');
+        if (sel && [...sel.options].some(o => o.value === f)) { sel.value = f; updateAddBtn(); }
+      }
       renderNotes();
     }));
 
@@ -1574,7 +1756,7 @@
     const listEl = document.getElementById('np-list');
     document.getElementById('np-count').textContent = active.length ? `${active.length} note${active.length!==1?'s':''}` : '';
     listEl.innerHTML = shown.length
-      ? shown.map(n => `<div class="np-note"><div class="np-note-head"><span class="np-note-proj">${esc(projName(n.project))}</span><span class="np-note-date">${esc(fmtDate(n.createdAt))}</span></div><div class="np-note-text">${esc(n.text)}</div><div class="np-note-actions"><button data-act="archive" data-id="${n.id}">Archive</button><button data-act="delete" data-id="${n.id}">Delete</button></div></div>`).join('')
+      ? shown.map(n => `<div class="np-note"><div class="np-note-head"><span class="np-note-proj">${esc(projName(n.project))}</span><span class="np-note-date">${esc(fmtDate(n.createdAt))}</span></div><div class="np-note-text">${esc(n.text)}</div><div class="np-note-actions"><button data-act="edit" data-id="${n.id}">Edit</button><button data-act="archive" data-id="${n.id}">Archive</button><button data-act="delete" data-id="${n.id}">Delete</button></div></div>`).join('')
       : `<p class="np-empty">${active.length?'No notes for this project.':'No notes yet. Jot one above.'}</p>`;
     listEl.querySelectorAll('button[data-act]').forEach(b => b.addEventListener('click', () => noteAction(b.dataset.act, b.dataset.id)));
 
@@ -1589,6 +1771,7 @@
   }
 
   function noteAction(act, id) {
+    if (act === 'edit') { startEditNote(id); return; }
     const notes = loadNotes(), idx = notes.findIndex(n => n.id === id);
     if (idx < 0) return;
     if (act === 'archive') notes[idx].status = 'archived';
@@ -1739,6 +1922,68 @@
       setTimeout(() => d.remove(), 1100);
     }
   }
+
+  /* ---------- LINKS ---------- */
+  const LINKS = [
+    { label: 'Project Dashboard', url: 'https://projects.chadstewartcpa.com', note: 'This app' },
+    { label: 'WSH Prep',          url: 'https://learn.chadstewartcpa.com/app',   note: 'Wild Stewart Homeschool — student prep' },
+    { label: 'WSH Learn',         url: 'https://learn.chadstewartcpa.com/learn', note: 'Wild Stewart Homeschool — learning portal' },
+  ];
+
+  let activeLink = null;
+
+  function renderLinks() {
+    const list = document.getElementById('links-list');
+    if (!list || list.children.length) return;
+    list.innerHTML = LINKS.map((lk, i) => `
+      <div class="link-item" role="button" tabindex="0" data-link-idx="${i}">
+        <div class="link-item-left">
+          <div class="link-item-label">${esc(lk.label)}</div>
+          <div class="link-item-url">${esc(lk.url)}</div>
+          ${lk.note ? `<div class="link-item-note">${esc(lk.note)}</div>` : ''}
+        </div>
+        <span class="link-item-arrow">›</span>
+      </div>`).join('');
+    list.querySelectorAll('.link-item').forEach(el => {
+      el.addEventListener('click', () => showLinkSheet(LINKS[+el.dataset.linkIdx]));
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showLinkSheet(LINKS[+el.dataset.linkIdx]); }
+      });
+    });
+  }
+
+  function showLinkSheet(lk) {
+    activeLink = lk;
+    document.getElementById('link-sheet-label').textContent = lk.label;
+    document.getElementById('link-sheet-url').textContent = lk.url;
+    document.getElementById('link-sheet-copy').textContent = 'Copy URL';
+    document.getElementById('link-sheet').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideLinkSheet() {
+    document.getElementById('link-sheet').style.display = 'none';
+    document.body.style.overflow = '';
+    activeLink = null;
+  }
+
+  document.getElementById('link-sheet-backdrop').addEventListener('click', hideLinkSheet);
+  document.getElementById('link-sheet-cancel').addEventListener('click', hideLinkSheet);
+  document.getElementById('link-sheet-open').addEventListener('click', () => {
+    if (activeLink) window.open(activeLink.url, '_blank', 'noopener');
+    hideLinkSheet();
+  });
+  document.getElementById('link-sheet-copy').addEventListener('click', async () => {
+    if (!activeLink) return;
+    const btn = document.getElementById('link-sheet-copy');
+    try {
+      await navigator.clipboard.writeText(activeLink.url);
+      btn.textContent = '✓ Copied!';
+    } catch {
+      btn.textContent = 'Copy failed';
+    }
+    setTimeout(hideLinkSheet, 1200);
+  });
 
   /* ---------- INIT ---------- */
   async function init() {
