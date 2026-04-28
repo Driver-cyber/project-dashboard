@@ -126,5 +126,23 @@
     "first_ever": "First Swift code in this repo",
     "curiosity_trail": "Can the widget read locally cached tracker data instead of refetching every 45 minutes?",
     "energy_in": "high"
+  },
+  {
+    "date": "2026-04-28",
+    "project": "der Hain",
+    "repo": "project-dashboard",
+    "completed": "Galaxy / Victory Lap tab shipped — 7 planets per project sized by accomplishment count, hyperspace warp on click (stars stretch to lines, stage scales toward clicked planet), planet detail view with moons in orbit (one per accomplishment), moon detail cards showing full rich-field data. Enriched learned-log.json schema with 8 new tracking fields, backfilled all entries, created enrich-tracker-shipped.md workflow prompt.",
+    "learned": "CSS transform-origin set dynamically per click makes scale() zoom toward any target point — no JS animation loop or requestAnimationFrame math needed. The browser computes the perspective. Setting it to the planet's position as a percentage of the container before adding the warp class is the entire trick.",
+    "session_note": "Chad looked at the dev deployment mid-session and said 'it is sooooo cool!!' — highest praise. The Galaxy was designed in conversation before a single line was written: spatial vs timeline, all 7 planets visible even if dim, hyperspace travel direction. The 8 tracking metrics were voted in real-time (yes/no/no/yes pattern). Chad immediately took the enrich prompt to the other 6 repos the same session.",
+    "tags": ["galaxy", "visualization", "css", "animation", "data-viz", "schema"],
+    "artifact": "index.html",
+    "intensity": "deep_dive",
+    "mood": "🪐",
+    "aha": "transform-origin as a percentage set dynamically — the CSS scale just knows where to zoom toward",
+    "wonder": "A spatial visualization of a year of work, built in one session, sourced entirely from data we'd already been maintaining. The log was always going to be the galaxy — we just hadn't rendered it yet.",
+    "first_ever": "First data visualization feature in this repo",
+    "real_world_use": true,
+    "energy_in": "high",
+    "curiosity_trail": "What does the galaxy look like in 6 months with 50+ moons per planet?"
   }
 ]

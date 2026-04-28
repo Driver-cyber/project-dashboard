@@ -195,7 +195,7 @@
     <div class="logo">Project Dashboard<em>.</em></div>
     <div class="meta">
       <span>Driver-cyber / project-dashboard</span>
-      <span>Updated 2026-04-28 · Phase 3</span>
+      <span>Updated 2026-04-28 · Phase 4</span>
     </div>
   </div>
   <div class="mode-toggle" role="group" aria-label="Theme">
@@ -246,6 +246,8 @@
 
   <div class="section-label">Backlog</div>
   <ul class="backlog-list">
+    <li>Cross-repo learned-log: other project sessions should append entries here with correct <code>repo</code> field so Galaxy shows full learning history, not just dashboard sessions</li>
+    <li>Learning platform / curriculum deep dives (parked) — separate Claude project with custom instructions for first-principles walkthroughs of Python, Swift, CSS by project; not a tab in der Hain</li>
     <li>Year-in-review generator from learned-log.json</li>
     <li>Lock screen widget for iOS (.accessoryRectangular family)</li>
     <li>Action Button shortcut to open der Hain instantly</li>
@@ -258,6 +260,10 @@
 
   <div class="section-label">Shipped</div>
   <ul class="backlog-list">
+    <li>Galaxy / Victory Lap tab — spatial planet visualization, 7 planets per project (sized by accomplishment count), hyperspace warp animation on click, orbiting moons (one per accomplishment), ✦ aha / ★ first-ever glyphs, moon detail cards with full rich-field rendering</li>
+    <li>learned-log.json schema enriched — 8 new tracking fields (tags, struggle, artifact, intensity, mood, aha, frustration_peak, curiosity_trail, first_ever, real_world_use, energy_in, wonder); all 8 existing entries backfilled</li>
+    <li>workflow/enrich-tracker-shipped.md — drop-in prompt to retrofit all 6 other tracked repos to structured shipped schema</li>
+    <li>project-dashboard-tracker.html shipped array — upgraded from string list to 30 dated/tagged objects as canonical template</li>
     <li>iOS companion app skeleton — WKWebView wrapper + home screen widget, ios/ subfolder, full Xcode setup guide</li>
     <li>Rebrand Garden → der Hain — logo, title, PWA name, empty state, favicon (single plant → grove of three trees with trunks + tonal variation), apple-touch-icon regenerated from pure stdlib Python</li>
     <li>Quick Links tab — preset URLs (Project Dashboard, WSH Prep, WSH Learn) with iOS-style action sheet (Open in browser / Copy URL)</li>
@@ -314,6 +320,7 @@
   "project": "der Hain",
   "description": "Personal command center — cross-project dashboard fetching live tracker data from GitHub",
   "updated": "2026-04-28",
+  "phase": "4",
   "columns": [
     {
       "name": "der Hain",
@@ -344,6 +351,9 @@
         "Custom categories in notepad selector (parked, may revisit)"
       ],
       "shipped": [
+        { "date": "2026-04-28", "what": "Galaxy / Victory Lap tab — 7 planets per project, hyperspace warp, orbiting moons with aha/first-ever glyphs, moon detail cards", "tags": ["galaxy", "visualization", "animation", "ux"], "learned": "transform-origin set per-click makes CSS scale() zoom toward any target — no JS animation loop needed" },
+        { "date": "2026-04-28", "what": "learned-log.json schema enriched with 8 tracking fields (tags, mood, aha, struggle, frustration_peak, wonder, curiosity_trail, first_ever, real_world_use, energy_in, intensity, artifact); all 8 entries backfilled", "tags": ["docs", "schema"] },
+        { "date": "2026-04-28", "what": "workflow/enrich-tracker-shipped.md — drop-in retrofit prompt for all 6 other repos", "tags": ["docs", "workflow"] },
         { "date": "2026-04-28", "what": "iOS companion app skeleton — WKWebView wrapper + home screen widget, ios/ subfolder, full Xcode setup guide", "tags": ["swift", "ios", "wkwebview", "widgetkit"] },
         { "date": "2026-04-28", "what": "Rebrand Garden → der Hain — logo, title, PWA name, empty state, favicon (grove of three trees with trunks + tonal variation), apple-touch-icon regenerated from pure stdlib Python", "tags": ["branding", "favicon", "python"] },
         { "date": "2026-04-28", "what": "Quick Links tab — preset URLs with iOS-style action sheet (Open in browser / Copy URL)", "tags": ["ux", "tabs"] },

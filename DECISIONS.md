@@ -5,12 +5,37 @@
 ---
 
 ## 🎯 Current Phase
-**Phase 3 — Identity + native shell** (in progress)
-Phase 1 complete 2026-04-23. Phase 2 wrapped 2026-04-28 with notepad polish and Quick Links. Phase 3 kicked off same session: rebrand Garden → der Hain (favicon redesign, domain updates), Notepad edit/chip-sync polish, Quick Links tab, and iOS WKWebView companion + widget skeleton in `ios/`. Remaining: auto-discovery of tracker files, staleness alerts, year-in-review generator, plus iOS app actually built and deployed at Mac.
+**Phase 4 — Galaxy + iOS native** (in progress)
+Phase 3 wrapped 2026-04-28: rebrand → der Hain, iOS WKWebView + widget skeleton, notepad polish. Phase 4 kicked off same day: Galaxy / Victory Lap tab shipped, learned-log schema enriched, all 6 other tracked repos retrofitted with structured shipped items. Next: iOS app built in Xcode and deployed to Chad's phone, auto-discovery of tracker files, staleness alerts.
 
 ---
 
 ## 📝 Decision Log
+
+### [2026-04-28] — Galaxy tab · Victory Lap visualization · enriched tracking schema
+
+**Galaxy tab: spatial planet visualization chosen over timeline**
+- Two options explored: scrolling timeline (standard, expected) vs spatial galaxy (planets per project, moons per accomplishment).
+- Chose spatial. Rationale: a timeline encourages sequential reading; a galaxy encourages exploration and *seeing differently* — noticing which project is biggest, which is darkest, which has the most firsts. It's also just more fun.
+- 7 planets (one per `projects.json` entry), elliptical dual-orbit layout, sized by accomplishment count. Dim/unlit planets for projects with no entries — not hidden, just unlit. Reminds you there's more story to write.
+- Hyperspace warp on planet click: CSS `transform-origin` set dynamically to the clicked planet's position as a percentage of the container, then `scale(8)` applied via class. Stars get `scaleY(40)` simultaneously. Total CSS, no JS animation loop. ~950ms to planet detail.
+- Moon glyphs: ✦ for aha-moment entries, ★ for first-ever entries — visible without clicking, reward exploration.
+
+**8/10 tracking metrics approved and added to schema**
+- Voted yes: mood emoji, aha moment, frustration peak, curiosity trail, first-ever flag, real-world use, energy level going in, wonder sentence.
+- Voted no: teach-back score (Chad), inspired-by (Chad).
+- All 8 added as optional fields to `learned-log.json` schema. Backfilled all 8 existing entries with the fields that were genuinely true. Padded fields are worse than absent ones — this is a principle.
+
+**Learning platform (Idea 2) parked to backlog**
+- Chad's second idea: a learning platform for first-principles understanding of what we've built, with Python specifically as a learning goal.
+- Decision: not a tab in der Hain. Better served as a separate Claude project with custom instructions for deep-dive walkthroughs of specific concepts. The data (code we've built) already exists; the value is in the conversation, not the UI.
+- Added to tracker backlog with clear description so it doesn't get lost.
+
+**workflow/enrich-tracker-shipped.md created**
+- Drop-in prompt for each of the 6 other tracked repos to convert their `shipped` string arrays to the structured `{date, what, tags, learned?}` object form.
+- Chad ran it across all 6 repos the same session — all planets now have data to render moons from.
+
+---
 
 ### [2026-04-28] — Rebrand to der Hain · iOS companion shell · notepad polish
 
