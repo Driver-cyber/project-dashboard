@@ -1,6 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <rect width="32" height="32" rx="6" fill="#35523A"/>
-  <path d="M6 25 Q9 16 12 25Z" fill="#B4C9B0"/>
-  <path d="M11 25 Q16 8 21 25Z" fill="#B4C9B0"/>
-  <path d="M20 25 Q23 15 26 25Z" fill="#B4C9B0"/>
+  <!-- Left tree (shorter, muted) -->
+  <path d="M5 24 Q8 12 11 24Z" fill="#9EBA9A"/>
+  <line x1="8" y1="24" x2="8" y2="27.5" stroke="#9EBA9A" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Centre tree (tallest, brightest) -->
+  <path d="M12 24 Q16 7 20 24Z" fill="#C4D8C0"/>
+  <line x1="16" y1="24" x2="16" y2="27.5" stroke="#C4D8C0" stroke-width="2" stroke-linecap="round"/>
+  <!-- Right tree (medium, mid-tone) -->
+  <path d="M21 24 Q24 13 27 24Z" fill="#A8C0A4"/>
+  <line x1="24" y1="24" x2="24" y2="27.5" stroke="#A8C0A4" stroke-width="1.5" stroke-linecap="round"/>
 </svg>
