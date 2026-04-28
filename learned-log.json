@@ -2,58 +2,129 @@
   {
     "date": "2026-04-22",
     "project": "Project Dashboard",
+    "repo": "project-dashboard",
     "completed": "Built the full dashboard from scratch — GitHub API fetch model, Cloudflare Pages deployment, 5 projects wired up, Garden Party restyle with light/dark mode.",
     "learned": "Cloudflare Pages requires index.html at the root to serve the site root; atob() returns binary strings not UTF-8, requiring TextDecoder for any non-ASCII content from the GitHub API.",
-    "session_note": "Founding session. Replaced a localStorage/drag-drop prototype with a live GitHub fetch architecture. The projects.json config pattern (one JSON line to add a project) was a key design decision that keeps the HTML focused on rendering."
+    "session_note": "Founding session. Replaced a localStorage/drag-drop prototype with a live GitHub fetch architecture. The projects.json config pattern (one JSON line to add a project) was a key design decision that keeps the HTML focused on rendering.",
+    "tags": ["github-api", "cloudflare-pages", "encoding", "founding"],
+    "artifact": "index.html",
+    "intensity": "deep_dive",
+    "mood": "🔥",
+    "first_ever": "First live dashboard deployment",
+    "real_world_use": true,
+    "energy_in": "high"
   },
   {
     "date": "2026-04-23",
     "project": "Project Dashboard",
+    "repo": "project-dashboard",
     "completed": "Expandable cards with inline backlog reveal, ORDOBook encoding fixed, all 5 cards rendering cleanly.",
     "learned": "CSS grid-template-rows: 0fr → 1fr is the correct pattern for smooth expand animations on unknown-height content — no max-height hacks, no JS measurement needed.",
-    "session_note": "Phase 1 complete. Dashboard is live, bookmarkable, and fully functional. Tracker onboarding prompt written and tested across 4 repos in one session."
-  }
-  ,
+    "session_note": "Phase 1 complete. Dashboard is live, bookmarkable, and fully functional. Tracker onboarding prompt written and tested across 4 repos in one session.",
+    "tags": ["css", "animation", "ux"],
+    "artifact": "index.html",
+    "intensity": "session",
+    "mood": "✨",
+    "aha": "grid-template-rows 0fr→1fr replaces every max-height hack I'd ever written",
+    "wonder": "CSS can animate from a height it cannot measure — the browser figures it out.",
+    "real_world_use": true,
+    "energy_in": "high"
+  },
   {
     "date": "2026-04-23",
     "project": "Project Dashboard",
+    "repo": "project-dashboard",
     "completed": "Shipped Notepad tab (notes, export, archive flow), Calm tab (wheat animation, confetti checkbox), tabbed navigation, GitHub card links, R shortcut, Wild Stewart Homeschool added, mobile zoom fixes, Copy as prompt button, Ideas/TBD category.",
     "learned": "iOS auto-zoom on input focus is triggered by font-size below 16px — setting inputs to 16px on mobile prevents it without disabling user zoom. CSS viewport maximum-scale=1 stops layout-breaking zoom on orientation change.",
-    "session_note": "Chad used the Notepad export flow in the same session it was built and immediately filed 3 real bugs with it. The Copy as prompt idea came from that first use. Notepad → export → Claude Code is the intended power loop."
+    "session_note": "Chad used the Notepad export flow in the same session it was built and immediately filed 3 real bugs with it. The Copy as prompt idea came from that first use. Notepad → export → Claude Code is the intended power loop.",
+    "tags": ["mobile", "ios", "ux", "tabs", "notepad"],
+    "artifact": "index.html",
+    "intensity": "marathon",
+    "mood": "🔥",
+    "aha": "iOS auto-zoom on input focus is just a font-size thing — 16px and the issue vanishes",
+    "real_world_use": true,
+    "first_ever": "First mobile-aware UI work in this repo",
+    "energy_in": "high"
   },
   {
     "date": "2026-04-24",
     "project": "Project Dashboard",
+    "repo": "project-dashboard",
     "completed": "Dashboard backburner — cards auto-sort by updated date, top 4 featured, rest collapsed behind a carrot. Added garden-app as 7th project. Shipped favicon and apple-touch-icon in sage-deep green.",
     "learned": "PNG files can be generated from pure Python with only stdlib (struct + zlib) — no PIL needed for simple shapes. iOS apple-touch-icon requires a real PNG (SVG not supported) but browser favicons accept SVG directly via <link rel='icon' type='image/svg+xml'>.",
-    "session_note": "First use of collapsible sub-sections inside the main grid. The backburner pattern (default-closed, localStorage-persisted open state) keeps the default view clean while preserving intentional exploration. garden-app is the first project registered that will NOT have a Cloudflare deployment — it's a standalone SwiftUI/iOS app, a new learning vector for Chad."
+    "session_note": "First use of collapsible sub-sections inside the main grid. The backburner pattern (default-closed, localStorage-persisted open state) keeps the default view clean while preserving intentional exploration. garden-app is the first project registered that will NOT have a Cloudflare deployment — it's a standalone SwiftUI/iOS app, a new learning vector for Chad.",
+    "tags": ["python", "stdlib", "png", "ios", "favicon"],
+    "artifact": "favicon.svg",
+    "intensity": "session",
+    "mood": "🌱",
+    "aha": "PNG from pure stdlib Python — struct + zlib + a CRC32 is the entire spec",
+    "wonder": "You can author a valid PNG with no library, just bytes and math.",
+    "first_ever": "First favicon authored by hand",
+    "energy_in": "medium"
   },
   {
     "date": "2026-04-24",
     "project": "Project Dashboard",
+    "repo": "project-dashboard",
     "completed": "Notes sync resilience: initSync now detects local-only notes (created while offline or not yet pushed) and auto-pushes them on reconnect. Sync indicator now shows live note count for at-a-glance reassurance.",
     "learned": "Offline-first sync has two failure modes worth distinguishing: silent failed pushes (red-dot visible, user can retry) and orphan writes (note exists locally but never made it to the remote). The orphan case is the dangerous one — it looks synced because there's nothing to retry. Detecting it requires comparing local IDs against remote IDs on every init, not just tracking push failures.",
-    "session_note": "Verified notes persistence by pulling the live /api/gist endpoint — found all notes intact plus 3 commits of gist version history (GitHub retains every prior state of the gist indefinitely, so even corruption is undoable). Confirmed Gist backend is fine to keep long-term with a no-expiration token; KV migration deferred as unnecessary."
+    "session_note": "Verified notes persistence by pulling the live /api/gist endpoint — found all notes intact plus 3 commits of gist version history (GitHub retains every prior state of the gist indefinitely, so even corruption is undoable). Confirmed Gist backend is fine to keep long-term with a no-expiration token; KV migration deferred as unnecessary.",
+    "tags": ["sync", "offline-first", "gist", "resilience"],
+    "artifact": "index.html",
+    "intensity": "session",
+    "mood": "🛡️",
+    "aha": "Orphan writes are the dangerous failure mode — failed pushes are loud, orphans are silent",
+    "struggle": "Sketching the failure modes carefully enough to see the orphan case wasn't symmetric to the failed-push case",
+    "curiosity_trail": "Should other localStorage-first features (theme, filter state) get the same orphan check?"
   },
   {
     "date": "2026-04-28",
     "project": "Project Dashboard",
+    "repo": "project-dashboard",
     "completed": "Defensive NaN guard in staleInfo — tracker cards now show 'Bad date format' instead of 'NaN weeks ago · stale' when a tracker's updated field can't be parsed. Diagnosed and provided fix prompts for wild-stewart-homeschool (wrong date format) and garden-app (flat priorities array instead of columns schema). Both repos confirmed fixed by Chad.",
     "learned": "JavaScript's new Date() silently returns Invalid Date on unrecognized formats — arithmetic on it produces NaN, not an error, so it can propagate deep into render logic before surfacing. Always isNaN-guard any computed value derived from a user-supplied date string. The second lesson: cross-repo tracker format drift is a real maintenance hazard when the schema lives in each repo independently — worth documenting the exact expected structure clearly so onboarding a new repo is one prompt, not trial and error.",
-    "session_note": "Both bugs surfaced from Chad looking at the live dashboard. The NaN label was a defensive fix here; the actual tracker corrections happened in the respective repos via Claude Code sessions. Pattern: dashboard catches the symptom, targeted prompts fix the source."
+    "session_note": "Both bugs surfaced from Chad looking at the live dashboard. The NaN label was a defensive fix here; the actual tracker corrections happened in the respective repos via Claude Code sessions. Pattern: dashboard catches the symptom, targeted prompts fix the source.",
+    "tags": ["javascript", "defensive-coding", "dates", "cross-repo"],
+    "artifact": "index.html",
+    "intensity": "quick",
+    "mood": "🐛",
+    "frustration_peak": "Two cards on the live dashboard both reading 'NaN weeks ago · stale' at the same time",
+    "curiosity_trail": "Should the tracker schema be a published JSON schema, validated on read?",
+    "real_world_use": true
   },
   {
     "date": "2026-04-28",
     "project": "der Hain",
+    "repo": "project-dashboard",
     "completed": "Notepad polish: edit existing notes (pre-fills composer with edit banner, Update/Cancel), category chips now sync the composer project on click (filter + compose in one tap), composer textarea taller and roomier. New Quick Links tab with three preset URLs and an iOS-style action sheet (Open in browser / Copy URL) — built for fast iMessage-share workflow. Full rebrand Garden → der Hain — logo, browser title, PWA home screen name, empty state copy, favicon redesigned from a single two-leaf plant to a grove of three trees with little trunks and tonal variation (left muted, centre brightest, right mid). apple-touch-icon regenerated from pure-stdlib Python at 180×180 with rounded corners. Domains updated to projects + hain + der.hain.chadstewartcpa.com.",
     "learned": "Quadratic Bezier curves can be rasterized to PNG with pure stdlib Python by sampling the curve into polygon points and using ray-casting point-in-polygon — no PIL needed even for organic shapes. Three trees identified separately (vs blending into one shrub) needs both shape gaps AND tonal variation; one without the other isn't enough. The chip-syncs-composer pattern is a 'one element, two affordances' UI win — same control answers both 'show me X' and 'I want to add to X'. Naming carries weight: 'Garden' had the right metaphor but conflicted with another project; 'der Hain' (a grove) keeps the metaphor while signalling specificity. The lowercase German article 'der' next to capitalized 'Hain' makes the typography work — article reads as prefix, name stands as the proper noun.",
-    "session_note": "Chad caught the favicon v1 looking like a shrub instead of three trees. Fix was structural (gaps + trunks) plus tonal (three different green tones), not just one or the other. Cloudflare deployment loop (push to main → live) makes visual iteration like this practical."
+    "session_note": "Chad caught the favicon v1 looking like a shrub instead of three trees. Fix was structural (gaps + trunks) plus tonal (three different green tones), not just one or the other. Cloudflare deployment loop (push to main → live) makes visual iteration like this practical.",
+    "tags": ["branding", "css", "python", "stdlib", "favicon", "ux", "naming"],
+    "artifact": "favicon.svg",
+    "intensity": "deep_dive",
+    "mood": "🌳",
+    "aha": "Three trees needs structural gaps AND tonal variation — neither alone is enough",
+    "frustration_peak": "v1 favicon looked like a shrub on the home screen — close but unmistakably wrong",
+    "wonder": "Quadratic Bezier curves draw into a PNG using ray-casting and zero dependencies — the math is the library.",
+    "first_ever": "First fully rebranded project (name, domain, icon, copy)",
+    "real_world_use": true,
+    "energy_in": "high"
   },
   {
     "date": "2026-04-28",
     "project": "der Hain",
+    "repo": "project-dashboard",
     "completed": "iOS companion app skeleton scaffolded in ios/ subfolder — DerHain (WKWebView wrapper, full-screen, pull-to-refresh, external links route to Safari, dashboard stays in-app) + DerHainWidget (home screen widget, small + medium, fetches projects.json then top tracker priority via GitHub Contents API, refreshes 45min). SETUP.md walkthrough for Xcode project creation, target wiring, and wired-deploy to personal iPhone (no App Store, no TestFlight). CLAUDE.md updated with widget-schema-sync maintenance rule and iOS scope reflected in Out of Scope table.",
     "learned": "A WKWebView wrapper is the right intermediate step between PWA and full native rewrite — 95% of features stay web (auto-update on Cloudflare deploy, single codebase) while iOS-only platform integrations (widgets, Action Button, Keychain, native haptics) get added incrementally as native code only when they pay off. The widget extension is a separate target with its own bundle identifier and can't share code with the WebView app directly — it parses tracker JSON itself, so any schema change is a manual sync point. WKWebView's localStorage is isolated from Safari's, so PWA-installed users get a 'first launch' moment where the Gist sync rehydrates their notes. .xcodeproj files contain user-specific UUIDs and signing config — better to leave them out of git and have setup instructions reproduce them locally.",
-    "session_note": "Chad isn't at his Mac, so all Swift was written 'cold' and committed; he'll open Xcode later and run through ios/SETUP.md. This is the first Swift code in the project-dashboard repo — first dual-platform project he's structured this way. The 'thin wrapper, web is source of truth' pattern is the explicit architectural commitment — keeps maintenance burden low while still unlocking iOS-only surfaces."
+    "session_note": "Chad isn't at his Mac, so all Swift was written 'cold' and committed; he'll open Xcode later and run through ios/SETUP.md. This is the first Swift code in the project-dashboard repo — first dual-platform project he's structured this way. The 'thin wrapper, web is source of truth' pattern is the explicit architectural commitment — keeps maintenance burden low while still unlocking iOS-only surfaces.",
+    "tags": ["swift", "ios", "wkwebview", "widgetkit", "architecture"],
+    "artifact": "ios/DerHain/WebView.swift",
+    "intensity": "deep_dive",
+    "mood": "🚀",
+    "aha": "WKWebView wrapper is the right intermediate step — keeps web as source of truth while unlocking iOS-only surfaces",
+    "wonder": "Widget extensions are isolated processes with their own bundle ID — they really can't import from the main app's code, even if they're in the same Xcode project.",
+    "first_ever": "First Swift code in this repo",
+    "curiosity_trail": "Can the widget read locally cached tracker data instead of refetching every 45 minutes?",
+    "energy_in": "high"
   }
 ]

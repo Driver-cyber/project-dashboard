@@ -1,6 +1,6 @@
 # CLAUDE.md — Project Dashboard Constitution
 *Governing document for the `Driver-cyber/project-dashboard` repo*
-*Last updated: 2026-04-22*
+*Last updated: 2026-04-28*
 
 ---
 
@@ -18,7 +18,7 @@ This repo is Chad's personal command center — a live, bookmarkable dashboard t
 
 | File / Folder | Purpose |
 |---|---|
-| `index.html` | The dashboard UI (Dashboard / Notepad / Calm tabs) — deployed via Cloudflare Pages, served at site root |
+| `index.html` | The dashboard UI (Dashboard / Notepad / Calm / Links / Galaxy tabs) — deployed via Cloudflare Pages, served at site root |
 | `projects.json` | The registry. Single source of truth for both dashboard cards AND notepad category dropdown. One-line-per-project: `{repo, tracker}`. |
 | `learned-log.json` | Append-only record of completed priorities and learning milestones |
 | `functions/api/gist.js` | Cloudflare Pages Function — server-side proxy for the notepad's GitHub Gist sync (hides the token from the client) |
@@ -50,18 +50,43 @@ https://api.github.com/repos/Driver-cyber/{repo-name}/contents/{tracker-filename
 ```
 Content is base64-encoded in the response — decode before parsing the `#tracker-data` JSON block.
 
-**`learned-log.json` schema:**
+**`learned-log.json` schema (enriched 2026-04-28 — Galaxy/Victory Lap data source):**
 ```json
 [
   {
-    "date": "YYYY-MM-DD",
-    "project": "Project name",
-    "completed": "What was finished — one sentence",
-    "learned": "Skill or concept acquired, if any — one sentence or null",
-    "session_note": "Optional brief context Claude or Chad adds"
+    "date": "YYYY-MM-DD",            // required
+    "project": "Project name",       // required — display name
+    "repo": "repo-name",             // required — matches projects.json `repo`
+    "completed": "What was finished — one sentence",  // required
+    "learned": "Skill/concept acquired — one sentence or null",
+    "session_note": "Brief context Claude or Chad adds",
+
+    // Optional enrichment fields — drive the Galaxy tab visuals + filters.
+    // Add what's true for the session, leave the rest off. Don't pad.
+    "tags": ["string", ...],         // queryable themes (e.g. swift, css, sync)
+    "struggle": "What was hard — one sentence",
+    "artifact": "path/or/url",       // primary file or URL touched
+    "intensity": "quick|session|deep_dive|marathon",  // affects moon size in Galaxy
+
+    "mood": "🔥",                    // single emoji capturing session vibe
+    "aha": "What clicked — one sentence",   // marks moon with ✦ glyph
+    "frustration_peak": "Moment of near-rage-quit — one sentence",
+    "curiosity_trail": "Question this opened up — one sentence",
+    "first_ever": "Label of a first-time event",  // marks moon with ★ glyph
+    "real_world_use": true,          // bool — was the work used same-session/day
+    "energy_in": "low|medium|high",  // self-rated energy walking in
+    "wonder": "One sentence on something that delighted you about how it works"
   }
 ]
 ```
+
+**Per-project tracker `shipped` items (inside each `*-tracker.html` `#tracker-data` JSON):**
+```json
+"shipped": [
+  { "date": "YYYY-MM-DD", "what": "What shipped", "tags": ["string"], "learned": "optional" }
+]
+```
+The Galaxy tab fetches each tracker (already done for cards) and merges its `shipped` array with `learned-log.json` keyed by `repo`. Strings in the legacy format still render — they just lack the rich fields.
 
 ---
 
@@ -79,8 +104,12 @@ Content is base64-encoded in the response — decode before parsing the `#tracke
 At the end of any working session, Claude Code should:
 
 1. **Update `project-dashboard-tracker.html`** — move completed priorities to backlog, pull up next items, bump the `updated` date in both the visual header and the JSON block.
-2. **Append to `learned-log.json`** — one entry per meaningful completion or skill acquired this session. If nothing meaningful shipped, skip it — don't pad the log.
-3. **Optionally ask Chad:** "Anything specific you want noted in the learning log from today?" — one question, not a form.
+2. **Append to `learned-log.json`** — one entry per meaningful completion or skill acquired this session. Always include `repo` and `tags`. Add the optional enrichment fields (`mood`, `aha`, `struggle`, `frustration_peak`, `wonder`, `first_ever`, `intensity`, `energy_in`, `real_world_use`, `curiosity_trail`, `artifact`) for any that are genuinely true — these feed the Galaxy/Victory Lap tab. Don't pad — empty fields are better than fabricated ones.
+3. **Optionally ask Chad** *one* question, not a form. Pick the one most likely to capture something we'd otherwise lose. Examples:
+   - "Anything specific you want noted in the learning log from today?"
+   - "What's the one mood emoji for this session?"
+   - "Was there an aha moment I should record?"
+   - "Did anything almost make you rage-quit today?"
 4. **Commit with a descriptive message.** Pattern: `"[project] — [what changed] | log updated"`
 
 ---
@@ -116,6 +145,7 @@ At the end of any working session, Claude Code should:
 - **After any architectural decision:** Add an entry to `DECISIONS.md` with date and rationale.
 - **Workflow templates in `workflow/`:** Update only when the underlying pattern changes — these are consumed by other projects, so treat them like a published API. Don't make breaking changes silently.
 - **If the tracker JSON schema changes** (fields in `columns`, `priorities`, etc.): also update the parser in `ios/DerHainWidget/DerHainWidget.swift` — the widget reads the same HTML directly and won't auto-update with web deploys.
+- **Per-project `shipped` items** in each tracker should use the object form `{ date, what, tags?, learned? }` (not bare strings) so the Galaxy tab can show rich moons. Strings still render but lose date sorting and tag filtering. New shipped items in any tracked repo: use the object form. See `workflow/enrich-tracker-shipped.md` for the drop-in retrofit prompt.
 
 ---
 
