@@ -195,7 +195,7 @@
     <div class="logo">Project Dashboard<em>.</em></div>
     <div class="meta">
       <span>Driver-cyber / project-dashboard</span>
-      <span>Updated 2026-04-28 · Phase 2</span>
+      <span>Updated 2026-04-28 · Phase 3</span>
     </div>
   </div>
   <div class="mode-toggle" role="group" aria-label="Theme">
@@ -224,36 +224,47 @@
     <li>
       <span class="num">1</span>
       <div class="priority-text">
-        <strong>Auto-discovery of tracker files</strong>
-        <span>Scan all Driver-cyber repos for *-tracker.html without needing a manual projects.json entry. Needs GitHub API list-repos call plus per-repo contents check.</span>
+        <strong>Build der Hain iOS app from ios/ skeleton</strong>
+        <span>Open Xcode at Mac, follow ios/SETUP.md, deploy WKWebView wrapper + widget to iPhone via cable. ~15 min, no App Store needed.</span>
       </div>
     </li>
     <li>
       <span class="num">2</span>
       <div class="priority-text">
-        <strong>Staleness alert when tracker goes quiet</strong>
-        <span>Visual warning on the card when a project hasn't been updated in 14+ days. Already have the staleness data — just needs a stronger signal.</span>
+        <strong>Auto-discovery of tracker files</strong>
+        <span>Scan all Driver-cyber repos for *-tracker.html without needing a manual projects.json entry. Needs GitHub API list-repos call plus per-repo contents check.</span>
       </div>
     </li>
     <li>
       <span class="num">3</span>
       <div class="priority-text">
-        <strong>Year-in-review generator from learned-log.json</strong>
-        <span>Claude drafts a quarterly or yearly summary of shipped work and skills acquired, on demand from the dashboard.</span>
+        <strong>Staleness alert when tracker goes quiet</strong>
+        <span>Visual warning on the card when a project hasn't been updated in 14+ days. Already have the staleness data — just needs a stronger signal.</span>
       </div>
     </li>
   </ol>
 
   <div class="section-label">Backlog</div>
   <ul class="backlog-list">
+    <li>Year-in-review generator from learned-log.json</li>
+    <li>Lock screen widget for iOS (.accessoryRectangular family)</li>
+    <li>Action Button shortcut to open der Hain instantly</li>
     <li>Collapse-all / expand-all keyboard shortcut</li>
     <li>Notepad: tag notes with multiple projects</li>
     <li>Notepad: search across all notes</li>
     <li>Pin/unpin a project to force it into the featured top 4</li>
+    <li>Custom categories in notepad selector (parked, may revisit)</li>
   </ul>
 
   <div class="section-label">Shipped</div>
   <ul class="backlog-list">
+    <li>iOS companion app skeleton — WKWebView wrapper + home screen widget, ios/ subfolder, full Xcode setup guide</li>
+    <li>Rebrand Garden → der Hain — logo, title, PWA name, empty state, favicon (single plant → grove of three trees with trunks + tonal variation), apple-touch-icon regenerated from pure stdlib Python</li>
+    <li>Quick Links tab — preset URLs (Project Dashboard, WSH Prep, WSH Learn) with iOS-style action sheet (Open in browser / Copy URL)</li>
+    <li>Notepad: edit existing notes — pre-fills composer with edit banner, Update/Cancel buttons</li>
+    <li>Notepad: category chip click syncs composer project — filter + compose in one tap</li>
+    <li>Notepad: composer polish — taller textarea (80→120px), more padding</li>
+    <li>CLAUDE.md: domains updated (projects/hain/der.hain.chadstewartcpa.com), widget schema sync rule, iOS scope updated</li>
     <li>Dashboard backburner — top 4 by recency auto-featured, rest collapsed behind a carrot</li>
     <li>Cards auto-sort by most-recent updated date — fresh work floats to top</li>
     <li>garden-app registered as 7th project card (native iOS notes app, Swift/SwiftData)</li>
@@ -300,14 +311,18 @@
 
 <script id="tracker-data" type="application/json">
 {
-  "project": "Project Dashboard",
+  "project": "der Hain",
   "description": "Personal command center — cross-project dashboard fetching live tracker data from GitHub",
   "updated": "2026-04-28",
   "columns": [
     {
-      "name": "project-dashboard",
-      "sub": "Cloudflare Pages · GitHub API · Vanilla JS",
+      "name": "der Hain",
+      "sub": "Cloudflare Pages · GitHub API · Vanilla JS · WKWebView (iOS)",
       "priorities": [
+        {
+          "title": "Build der Hain iOS app from ios/ skeleton",
+          "note": "Open Xcode at Mac, follow ios/SETUP.md to deploy WKWebView + widget to iPhone."
+        },
         {
           "title": "Auto-discovery of tracker files",
           "note": "Scan Driver-cyber repos for *-tracker.html — no manual projects.json entry needed."
@@ -315,17 +330,17 @@
         {
           "title": "Staleness alert on quiet projects",
           "note": "Stronger visual signal when a project hasn't updated in 14+ days."
-        },
-        {
-          "title": "Year-in-review generator from learned-log.json",
-          "note": "Claude drafts a quarterly/yearly summary of shipped work and skills acquired."
         }
       ],
       "backlog": [
+        "Year-in-review generator from learned-log.json",
+        "Lock screen widget for iOS (.accessoryRectangular family)",
+        "Action Button shortcut to open der Hain instantly",
         "Collapse-all / expand-all keyboard shortcut",
         "Notepad: tag notes with multiple projects",
         "Notepad: search across all notes",
-        "Pin/unpin a project to force it into the featured top 4"
+        "Pin/unpin a project to force it into the featured top 4",
+        "Custom categories in notepad selector (parked, may revisit)"
       ]
     }
   ]

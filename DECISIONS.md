@@ -5,12 +5,53 @@
 ---
 
 ## 🎯 Current Phase
-**Phase 2 — Quality of life** (in progress)
-Phase 1 complete 2026-04-23. Phase 2 deliverables shipped 2026-04-24: Notepad tab, Calm tab, tabbed nav, GitHub card links, R-to-refresh, mobile zoom fixes, dashboard backburner + recency sort, notes Gist sync with resilience, favicon/apple-touch-icon, garden-app registered. Remaining: auto-discovery of tracker files, staleness alerts, year-in-review generator.
+**Phase 3 — Identity + native shell** (in progress)
+Phase 1 complete 2026-04-23. Phase 2 wrapped 2026-04-28 with notepad polish and Quick Links. Phase 3 kicked off same session: rebrand Garden → der Hain (favicon redesign, domain updates), Notepad edit/chip-sync polish, Quick Links tab, and iOS WKWebView companion + widget skeleton in `ios/`. Remaining: auto-discovery of tracker files, staleness alerts, year-in-review generator, plus iOS app actually built and deployed at Mac.
 
 ---
 
 ## 📝 Decision Log
+
+### [2026-04-28] — Rebrand to der Hain · iOS companion shell · notepad polish
+
+**Rebrand: Garden → der Hain**
+- Old name conflicted with the garden-app iOS project (separate SwiftUI app being built, registered in this dashboard as a card). Two things named "Garden" in Chad's stack was confusing.
+- "Hain" is German for *grove* — keeps the plant/growth metaphor but distinct from a single garden, implies a collection of growing things tended together.
+- Lowercase German article kept (`der Hain`) so the name reads as a proper noun phrase — article serves as prefix, capitalized noun stands as the name. Also signals German-ness clearly to readers.
+- Touchpoints updated: PWA `apple-mobile-web-app-title`, browser `<title>`, header `.logo`, empty-state copy. The `garden-notes.json` Gist filename intentionally NOT renamed — that's the live sync key, renaming it would orphan all existing notes.
+- Domains: `projects.chadstewartcpa.com`, `hain.chadstewartcpa.com`, `der.hain.chadstewartcpa.com` (Chad picked the multi-dot `der.` subdomain for clarity that it's German). Old `garden.chadstewartcpa.com` deleted.
+
+**Favicon redesign: single plant → grove of three trees**
+- v1 (three crowns, one color, no trunks) read as a shrub at favicon size — Chad caught it immediately.
+- v2 fix is both structural and tonal: 1-unit gaps between crowns, thin trunks beneath each, three distinct sage tones (left muted #9EBA9A, centre brightest #C4D8C0, right mid #A8C0A4). One without the other wasn't enough.
+- apple-touch-icon.png regenerated from the same pure-stdlib Python pattern (struct + zlib) — quadratic Bezier curves rasterized via sample-into-polygon-points + ray-casting. No PIL dependency, full version-controllable PNG generator.
+
+**Notepad: edit existing notes**
+- Previously: archive or delete only. No way to fix a typo without recreating the note.
+- Chose in-place edit (vs modal): pre-fill the composer with the note's content, show "Editing note" banner, change "Add note" → "Update note", add "Cancel edit" button. createdAt preserved, project + text mutable.
+- Edit reuses the composer instead of duplicating UI — keeps the surface area small.
+
+**Notepad: category chips → composer category sync**
+- "One element, two affordances": tapping a category chip both filters the visible notes AND sets the composer's project dropdown to match. Filter + compose in one tap.
+- One-directional only (chip → composer, not the reverse). Avoids surprising the user when they're typing a note and the chip filter shifts under them.
+
+**Quick Links tab — preset URL launcher**
+- New 4th tab. Three preset links (Project Dashboard / WSH Prep / WSH Learn), each tap shows an iOS-style action sheet with "Open in browser" or "Copy URL" — purpose-built for the iMessage share workflow Chad uses.
+- Links are a JS array constant; adding more is a one-line edit. Simpler than building a CRUD UI for what's effectively a personal bookmarks file.
+
+**iOS companion: thin WKWebView wrapper, not a rewrite**
+- Chad uses der Hain almost exclusively on iPhone. Considered: full SwiftUI rewrite vs WKWebView wrapper vs status quo PWA.
+- Decision: WKWebView wrapper + home screen widget. Web app stays the source of truth (95% of features auto-update on Cloudflare deploy, single codebase). iOS-only surfaces — widgets, Action Button, Keychain, native haptics — added as native code incrementally only when they pay off.
+- Avoids the trap of maintaining two parallel feature implementations. Garden-app already exists as a separate Swift project; this dashboard would have been the second SwiftUI codebase — too much surface area.
+- Code structure: `ios/` subfolder in this repo (vs separate repo) — the iOS app is tightly coupled to `projects.json` and the Gist data layer, co-location wins.
+- `.xcodeproj` intentionally NOT committed: contains user-specific UUIDs and signing config. SETUP.md guide reproduces it in 5 minutes at a Mac.
+
+**Widget data path is a separate sync point (flagged in CLAUDE.md)**
+- The widget extension can't share code with the WKWebView app — it has to parse `projects.json` and tracker HTML itself.
+- Implication: if the tracker JSON schema ever changes (new fields, renames in `columns`/`priorities`), `ios/DerHainWidget/DerHainWidget.swift` parser must be updated to match. Web app changes are auto; widget is manual.
+- Added explicit maintenance rule to CLAUDE.md so any future Claude Code session sees the dependency.
+
+---
 
 ### [2026-04-28] — Defensive fixes · cross-repo tracker format documented
 
