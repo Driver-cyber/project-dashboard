@@ -34,5 +34,12 @@
     "completed": "Notes sync resilience: initSync now detects local-only notes (created while offline or not yet pushed) and auto-pushes them on reconnect. Sync indicator now shows live note count for at-a-glance reassurance.",
     "learned": "Offline-first sync has two failure modes worth distinguishing: silent failed pushes (red-dot visible, user can retry) and orphan writes (note exists locally but never made it to the remote). The orphan case is the dangerous one — it looks synced because there's nothing to retry. Detecting it requires comparing local IDs against remote IDs on every init, not just tracking push failures.",
     "session_note": "Verified notes persistence by pulling the live /api/gist endpoint — found all notes intact plus 3 commits of gist version history (GitHub retains every prior state of the gist indefinitely, so even corruption is undoable). Confirmed Gist backend is fine to keep long-term with a no-expiration token; KV migration deferred as unnecessary."
+  },
+  {
+    "date": "2026-04-28",
+    "project": "Project Dashboard",
+    "completed": "Defensive NaN guard in staleInfo — tracker cards now show 'Bad date format' instead of 'NaN weeks ago · stale' when a tracker's updated field can't be parsed. Diagnosed and provided fix prompts for wild-stewart-homeschool (wrong date format) and garden-app (flat priorities array instead of columns schema). Both repos confirmed fixed by Chad.",
+    "learned": "JavaScript's new Date() silently returns Invalid Date on unrecognized formats — arithmetic on it produces NaN, not an error, so it can propagate deep into render logic before surfacing. Always isNaN-guard any computed value derived from a user-supplied date string. The second lesson: cross-repo tracker format drift is a real maintenance hazard when the schema lives in each repo independently — worth documenting the exact expected structure clearly so onboarding a new repo is one prompt, not trial and error.",
+    "session_note": "Both bugs surfaced from Chad looking at the live dashboard. The NaN label was a defensive fix here; the actual tracker corrections happened in the respective repos via Claude Code sessions. Pattern: dashboard catches the symptom, targeted prompts fix the source."
   }
 ]

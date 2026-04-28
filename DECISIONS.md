@@ -12,6 +12,25 @@ Phase 1 complete 2026-04-23. Phase 2 deliverables shipped 2026-04-24: Notepad ta
 
 ## 📝 Decision Log
 
+### [2026-04-28] — Defensive fixes · cross-repo tracker format documented
+
+**Defensive NaN guard in staleInfo**
+- Added `Number.isNaN(days)` check after date arithmetic in `staleInfo()` — shows "Bad date format" badge instead of "NaN weeks ago · stale" when a tracker's `updated` field can't be parsed by `new Date()`
+- Caught in the wild: wild-stewart-homeschool tracker had an unrecognized date format
+- Rationale: silent NaN propagation through render logic is confusing; explicit label makes the problem visible and actionable without crashing
+
+**Cross-repo tracker schema documented**
+- garden-app tracker was created with a flat `priorities: string[]` — dashboard requires `columns: [{name, sub, priorities: [{title, note}], backlog: string[]}]`
+- Both wild-stewart and garden-app corrected via targeted Claude Code sessions in their respective repos
+- Schema is now documented in CLAUDE.md and in the cross-repo onboarding prompt pattern (see session context)
+
+**GitHub MCP scope — discussed, no action taken**
+- Chad asked about granting broader repo access to Claude Code sessions
+- Recommendation: expand GitHub App installation to full Driver-cyber org for read access; keep session scoping conservative for writes
+- No change made this session — Chad to configure via github.com → Driver-cyber → Settings → Integrations → GitHub Apps → Claude → Configure
+
+---
+
 ### [2026-04-24] — Phase 2 push · backburner, notes resilience, garden-app, icons
 
 **Dashboard redesign — backburner pattern**
