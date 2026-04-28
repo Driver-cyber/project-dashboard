@@ -104,7 +104,7 @@ At the end of any working session, Claude Code should:
 | Authentication / private repo access | Public repos eliminate the need | If a project must stay private |
 | Multi-user access | This is Chad's personal tool | Never, probably |
 | Automated sync without Claude Code | Adds CI complexity for marginal gain | September 2026 checkpoint |
-| Mobile app / native client | Browser is fine | Never, probably |
+| Mobile app / native client | WKWebView wrapper + widget built in `ios/` — web app is still the source of truth | Expand widget or add native features as needed |
 | Notifications / alerts for stale trackers | Nice-to-have | Future session |
 
 ---
@@ -115,6 +115,7 @@ At the end of any working session, Claude Code should:
 - **After any session that ships something meaningful:** Append to `learned-log.json`.
 - **After any architectural decision:** Add an entry to `DECISIONS.md` with date and rationale.
 - **Workflow templates in `workflow/`:** Update only when the underlying pattern changes — these are consumed by other projects, so treat them like a published API. Don't make breaking changes silently.
+- **If the tracker JSON schema changes** (fields in `columns`, `priorities`, etc.): also update the parser in `ios/DerHainWidget/DerHainWidget.swift` — the widget reads the same HTML directly and won't auto-update with web deploys.
 
 ---
 
