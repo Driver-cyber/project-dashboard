@@ -31,7 +31,7 @@ This repo is Chad's personal command center — a live, bookmarkable dashboard t
 
 ## 🛠 Architecture
 
-**Hosting:** Cloudflare Pages — auto-deploys on push to `main`. Custom domain: `garden.chadstewartcpa.com`.
+**Hosting:** Cloudflare Pages — auto-deploys on push to `main`. Custom domains: `projects.chadstewartcpa.com`, `hain.chadstewartcpa.com`.
 
 **Data flow — dashboard cards:**
 - Fetches tracker data live from public repos under `Driver-cyber` via the unauthenticated GitHub Contents API
