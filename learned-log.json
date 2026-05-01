@@ -6,7 +6,12 @@
     "completed": "Built the full dashboard from scratch — GitHub API fetch model, Cloudflare Pages deployment, 5 projects wired up, Garden Party restyle with light/dark mode.",
     "learned": "Cloudflare Pages requires index.html at the root to serve the site root; atob() returns binary strings not UTF-8, requiring TextDecoder for any non-ASCII content from the GitHub API.",
     "session_note": "Founding session. Replaced a localStorage/drag-drop prototype with a live GitHub fetch architecture. The projects.json config pattern (one JSON line to add a project) was a key design decision that keeps the HTML focused on rendering.",
-    "tags": ["github-api", "cloudflare-pages", "encoding", "founding"],
+    "tags": [
+      "github-api",
+      "cloudflare-pages",
+      "encoding",
+      "founding"
+    ],
     "artifact": "index.html",
     "intensity": "deep_dive",
     "mood": "🔥",
@@ -21,7 +26,11 @@
     "completed": "Expandable cards with inline backlog reveal, ORDOBook encoding fixed, all 5 cards rendering cleanly.",
     "learned": "CSS grid-template-rows: 0fr → 1fr is the correct pattern for smooth expand animations on unknown-height content — no max-height hacks, no JS measurement needed.",
     "session_note": "Phase 1 complete. Dashboard is live, bookmarkable, and fully functional. Tracker onboarding prompt written and tested across 4 repos in one session.",
-    "tags": ["css", "animation", "ux"],
+    "tags": [
+      "css",
+      "animation",
+      "ux"
+    ],
     "artifact": "index.html",
     "intensity": "session",
     "mood": "✨",
@@ -37,7 +46,13 @@
     "completed": "Shipped Notepad tab (notes, export, archive flow), Calm tab (wheat animation, confetti checkbox), tabbed navigation, GitHub card links, R shortcut, Wild Stewart Homeschool added, mobile zoom fixes, Copy as prompt button, Ideas/TBD category.",
     "learned": "iOS auto-zoom on input focus is triggered by font-size below 16px — setting inputs to 16px on mobile prevents it without disabling user zoom. CSS viewport maximum-scale=1 stops layout-breaking zoom on orientation change.",
     "session_note": "Chad used the Notepad export flow in the same session it was built and immediately filed 3 real bugs with it. The Copy as prompt idea came from that first use. Notepad → export → Claude Code is the intended power loop.",
-    "tags": ["mobile", "ios", "ux", "tabs", "notepad"],
+    "tags": [
+      "mobile",
+      "ios",
+      "ux",
+      "tabs",
+      "notepad"
+    ],
     "artifact": "index.html",
     "intensity": "marathon",
     "mood": "🔥",
@@ -53,7 +68,13 @@
     "completed": "Dashboard backburner — cards auto-sort by updated date, top 4 featured, rest collapsed behind a carrot. Added garden-app as 7th project. Shipped favicon and apple-touch-icon in sage-deep green.",
     "learned": "PNG files can be generated from pure Python with only stdlib (struct + zlib) — no PIL needed for simple shapes. iOS apple-touch-icon requires a real PNG (SVG not supported) but browser favicons accept SVG directly via <link rel='icon' type='image/svg+xml'>.",
     "session_note": "First use of collapsible sub-sections inside the main grid. The backburner pattern (default-closed, localStorage-persisted open state) keeps the default view clean while preserving intentional exploration. garden-app is the first project registered that will NOT have a Cloudflare deployment — it's a standalone SwiftUI/iOS app, a new learning vector for Chad.",
-    "tags": ["python", "stdlib", "png", "ios", "favicon"],
+    "tags": [
+      "python",
+      "stdlib",
+      "png",
+      "ios",
+      "favicon"
+    ],
     "artifact": "favicon.svg",
     "intensity": "session",
     "mood": "🌱",
@@ -69,7 +90,12 @@
     "completed": "Notes sync resilience: initSync now detects local-only notes (created while offline or not yet pushed) and auto-pushes them on reconnect. Sync indicator now shows live note count for at-a-glance reassurance.",
     "learned": "Offline-first sync has two failure modes worth distinguishing: silent failed pushes (red-dot visible, user can retry) and orphan writes (note exists locally but never made it to the remote). The orphan case is the dangerous one — it looks synced because there's nothing to retry. Detecting it requires comparing local IDs against remote IDs on every init, not just tracking push failures.",
     "session_note": "Verified notes persistence by pulling the live /api/gist endpoint — found all notes intact plus 3 commits of gist version history (GitHub retains every prior state of the gist indefinitely, so even corruption is undoable). Confirmed Gist backend is fine to keep long-term with a no-expiration token; KV migration deferred as unnecessary.",
-    "tags": ["sync", "offline-first", "gist", "resilience"],
+    "tags": [
+      "sync",
+      "offline-first",
+      "gist",
+      "resilience"
+    ],
     "artifact": "index.html",
     "intensity": "session",
     "mood": "🛡️",
@@ -84,7 +110,12 @@
     "completed": "Defensive NaN guard in staleInfo — tracker cards now show 'Bad date format' instead of 'NaN weeks ago · stale' when a tracker's updated field can't be parsed. Diagnosed and provided fix prompts for wild-stewart-homeschool (wrong date format) and garden-app (flat priorities array instead of columns schema). Both repos confirmed fixed by Chad.",
     "learned": "JavaScript's new Date() silently returns Invalid Date on unrecognized formats — arithmetic on it produces NaN, not an error, so it can propagate deep into render logic before surfacing. Always isNaN-guard any computed value derived from a user-supplied date string. The second lesson: cross-repo tracker format drift is a real maintenance hazard when the schema lives in each repo independently — worth documenting the exact expected structure clearly so onboarding a new repo is one prompt, not trial and error.",
     "session_note": "Both bugs surfaced from Chad looking at the live dashboard. The NaN label was a defensive fix here; the actual tracker corrections happened in the respective repos via Claude Code sessions. Pattern: dashboard catches the symptom, targeted prompts fix the source.",
-    "tags": ["javascript", "defensive-coding", "dates", "cross-repo"],
+    "tags": [
+      "javascript",
+      "defensive-coding",
+      "dates",
+      "cross-repo"
+    ],
     "artifact": "index.html",
     "intensity": "quick",
     "mood": "🐛",
@@ -99,7 +130,15 @@
     "completed": "Notepad polish: edit existing notes (pre-fills composer with edit banner, Update/Cancel), category chips now sync the composer project on click (filter + compose in one tap), composer textarea taller and roomier. New Quick Links tab with three preset URLs and an iOS-style action sheet (Open in browser / Copy URL) — built for fast iMessage-share workflow. Full rebrand Garden → der Hain — logo, browser title, PWA home screen name, empty state copy, favicon redesigned from a single two-leaf plant to a grove of three trees with little trunks and tonal variation (left muted, centre brightest, right mid). apple-touch-icon regenerated from pure-stdlib Python at 180×180 with rounded corners. Domains updated to projects + hain + der.hain.chadstewartcpa.com.",
     "learned": "Quadratic Bezier curves can be rasterized to PNG with pure stdlib Python by sampling the curve into polygon points and using ray-casting point-in-polygon — no PIL needed even for organic shapes. Three trees identified separately (vs blending into one shrub) needs both shape gaps AND tonal variation; one without the other isn't enough. The chip-syncs-composer pattern is a 'one element, two affordances' UI win — same control answers both 'show me X' and 'I want to add to X'. Naming carries weight: 'Garden' had the right metaphor but conflicted with another project; 'der Hain' (a grove) keeps the metaphor while signalling specificity. The lowercase German article 'der' next to capitalized 'Hain' makes the typography work — article reads as prefix, name stands as the proper noun.",
     "session_note": "Chad caught the favicon v1 looking like a shrub instead of three trees. Fix was structural (gaps + trunks) plus tonal (three different green tones), not just one or the other. Cloudflare deployment loop (push to main → live) makes visual iteration like this practical.",
-    "tags": ["branding", "css", "python", "stdlib", "favicon", "ux", "naming"],
+    "tags": [
+      "branding",
+      "css",
+      "python",
+      "stdlib",
+      "favicon",
+      "ux",
+      "naming"
+    ],
     "artifact": "favicon.svg",
     "intensity": "deep_dive",
     "mood": "🌳",
@@ -117,7 +156,13 @@
     "completed": "iOS companion app skeleton scaffolded in ios/ subfolder — DerHain (WKWebView wrapper, full-screen, pull-to-refresh, external links route to Safari, dashboard stays in-app) + DerHainWidget (home screen widget, small + medium, fetches projects.json then top tracker priority via GitHub Contents API, refreshes 45min). SETUP.md walkthrough for Xcode project creation, target wiring, and wired-deploy to personal iPhone (no App Store, no TestFlight). CLAUDE.md updated with widget-schema-sync maintenance rule and iOS scope reflected in Out of Scope table.",
     "learned": "A WKWebView wrapper is the right intermediate step between PWA and full native rewrite — 95% of features stay web (auto-update on Cloudflare deploy, single codebase) while iOS-only platform integrations (widgets, Action Button, Keychain, native haptics) get added incrementally as native code only when they pay off. The widget extension is a separate target with its own bundle identifier and can't share code with the WebView app directly — it parses tracker JSON itself, so any schema change is a manual sync point. WKWebView's localStorage is isolated from Safari's, so PWA-installed users get a 'first launch' moment where the Gist sync rehydrates their notes. .xcodeproj files contain user-specific UUIDs and signing config — better to leave them out of git and have setup instructions reproduce them locally.",
     "session_note": "Chad isn't at his Mac, so all Swift was written 'cold' and committed; he'll open Xcode later and run through ios/SETUP.md. This is the first Swift code in the project-dashboard repo — first dual-platform project he's structured this way. The 'thin wrapper, web is source of truth' pattern is the explicit architectural commitment — keeps maintenance burden low while still unlocking iOS-only surfaces.",
-    "tags": ["swift", "ios", "wkwebview", "widgetkit", "architecture"],
+    "tags": [
+      "swift",
+      "ios",
+      "wkwebview",
+      "widgetkit",
+      "architecture"
+    ],
     "artifact": "ios/DerHain/WebView.swift",
     "intensity": "deep_dive",
     "mood": "🚀",
@@ -134,7 +179,14 @@
     "completed": "Galaxy / Victory Lap tab shipped — 7 planets per project sized by accomplishment count, hyperspace warp on click (stars stretch to lines, stage scales toward clicked planet), planet detail view with moons in orbit (one per accomplishment), moon detail cards showing full rich-field data. Enriched learned-log.json schema with 8 new tracking fields, backfilled all entries, created enrich-tracker-shipped.md workflow prompt.",
     "learned": "CSS transform-origin set dynamically per click makes scale() zoom toward any target point — no JS animation loop or requestAnimationFrame math needed. The browser computes the perspective. Setting it to the planet's position as a percentage of the container before adding the warp class is the entire trick.",
     "session_note": "Chad looked at the dev deployment mid-session and said 'it is sooooo cool!!' — highest praise. The Galaxy was designed in conversation before a single line was written: spatial vs timeline, all 7 planets visible even if dim, hyperspace travel direction. The 8 tracking metrics were voted in real-time (yes/no/no/yes pattern). Chad immediately took the enrich prompt to the other 6 repos the same session.",
-    "tags": ["galaxy", "visualization", "css", "animation", "data-viz", "schema"],
+    "tags": [
+      "galaxy",
+      "visualization",
+      "css",
+      "animation",
+      "data-viz",
+      "schema"
+    ],
     "artifact": "index.html",
     "intensity": "deep_dive",
     "mood": "🪐",
@@ -144,5 +196,50 @@
     "real_world_use": true,
     "energy_in": "high",
     "curiosity_trail": "What does the galaxy look like in 6 months with 50+ moons per planet?"
+  },
+  {
+    "date": "2026-04-29",
+    "project": "Chad-Wiki",
+    "repo": "chad-wiki",
+    "completed": "Chad-Wiki v1 architecture closed out — Cowork's CLAUDE.md stop-gap orientation section replaced with a canonical fetch pointer to chadwiki.chadstewartcpa.com/orientation.md (plus fallback-ladder protocol). Caught and fixed the manifest auto-update workflow which had landed at the repo root instead of .github/workflows/ at v1 ship and had been silently inert ever since — first run succeeded after the rename. Mac mini set up as the primary Claude Code working environment on chadsminiEXT, replacing flaky Cowork; 10 additional Driver-cyber repos cloned locally and global gitignore configured.",
+    "learned": "Shipping a 'v1 deployed' doesn't mean the architecture is closed — there's a stop-gap-to-canonical transition that has to actually happen, or the system sits in a half-state where the canonical source exists but nothing references it. Also: workflow files outside .github/workflows/ are inert without warning. GitHub doesn't surface the misplacement; the file just looks like normal YAML.",
+    "session_note": "First session in Claude Code on the Mac mini, moving execution off Cowork (which had been disconnecting and losing progress). Setup work and architectural close-out interleaved in the same session because the Mac mini handoff was the natural moment to also notice the workflow misplacement bug. Memory seeded for future cold-start sessions on this drive: 5 entries covering Chad's profile, the wiki, Cowork constitution location, survivor-drive convention, and the archive-folder ignore rule.",
+    "tags": [
+      "wiki",
+      "architecture",
+      "github-actions",
+      "infrastructure",
+      "setup",
+      "multi-machine"
+    ],
+    "artifact": "https://chadwiki.chadstewartcpa.com/orientation.md",
+    "intensity": "session",
+    "mood": "🏗️",
+    "aha": "Architecture isn't done until the pointers move — canonical source + embedded stop-gap is a half-state, not a complete transition.",
+    "wonder": "A 2-file wiki (orientation.md + map.md) becomes the coordination point across many Claude surfaces. The infrastructure is dramatically more elaborate than the content, by design — content stays short, infrastructure stays invisible.",
+    "first_ever": "First repo of Chad's to complete the stop-gap → canonical-pointer transition",
+    "real_world_use": true,
+    "energy_in": "medium",
+    "curiosity_trail": "How does each non-Cowork surface (claude.ai, Claude Code, future surfaces) discover the wiki URL on its own? Cowork has it hardcoded in CLAUDE.md; the others need their own answer."
+  },
+  {
+    "date": "2026-05-01",
+    "project": "der Hain",
+    "repo": "project-dashboard",
+    "completed": "Shipped der Hain iOS app + home-screen widget to physical iPhone. Built the Xcode project from the ios/ skeleton, signed with free Apple ID, walked through every Xcode 26 gotcha, deep-linked widget into the WKWebView, fixed icon, fixed widget background API. Also flattened der.hain. → derhain.chadstewartcpa.com to stay under Cloudflare Universal SSL.",
+    "learned": "Xcode widget extension defaults to latest SDK deployment target regardless of parent app — caused the widget to silently filter out of the gallery on devices below the SDK. iOS 17+ widgets require .containerBackground(_:for:) modifier instead of setting a background view inside the body. Free Apple ID dev signing requires 'Embed Without Signing' (not 'Embed & Sign') for .appex extensions — and that dropdown only offers two options for extensions, never three. Cloudflare Universal SSL covers apex + one subdomain level only; nested subdomains need paid Advanced Certificate Manager.",
+    "session_note": "Long, gauntlet-style session. Twelve+ Xcode dialogs, several false starts (folder collision when project name matched existing directory, target membership trap that put @main twice into the app module, deployment-target mismatch hiding the widget from gallery, missing AppIcon image showing default placeholder). Each fix was a single-line/single-checkbox change but finding the right one required reading the error message carefully and translating Apple's phrasing into actionable steps. End state: der Hain now lives on Chad's home screen with a working widget that pulls live data from GitHub every 45 minutes.",
+    "tags": ["ios", "swiftui", "xcode", "widget", "widgetkit", "wkwebview", "code-signing", "cloudflare", "ssl", "shipping"],
+    "struggle": "Xcode 26 introduced subtle defaults that broke the original SETUP.md instructions — widget Extension target deployment defaults to latest SDK, bundle ID derives case from Product Name, bridging-header dialog auto-pops on widget file add, and the New Target wizard has three new optional checkboxes (Live Activity, Control, App Intent) that scaffold collisions if left checked.",
+    "artifact": "ios/DerHain/",
+    "intensity": "marathon",
+    "mood": "🛠️",
+    "aha": "The widget wasn't broken — iOS was filtering it out because its deployment target (auto-set to 26.4) exceeded what the phone could install. Once I matched it to the app's 17.6, the widget appeared in the gallery within seconds.",
+    "frustration_peak": "When the widget finally showed up but threw 'Please adopt containerBackground API' on the home screen — felt like the goal post moved one more time after twelve previous fixes.",
+    "curiosity_trail": "Could SETUP.md be retrofitted into a single Xcode-config check script (read project.pbxproj, flag deployment-target mismatch / target-membership doublings / missing icon images) so future fresh installs catch these before ⌘B?",
+    "first_ever": "First iOS app shipped to a physical device + first widget extension built from scratch",
+    "real_world_use": true,
+    "energy_in": "medium",
+    "wonder": "A widget extension is just a .appex bundle nested inside the parent app's PlugIns/ folder — iOS scans those at install time and registers any whose Info.plist declares NSExtensionPointIdentifier = com.apple.widgetkit-extension. The whole 'add widget to home screen' flow is just iOS reading metadata from a sub-bundle."
   }
 ]

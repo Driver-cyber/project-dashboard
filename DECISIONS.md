@@ -12,6 +12,15 @@ Phase 3 wrapped 2026-04-28: rebrand → der Hain, iOS WKWebView + widget skeleto
 
 ## 📝 Decision Log
 
+### [2026-05-01] — Flatten `der.hain.` → `derhain.` for free SSL coverage
+
+- Cloudflare Universal SSL only covers the apex + one subdomain level (`*.chadstewartcpa.com`). `der.hain.chadstewartcpa.com` is two levels deep and would require Advanced Certificate Manager (paid) or a custom cert — not worth it for the German-clarity nicety.
+- Cutover: `derhain.chadstewartcpa.com` is now the canonical iOS-app/PWA URL. Old `der.hain.…` can be kept as a 301 redirect for muscle-memory grace, then retired.
+- Touchpoints updated: `ios/DerHain/ContentView.swift` (loaded URL), `ios/DerHain/WebView.swift` (external-link host check), `CLAUDE.md` (domain list). Widget unaffected — it queries the GitHub API directly.
+- iOS app must be rebuilt + reinstalled on Chad's phone for the change to take effect — bundle ID stays `com.chadstewart.derhain`, so it's a same-app update, not a fresh install.
+
+---
+
 ### [2026-04-28] — Galaxy tab · Victory Lap visualization · enriched tracking schema
 
 **Galaxy tab: spatial planet visualization chosen over timeline**
@@ -44,7 +53,7 @@ Phase 3 wrapped 2026-04-28: rebrand → der Hain, iOS WKWebView + widget skeleto
 - "Hain" is German for *grove* — keeps the plant/growth metaphor but distinct from a single garden, implies a collection of growing things tended together.
 - Lowercase German article kept (`der Hain`) so the name reads as a proper noun phrase — article serves as prefix, capitalized noun stands as the name. Also signals German-ness clearly to readers.
 - Touchpoints updated: PWA `apple-mobile-web-app-title`, browser `<title>`, header `.logo`, empty-state copy. The `garden-notes.json` Gist filename intentionally NOT renamed — that's the live sync key, renaming it would orphan all existing notes.
-- Domains: `projects.chadstewartcpa.com`, `hain.chadstewartcpa.com`, `der.hain.chadstewartcpa.com` (Chad picked the multi-dot `der.` subdomain for clarity that it's German). Old `garden.chadstewartcpa.com` deleted.
+- Domains: `projects.chadstewartcpa.com`, `hain.chadstewartcpa.com`, `derhain.chadstewartcpa.com`. Old `garden.chadstewartcpa.com` deleted. *(Originally registered as `der.hain.chadstewartcpa.com` for German-clarity reasons; flattened to `derhain.` on 2026-05-01 — see entry below.)*
 
 **Favicon redesign: single plant → grove of three trees**
 - v1 (three crowns, one color, no trunks) read as a shrub at favicon size — Chad caught it immediately.

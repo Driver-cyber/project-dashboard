@@ -47,7 +47,7 @@ struct WebView: UIViewRepresentable {
         ) {
             if let url = navigationAction.request.url,
                navigationAction.navigationType == .linkActivated,
-               url.host != "der.hain.chadstewartcpa.com"
+               url.host != "derhain.chadstewartcpa.com"
             {
                 UIApplication.shared.open(url)
                 decisionHandler(.cancel)

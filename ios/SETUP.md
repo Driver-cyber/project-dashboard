@@ -103,6 +103,21 @@ If Xcode warns about network access, add this to `Info.plist`:
 
 ---
 
+## Gotchas (Xcode 26+)
+
+If you're re-doing this setup on a fresh Mac, here are the traps that bit us on the first run:
+
+1. **Folder collision on project save.** Xcode creates a folder named after Product Name. If `ios/DerHain/` already holds the prepared `.swift` files, rename them out of the way first (`DerHain` → `DerHain-src`, `DerHainWidget` → `DerHainWidget-src`), create the project, then add files from the `-src` folders with "Copy items if needed" **checked**.
+2. **Bundle ID case follows Product Name.** With Product Name `DerHain`, the bundle ID auto-derives as `com.chadstewart.DerHain` (capital D, capital H), not lowercase. The widget bundle ID will be `com.chadstewart.DerHain.DerHainWidget`. This is fine — just use matching case throughout.
+3. **Target membership trap.** When adding widget files, the Add Files dialog defaults to "Add to targets: ✅ DerHain ✅ DerHainWidget" — uncheck `DerHain`. Otherwise both `DerHainApp` (@main) and `DerHainWidgetBundle` (@main) compile into the app module → "'main' attribute can only apply to one type in a module" error.
+4. **Widget deployment target defaults to latest SDK.** New widget extension targets get `IPHONEOS_DEPLOYMENT_TARGET = <whatever Xcode shipped with>` (e.g. 26.4) regardless of the parent app's target (17.6). The widget will silently filter out of the home-screen gallery on any device below that SDK. **Fix:** project icon → DerHainWidgetExtension target → General → Minimum Deployments → match the app's iOS version.
+5. **Bridging header prompt on widget file add.** Xcode pops a "Would you like to configure an Objective-C bridging header?" dialog when adding the prepared Swift files. Click **Don't Create** — the widget is pure Swift.
+6. **Three optional checkboxes in the Widget Extension wizard.** Modern Xcode adds "Include Live Activity", "Include Control", and "Include Configuration App Intent" as default-checked options. Uncheck **all three** — they scaffold types that collide with the prepared `DerHainWidget.swift` / `DerHainWidgetBundle.swift`.
+7. **AppIcon needs an actual image.** The auto-generated `AppIcon.appiconset/Contents.json` declares slots but ships no PNG, so the home-screen icon shows the default white grid. Drop a 1024×1024 PNG into the appiconset and reference it from the `filename` field in `Contents.json`. The repo's `favicon.svg` rasterizes nicely via `qlmanage -t -s 1024 -o /tmp favicon.svg`.
+8. **iOS 17+ widget background API.** Widgets must use `.containerBackground(_:for:)` modifier on their root view. The pre-iOS-17 pattern of putting a color view inside a ZStack throws "Please adopt containerBackground API" on the home screen.
+9. **Widget gallery cache.** After fixing any widget config, iOS sometimes caches the old (failed) extension list. To force a re-scan: delete the app from the phone, restart the phone, ⌘R fresh-install. Without the phone restart, the widget often won't appear even if the build is correct.
+10. **Free Apple ID `.appex` embedding.** For widget extensions, the only valid embed mode is **Embed Without Signing** — there is no "Embed & Sign" option for `.appex`. The widget gets re-signed implicitly when the parent app is signed.
+
 ## Future ideas
 
 - Lock screen widget (`.accessoryRectangular` family) — same data, tiny layout

@@ -1,6 +1,6 @@
 # CLAUDE.md — Project Dashboard Constitution
 *Governing document for the `Driver-cyber/project-dashboard` repo*
-*Last updated: 2026-04-28*
+*Last updated: 2026-05-01*
 
 ---
 
@@ -31,7 +31,7 @@ This repo is Chad's personal command center — a live, bookmarkable dashboard t
 
 ## 🛠 Architecture
 
-**Hosting:** Cloudflare Pages — auto-deploys on push to `main`. Custom domains: `projects.chadstewartcpa.com`, `hain.chadstewartcpa.com`, `der.hain.chadstewartcpa.com`.
+**Hosting:** Cloudflare Pages — auto-deploys on push to `main`. Custom domains: `projects.chadstewartcpa.com`, `hain.chadstewartcpa.com`, `derhain.chadstewartcpa.com`.
 
 **Data flow — dashboard cards:**
 - Fetches tracker data live from public repos under `Driver-cyber` via the unauthenticated GitHub Contents API

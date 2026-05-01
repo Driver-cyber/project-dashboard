@@ -129,36 +129,34 @@ struct WidgetView: View {
     @Environment(\.widgetFamily) var family
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            bgColor
-            VStack(alignment: .leading, spacing: 5) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text("der Hain")
-                        .font(.system(size: 11, weight: .regular, design: .serif).italic())
-                        .foregroundColor(sageColor)
-                    Spacer()
-                    if !entry.updatedLabel.isEmpty {
-                        Text(entry.updatedLabel)
-                            .font(.system(size: 9, design: .monospaced))
-                            .foregroundColor(dimColor)
-                    }
-                }
-
-                Text(entry.projectName)
-                    .font(.system(size: family == .systemSmall ? 16 : 20, weight: .semibold))
-                    .foregroundColor(inkColor)
-                    .lineLimit(1)
-
-                Text(entry.topPriority)
-                    .font(.system(size: family == .systemSmall ? 11 : 13))
+        VStack(alignment: .leading, spacing: 5) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("der Hain")
+                    .font(.system(size: 11, weight: .regular, design: .serif).italic())
                     .foregroundColor(sageColor)
-                    .lineLimit(family == .systemSmall ? 2 : 3)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Spacer(minLength: 0)
+                Spacer()
+                if !entry.updatedLabel.isEmpty {
+                    Text(entry.updatedLabel)
+                        .font(.system(size: 9, design: .monospaced))
+                        .foregroundColor(dimColor)
+                }
             }
-            .padding(family == .systemSmall ? 13 : 16)
+
+            Text(entry.projectName)
+                .font(.system(size: family == .systemSmall ? 16 : 20, weight: .semibold))
+                .foregroundColor(inkColor)
+                .lineLimit(1)
+
+            Text(entry.topPriority)
+                .font(.system(size: family == .systemSmall ? 11 : 13))
+                .foregroundColor(sageColor)
+                .lineLimit(family == .systemSmall ? 2 : 3)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Spacer(minLength: 0)
         }
+        .padding(family == .systemSmall ? 13 : 16)
+        .containerBackground(bgColor, for: .widget)
     }
 }
 
