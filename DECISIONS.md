@@ -12,6 +12,29 @@ Phase 3 wrapped 2026-04-28: rebrand → der Hain, iOS WKWebView + widget skeleto
 
 ## 📝 Decision Log
 
+### [2026-05-01] — Inbox capture pipeline · single-source tracker hydration
+
+**Inbox capture pipeline (iOS Shortcut → Pages Function → Gist → session-end sweep)**
+- Goal: lower the friction of "I just thought of a tracker entry, but I'm on my phone." Voice-first, sub-second round-trip, no app to open.
+- Architecture: iOS Shortcut (Action Button or Siri) → Dictate Text → POST `https://derhain.chadstewartcpa.com/api/inbox` with `{text}` → Pages Function fetches the notepad Gist, prepends a note `{project: "Inbox", text, source: "inbox-api"}`, PATCHes back. Returns 200 + new note id.
+- Endpoint: `functions/api/inbox.js`. Reuses the same `GITHUB_TOKEN`/`GIST_ID` env vars that the existing `/api/gist` proxy uses — no additional secrets.
+- Notepad UI auto-renders an "Inbox" chip when any note has `project: "Inbox"`, since chip rendering uses `Set(notes.map(n => n.project))`. No UI code change needed for the new category.
+- Sweep: at session-end (or via "sweep inbox" trigger), Claude pulls Inbox notes, decides whether each is a shipped item / new priority / backlog idea / discardable, and routes accordingly.
+- Cleanup gap (acknowledged): Claude can currently *read* the gist via `/api/gist` GET, but doesn't have a clean delete-by-id endpoint — would need to PATCH the full notes array back. Acceptable for now; if Inbox grows noisy, add `/api/inbox?action=clear&ids=...` or have Chad swipe-delete in the Notepad UI.
+
+**Single-source tracker — visual hydrates from JSON**
+- Bug discovered: `project-dashboard-tracker.html` had a static `<ol>` list of priorities AND a `#tracker-data` JSON block. Both were maintained by hand. After the iOS-shipping commit, the JSON had updated priorities but the visual list still showed shipped items as priorities — that's why the page felt "stale."
+- Decision: JSON is the single source of truth. The visual lists hydrate from `#tracker-data` on page load via a small inline script (~30 LOC). Static HTML in the file remains as a no-JS fallback / first paint, but JS overwrites on load.
+- Bug-within-bug: the hydration script initially lived in the same `<script>` block as the theme toggle, ABOVE the `<script id="tracker-data">` block. `getElementById('tracker-data')` returned null because the parser hadn't reached the JSON yet; the function silently bailed. Fix: move hydration into its own `<script>` block AFTER the JSON. Lesson encoded in a comment in the file.
+- CLAUDE.md updated: "edit the `#tracker-data` JSON block only" — visual auto-syncs. Removed the old "bump in both places" rule.
+- Galaxy tab and dashboard cards already read the JSON directly via the GitHub Contents API — they were never affected by the dual-source bug. Only the visual tracker page itself was lying.
+
+**Session-end protocol upgraded with trigger phrases**
+- Codified in CLAUDE.md: "shipped X, next Y" (mid-session), "session-end" / "wrap up" / "close out" (end of session), "add to backlog: Z" (capture without re-prioritizing), "sweep inbox" (process Inbox-tagged notepad entries).
+- New step 1: sweep the Inbox before editing the tracker. New step 5: push to main (was implicit before; now explicit because the iOS widget depends on it).
+
+---
+
 ### [2026-05-01] — Flatten `der.hain.` → `derhain.` for free SSL coverage
 
 - Cloudflare Universal SSL only covers the apex + one subdomain level (`*.chadstewartcpa.com`). `der.hain.chadstewartcpa.com` is two levels deep and would require Advanced Certificate Manager (paid) or a custom cert — not worth it for the German-clarity nicety.

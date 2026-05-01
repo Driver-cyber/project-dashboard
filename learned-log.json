@@ -241,5 +241,25 @@
     "real_world_use": true,
     "energy_in": "medium",
     "wonder": "A widget extension is just a .appex bundle nested inside the parent app's PlugIns/ folder — iOS scans those at install time and registers any whose Info.plist declares NSExtensionPointIdentifier = com.apple.widgetkit-extension. The whole 'add widget to home screen' flow is just iOS reading metadata from a sub-bundle."
+  },
+  {
+    "date": "2026-05-01",
+    "project": "der Hain",
+    "repo": "project-dashboard",
+    "completed": "Closed the capture loop end-to-end: voice-dictate on iPhone via iOS Shortcut → POST to /api/inbox Cloudflare Pages Function → appended as Inbox-tagged note to the notepad Gist → next session-end Claude sweeps it into tracker priorities/shipped/backlog. Also made the tracker visual single-source — priorities/backlog/shipped lists hydrate from the #tracker-data JSON on page load, eliminating dual-edit. Plus codified session-end trigger phrases ('shipped X, next Y' / 'session-end' / 'sweep inbox') in CLAUDE.md.",
+    "learned": "Inline <script> blocks execute as the HTML parser hits them — getElementById can't find sibling elements that appear later in the document. Hydration scripts that read embedded JSON must come AFTER the JSON <script> block. Caught this only by curling the deployed page and seeing the new banner render but the priority list still stale. Separately: iOS Shortcuts is a no-code automation runtime that ships in the OS; pairing it with a Cloudflare Pages Function gives voice-controlled API endpoints with zero auth UX (token stays server-side).",
+    "session_note": "Started as a small ask — 'how do I update the tracker?' — and surfaced a real bug (visual HTML and JSON were dual-maintained, so the page showed stale priorities even after the JSON updated). Building the Inbox capture pipeline was the satisfying part: backend endpoint, walked Chad through Shortcuts setup, watched the first capture land in the gist via curl. The 'Now listening' artifact happened because Chad read the iOS dictation UI text out loud — the system literally captured itself describing itself.",
+    "tags": ["ios", "shortcuts", "siri", "cloudflare-pages", "voice-capture", "single-source", "session-protocol", "javascript", "hydration"],
+    "struggle": "Hydration bug was invisible from source — looked correct, but ran before the JSON <script> block was parsed so getElementById returned null and silently bailed. Only caught it by curling the deployed file and reading my own code back to myself.",
+    "artifact": "functions/api/inbox.js",
+    "intensity": "deep_dive",
+    "mood": "🎙️",
+    "aha": "When 'Now listening Now listening' showed up in the gist, I thought it was a UI bleed — but Chad had read the iOS dictation prompt aloud. The capture system recorded itself describing itself. Felt like the universe winking back at the new pipeline.",
+    "frustration_peak": "Pushing what I thought was a finished feature, watching Chad's screenshot still show the old priority list, and only finding the script-order bug by curling the live HTML.",
+    "curiosity_trail": "What else wants to land in /api/inbox from the phone? Daily photo to a journal album? Location-tagged ideas? The endpoint is now a cheap landing pad for any iOS Shortcut.",
+    "first_ever": "First voice-capture iOS Shortcut wired to my own backend — Action Button → Pages Function → Gist round-trip, all under a second",
+    "real_world_use": true,
+    "energy_in": "high",
+    "wonder": "The full capture loop runs in maybe 800ms — phone dictates, HTTPS POSTs to Cloudflare's edge, Pages Function fetches the gist from GitHub, modifies it, PATCHes back, returns 200, phone shows notification. Four network hops across three services, voice-to-persisted-note in the time it takes to lower the phone."
   }
 ]
