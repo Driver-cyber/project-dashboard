@@ -101,16 +101,23 @@ The Galaxy tab fetches each tracker (already done for cards) and merges its `shi
 
 ## ⚙️ Session-End Protocol (Claude Code)
 
+**Trigger phrases — Chad can say any of these to invoke this protocol:**
+- *"shipped X, next Y"* — finished one priority, starting another
+- *"session-end"* / *"wrap up"* / *"close out"* — end-of-session sweep
+- *"add to backlog: Z"* — capture an idea without re-prioritizing
+- *"sweep inbox"* — process Inbox-tagged notepad entries (see step 1)
+
 At the end of any working session, Claude Code should:
 
-1. **Update `project-dashboard-tracker.html`** — move completed priorities to backlog, pull up next items, bump the `updated` date in both the visual header and the JSON block.
-2. **Append to `learned-log.json`** — one entry per meaningful completion or skill acquired this session. Always include `repo` and `tags`. Add the optional enrichment fields (`mood`, `aha`, `struggle`, `frustration_peak`, `wonder`, `first_ever`, `intensity`, `energy_in`, `real_world_use`, `curiosity_trail`, `artifact`) for any that are genuinely true — these feed the Galaxy/Victory Lap tab. Don't pad — empty fields are better than fabricated ones.
-3. **Optionally ask Chad** *one* question, not a form. Pick the one most likely to capture something we'd otherwise lose. Examples:
+1. **Sweep the Inbox first** — check the Notepad Gist (or `/api/inbox` queue) for entries tagged `Inbox` or in the Inbox category. These are quick captures from iOS Action Button / Siri / on-the-fly notes. For each: decide whether it's a shipped item, a new priority, a backlog idea, or just a note — and route it to the right place. Clear processed entries.
+2. **Update `project-dashboard-tracker.html`** — edit the `#tracker-data` JSON block only (priorities, backlog, shipped, `updated` date, `phase`). The visual header + lists hydrate from the JSON automatically — no need to edit both.
+3. **Append to `learned-log.json`** — one entry per meaningful completion or skill acquired this session. Always include `repo` and `tags`. Add the optional enrichment fields (`mood`, `aha`, `struggle`, `frustration_peak`, `wonder`, `first_ever`, `intensity`, `energy_in`, `real_world_use`, `curiosity_trail`, `artifact`) for any that are genuinely true — these feed the Galaxy/Victory Lap tab. Don't pad — empty fields are better than fabricated ones.
+4. **Optionally ask Chad** *one* question, not a form. Pick the one most likely to capture something we'd otherwise lose. Examples:
    - "Anything specific you want noted in the learning log from today?"
    - "What's the one mood emoji for this session?"
    - "Was there an aha moment I should record?"
    - "Did anything almost make you rage-quit today?"
-4. **Commit with a descriptive message.** Pattern: `"[project] — [what changed] | log updated"`
+5. **Commit + push.** Pattern: `"[project] — [what changed] | log updated"`. Push to `main` so Cloudflare deploys and the iOS widget picks up new data.
 
 ---
 
@@ -140,7 +147,7 @@ At the end of any working session, Claude Code should:
 
 ## 🔧 Maintenance Rules
 
-- **After any session that changes build priorities:** Update `project-dashboard-tracker.html`.
+- **After any session that changes build priorities:** Update the `#tracker-data` JSON block in `project-dashboard-tracker.html`. The visual page hydrates from JSON on load — do NOT also hand-edit the static `<ol>`/`<ul>` lists.
 - **After any session that ships something meaningful:** Append to `learned-log.json`.
 - **After any architectural decision:** Add an entry to `DECISIONS.md` with date and rationale.
 - **Workflow templates in `workflow/`:** Update only when the underlying pattern changes — these are consumed by other projects, so treat them like a published API. Don't make breaking changes silently.

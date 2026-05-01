@@ -3,3 +3,6 @@
 # Xcode per-user state (don't commit machine-specific UI state)
 xcuserdata/
 *.xcuserstate
+
+# Claude Code per-machine settings
+.claude/
