@@ -342,60 +342,6 @@
   })();
   document.getElementById('mode-light').addEventListener('click', () => applyTheme('light'));
   document.getElementById('mode-dark').addEventListener('click',  () => applyTheme('dark'));
-
-  // Hydrate visual lists from #tracker-data so the JSON is the single source of truth.
-  (function hydrateTracker() {
-    const dataEl = document.getElementById('tracker-data');
-    if (!dataEl) return;
-    let data;
-    try { data = JSON.parse(dataEl.textContent); } catch { return; }
-    const col = data.columns && data.columns[0];
-    if (!col) return;
-
-    const esc = (s) => {
-      const d = document.createElement('div');
-      d.textContent = String(s == null ? '' : s);
-      return d.innerHTML;
-    };
-
-    const priorityList = document.querySelector('ol.priority-list');
-    if (priorityList && Array.isArray(col.priorities)) {
-      priorityList.innerHTML = col.priorities.map((p, i) => `
-        <li>
-          <span class="num">${i + 1}</span>
-          <div class="priority-text">
-            <strong>${esc(p.title)}</strong>
-            <span>${esc(p.note || '')}</span>
-          </div>
-        </li>
-      `).join('');
-    }
-
-    document.querySelectorAll('.section-label').forEach(label => {
-      const ul = label.nextElementSibling;
-      if (!ul || ul.tagName !== 'UL') return;
-      const text = label.textContent.trim();
-      if (text === 'Backlog' && Array.isArray(col.backlog)) {
-        ul.innerHTML = col.backlog.map(item => `<li>${esc(item)}</li>`).join('');
-      } else if (text === 'Shipped' && Array.isArray(col.shipped)) {
-        const sorted = [...col.shipped].sort((a, b) => {
-          const ad = (typeof a === 'object' && a && a.date) || '';
-          const bd = (typeof b === 'object' && b && b.date) || '';
-          return bd.localeCompare(ad);
-        });
-        ul.innerHTML = sorted.map(item => {
-          if (typeof item === 'string') return `<li>${esc(item)}</li>`;
-          const date = item.date ? `<span class="ship-date">${esc(item.date)}</span>` : '';
-          return `<li>${date}${esc(item.what || '')}</li>`;
-        }).join('');
-      }
-    });
-
-    const stampSpan = document.querySelectorAll('.meta span')[1];
-    if (stampSpan && data.updated) {
-      stampSpan.textContent = `Updated ${data.updated} · Phase ${data.phase || ''}`.trim();
-    }
-  })();
 </script>
 
 <script id="tracker-data" type="application/json">
@@ -474,6 +420,63 @@
     }
   ]
 }
+</script>
+
+<script>
+  // Hydrate visual lists from #tracker-data so the JSON is the single source of truth.
+  // Must run AFTER the tracker-data <script> above so getElementById finds it.
+  (function hydrateTracker() {
+    const dataEl = document.getElementById('tracker-data');
+    if (!dataEl) return;
+    let data;
+    try { data = JSON.parse(dataEl.textContent); } catch { return; }
+    const col = data.columns && data.columns[0];
+    if (!col) return;
+
+    const esc = (s) => {
+      const d = document.createElement('div');
+      d.textContent = String(s == null ? '' : s);
+      return d.innerHTML;
+    };
+
+    const priorityList = document.querySelector('ol.priority-list');
+    if (priorityList && Array.isArray(col.priorities)) {
+      priorityList.innerHTML = col.priorities.map((p, i) => `
+        <li>
+          <span class="num">${i + 1}</span>
+          <div class="priority-text">
+            <strong>${esc(p.title)}</strong>
+            <span>${esc(p.note || '')}</span>
+          </div>
+        </li>
+      `).join('');
+    }
+
+    document.querySelectorAll('.section-label').forEach(label => {
+      const ul = label.nextElementSibling;
+      if (!ul || ul.tagName !== 'UL') return;
+      const text = label.textContent.trim();
+      if (text === 'Backlog' && Array.isArray(col.backlog)) {
+        ul.innerHTML = col.backlog.map(item => `<li>${esc(item)}</li>`).join('');
+      } else if (text === 'Shipped' && Array.isArray(col.shipped)) {
+        const sorted = [...col.shipped].sort((a, b) => {
+          const ad = (typeof a === 'object' && a && a.date) || '';
+          const bd = (typeof b === 'object' && b && b.date) || '';
+          return bd.localeCompare(ad);
+        });
+        ul.innerHTML = sorted.map(item => {
+          if (typeof item === 'string') return `<li>${esc(item)}</li>`;
+          const date = item.date ? `<span class="ship-date">${esc(item.date)}</span>` : '';
+          return `<li>${date}${esc(item.what || '')}</li>`;
+        }).join('');
+      }
+    });
+
+    const stampSpan = document.querySelectorAll('.meta span')[1];
+    if (stampSpan && data.updated) {
+      stampSpan.textContent = `Updated ${data.updated} · Phase ${data.phase || ''}`.trim();
+    }
+  })();
 </script>
 
 </body>
