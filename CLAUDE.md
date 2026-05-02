@@ -1,6 +1,6 @@
 # CLAUDE.md — Project Dashboard Constitution
 *Governing document for the `Driver-cyber/project-dashboard` repo*
-*Last updated: 2026-05-01*
+*Last updated: 2026-05-02*
 
 ---
 
@@ -99,26 +99,42 @@ The Galaxy tab fetches each tracker (already done for cards) and merges its `shi
 
 ---
 
-## ⚙️ Session-End Protocol (Claude Code)
+## ⚙️ Session-End Protocol
 
-**Trigger phrases — Chad can say any of these to invoke this protocol:**
-- *"shipped X, next Y"* — finished one priority, starting another
-- *"session-end"* / *"wrap up"* / *"close out"* — end-of-session sweep
-- *"add to backlog: Z"* — capture an idea without re-prioritizing
-- *"sweep inbox"* — process Inbox-tagged notepad entries interactively (see step 1)
-- *"sweep all"* / *"session-end automated"* — Chad hands editorial control to Claude for ONE sweep (bulk-mode opt-in)
+**Canonical body lives in chad-wiki:**
+[`session-end-protocol.md`](https://chadwiki.chadstewartcpa.com/?doc=session-end-protocol.md).
+This `CLAUDE.md` declares only the per-project hooks; the protocol substance
+itself is single-source on the wiki.
 
-At the end of any working session, Claude Code should:
+**Trigger phrases — Chad can say any of these:**
+- *"shipped X, next Y"*, *"session-end"*, *"wrap up"*, *"close out"*
+- *"add to backlog: Z"*, *"sweep inbox"*
+- *"sweep all"* / *"session-end automated"* (bulk opt-in for ONE sweep)
 
-1. **Sweep the Inbox first — interactively by default, bulk on opt-in.** Default mode: read each Inbox-tagged note from the notepad Gist (`curl https://derhain.chadstewartcpa.com/api/gist`, parse `garden-notes.json`, filter `project === "Inbox"` and `status === "active"`) and ask Chad per-item what it should become — *priority? backlog? shipped? task (re-route to the `Tasks` category as a to-do)? re-route to a different project's notepad category? delete?* Chad is the editorial hand; Claude is the typing layer. Bulk opt-in: if Chad explicitly says *"sweep all"* / *"session-end automated"* / *"process them yourself"*, Claude takes editorial control for that one sweep — useful when the Inbox is thick or Chad isn't at a screen. Default reverts to interactive on the next session unless Chad re-states the override. To apply changes, PATCH the gist via `/api/gist` with an explicit `User-Agent` header — Cloudflare's WAF blocks default `Python-urllib`, so use curl `-A "..."` or set the header in code.
-2. **Update `project-dashboard-tracker.html`** — edit the `#tracker-data` JSON block only (priorities, backlog, shipped, `updated` date, `phase`). The visual header + lists hydrate from the JSON automatically — no need to edit both.
-3. **Append to `learned-log.json`** — one entry per meaningful completion or skill acquired this session. Always include `repo` and `tags`. Add the optional enrichment fields (`mood`, `aha`, `struggle`, `frustration_peak`, `wonder`, `first_ever`, `intensity`, `energy_in`, `real_world_use`, `curiosity_trail`, `artifact`) for any that are genuinely true — these feed the Galaxy/Victory Lap tab. Don't pad — empty fields are better than fabricated ones.
-4. **Optionally ask Chad** *one* question, not a form. Pick the one most likely to capture something we'd otherwise lose. Examples:
-   - "Anything specific you want noted in the learning log from today?"
-   - "What's the one mood emoji for this session?"
-   - "Was there an aha moment I should record?"
-   - "Did anything almost make you rage-quit today?"
-5. **Commit + push.** Pattern: `"[project] — [what changed] | log updated"`. Push to `main` so Cloudflare deploys and the iOS widget picks up new data.
+**When Chad uses a trigger phrase:** invoke the user-level Claude Code skill
+**`/session-end-protocol`**. It reads the per-project hooks below, runs the
+canonical body, and applies it interactively per
+[detect → propose → confirm](https://chadwiki.chadstewartcpa.com/?doc=collaboration-patterns.md).
+
+If the skill isn't available in the current Claude surface (e.g. claude.ai
+chat instead of Claude Code), fetch the canonical body from the URL above
+and follow it by hand against the hooks below.
+
+### Per-project hooks
+
+| Hook | Value |
+|---|---|
+| Tracker filename | `project-dashboard-tracker.html` |
+| Learned-log path | `learned-log.json` (repo root) |
+| Inbox source | `https://derhain.chadstewartcpa.com/api/gist` — fetch `garden-notes.json`, filter `project === "Inbox"` and `status === "active"`. PATCH back via `/api/gist` with explicit `User-Agent` header (Cloudflare WAF blocks default `Python-urllib`). |
+| Commit-message tag | `[<area>]` — e.g. `[notepad]`, `[dashboard]`, `[ios]`, `[docs]`. Match recent `git log --oneline -5` for current convention. |
+| Deploy target | Cloudflare Pages (auto-deploys on push to `main`); iOS widget reads the tracker HTML directly. |
+
+### Special note for this repo
+
+The iOS widget at `ios/DerHainWidget/DerHainWidget.swift` parses
+`project-dashboard-tracker.html` directly. If `#tracker-data` schema fields
+change, update the widget parser in the same commit.
 
 ---
 
