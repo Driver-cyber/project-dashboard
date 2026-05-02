@@ -229,7 +229,18 @@
     "completed": "Shipped der Hain iOS app + home-screen widget to physical iPhone. Built the Xcode project from the ios/ skeleton, signed with free Apple ID, walked through every Xcode 26 gotcha, deep-linked widget into the WKWebView, fixed icon, fixed widget background API. Also flattened der.hain. → derhain.chadstewartcpa.com to stay under Cloudflare Universal SSL.",
     "learned": "Xcode widget extension defaults to latest SDK deployment target regardless of parent app — caused the widget to silently filter out of the gallery on devices below the SDK. iOS 17+ widgets require .containerBackground(_:for:) modifier instead of setting a background view inside the body. Free Apple ID dev signing requires 'Embed Without Signing' (not 'Embed & Sign') for .appex extensions — and that dropdown only offers two options for extensions, never three. Cloudflare Universal SSL covers apex + one subdomain level only; nested subdomains need paid Advanced Certificate Manager.",
     "session_note": "Long, gauntlet-style session. Twelve+ Xcode dialogs, several false starts (folder collision when project name matched existing directory, target membership trap that put @main twice into the app module, deployment-target mismatch hiding the widget from gallery, missing AppIcon image showing default placeholder). Each fix was a single-line/single-checkbox change but finding the right one required reading the error message carefully and translating Apple's phrasing into actionable steps. End state: der Hain now lives on Chad's home screen with a working widget that pulls live data from GitHub every 45 minutes.",
-    "tags": ["ios", "swiftui", "xcode", "widget", "widgetkit", "wkwebview", "code-signing", "cloudflare", "ssl", "shipping"],
+    "tags": [
+      "ios",
+      "swiftui",
+      "xcode",
+      "widget",
+      "widgetkit",
+      "wkwebview",
+      "code-signing",
+      "cloudflare",
+      "ssl",
+      "shipping"
+    ],
     "struggle": "Xcode 26 introduced subtle defaults that broke the original SETUP.md instructions — widget Extension target deployment defaults to latest SDK, bundle ID derives case from Product Name, bridging-header dialog auto-pops on widget file add, and the New Target wizard has three new optional checkboxes (Live Activity, Control, App Intent) that scaffold collisions if left checked.",
     "artifact": "ios/DerHain/",
     "intensity": "marathon",
@@ -249,7 +260,17 @@
     "completed": "Closed the capture loop end-to-end: voice-dictate on iPhone via iOS Shortcut → POST to /api/inbox Cloudflare Pages Function → appended as Inbox-tagged note to the notepad Gist → next session-end Claude sweeps it into tracker priorities/shipped/backlog. Also made the tracker visual single-source — priorities/backlog/shipped lists hydrate from the #tracker-data JSON on page load, eliminating dual-edit. Plus codified session-end trigger phrases ('shipped X, next Y' / 'session-end' / 'sweep inbox') in CLAUDE.md.",
     "learned": "Inline <script> blocks execute as the HTML parser hits them — getElementById can't find sibling elements that appear later in the document. Hydration scripts that read embedded JSON must come AFTER the JSON <script> block. Caught this only by curling the deployed page and seeing the new banner render but the priority list still stale. Separately: iOS Shortcuts is a no-code automation runtime that ships in the OS; pairing it with a Cloudflare Pages Function gives voice-controlled API endpoints with zero auth UX (token stays server-side).",
     "session_note": "Started as a small ask — 'how do I update the tracker?' — and surfaced a real bug (visual HTML and JSON were dual-maintained, so the page showed stale priorities even after the JSON updated). Building the Inbox capture pipeline was the satisfying part: backend endpoint, walked Chad through Shortcuts setup, watched the first capture land in the gist via curl. The 'Now listening' artifact happened because Chad read the iOS dictation UI text out loud — the system literally captured itself describing itself.",
-    "tags": ["ios", "shortcuts", "siri", "cloudflare-pages", "voice-capture", "single-source", "session-protocol", "javascript", "hydration"],
+    "tags": [
+      "ios",
+      "shortcuts",
+      "siri",
+      "cloudflare-pages",
+      "voice-capture",
+      "single-source",
+      "session-protocol",
+      "javascript",
+      "hydration"
+    ],
     "struggle": "Hydration bug was invisible from source — looked correct, but ran before the JSON <script> block was parsed so getElementById returned null and silently bailed. Only caught it by curling the deployed file and reading my own code back to myself.",
     "artifact": "functions/api/inbox.js",
     "intensity": "deep_dive",
@@ -269,7 +290,16 @@
     "completed": "Widget v2 shipped to phone — Inbox count + shipped-today footer renders on medium size when either count > 0. Added WidgetCenter.reloadAllTimelines() to DerHainApp.onAppear so opening der Hain force-refreshes the widget instead of waiting on the 45-min OS timeline. Codified the interactive Inbox sweep as default protocol behavior with a 'sweep all' / 'session-end automated' opt-in for bulk mode, and saved as durable feedback memory across all future Claude sessions.",
     "learned": "WidgetCenter.shared.reloadAllTimelines() is the WidgetKit escape hatch from the OS-managed 45-min refresh cycle — call it from the parent app's .onAppear and you get a 'force-refresh' gesture for free (just open the app). Also: when proxying GitHub Gist PATCHes through a Cloudflare Pages Function, the WAF blocks default Python-urllib User-Agent — must set an explicit User-Agent string (curl -A or http.client headers) or requests get 403'd silently.",
     "session_note": "Continued from a 'how do I update the tracker?' question into a full home-screen feature: the widget now shows live Inbox + shipped-today counts, and reloads on app launch. Halfway through, Chad noticed I'd unilaterally swept his first Inbox captures earlier in the session and gave clear feedback: interactive review is the default; he wants to be the editorial hand. Saved as durable feedback memory + bulk-mode opt-in trigger added so the protocol respects autonomy without losing the option for hands-off sweeps. Whole loop is now visible on glass — voice → Inbox → widget badge → session-end review → tracker → push → widget reflects.",
-    "tags": ["ios", "widgetkit", "swiftui", "real-time", "session-protocol", "memory", "feedback-loop", "editorial-control"],
+    "tags": [
+      "ios",
+      "widgetkit",
+      "swiftui",
+      "real-time",
+      "session-protocol",
+      "memory",
+      "feedback-loop",
+      "editorial-control"
+    ],
     "struggle": "Xcode scheme picker dropped DerHain (the app scheme) from the visible list after we added the widget extension target — only DerHainWidgetExtension showed, blocking ⌘R from rebuilding the parent app. Took a Manage Schemes detour and Xcode quit/reopen to surface DerHain again.",
     "artifact": "ios/DerHain/DerHain/DerHainApp.swift",
     "intensity": "deep_dive",
@@ -289,7 +319,13 @@
     "completed": "Inbox capture Shortcut now supports dual-mode — Choose from Menu prompts 'Speak' or 'Type' on launch; Speak runs Dictate Text, Type runs Ask for Input, both flow through a captureText variable into the same /api/inbox POST. Lets Chad capture silently in public spaces where talking to a phone is awkward.",
     "learned": "Choose from Menu's branch-result passthrough is finicky — the magic-variable handoff after End Menu can drop or default to a sibling action's output. Explicitly Set Variable to a named slot ('captureText') in each branch keeps the downstream POST step path-agnostic and reliable.",
     "session_note": "Tight follow-on session. Chad noted he doesn't always want to talk to his phone in public (the original Action Button shortcut was dictate-only) so we walked through editing the Shortcut in-place — added Choose from Menu above the existing actions, moved Dictate into the Speak branch, added Ask for Input under Type, and rewired the URL body. Tested both paths, both landed in the gist. Inbox swept at session-end.",
-    "tags": ["ios", "shortcuts", "ux", "voice-capture", "ergonomics"],
+    "tags": [
+      "ios",
+      "shortcuts",
+      "ux",
+      "voice-capture",
+      "ergonomics"
+    ],
     "struggle": "Walking through Shortcut edits over text without seeing the screen — small UI words like 'Provided Input' vs 'Dictated Text' as magic variables matter a lot, and getting the drag-into-branch step right is hard to describe without a video.",
     "artifact": "ios Shortcut: der Hain Inbox",
     "intensity": "quick",
@@ -299,5 +335,26 @@
     "real_world_use": true,
     "energy_in": "medium",
     "wonder": "The Action Button on iPhone is becoming a personal dispatcher — one physical button, n possible intents, branched at the Shortcut layer. The hardware is dumb; the routing is in software I wrote in ten minutes."
+  },
+  {
+    "date": "2026-05-02",
+    "project": "der Hain",
+    "repo": "project-dashboard",
+    "completed": "Tasks category added to notepad — virtual non-project category for capturing to-dos via composer or Inbox-sweep routing; appears in dropdowns + chip filter, hidden from Galaxy.",
+    "learned": "Virtual categories cost nothing structurally — projName()'s `|| repo` fallback, dynamic chip rendering, and the dropdown JSON were already extension points. The only change was three lines in populateProjectSelects().",
+    "session_note": "Small addition with outsized utility — Tasks now lets the Inbox-capture pipeline (Shortcut/widget) feed a real to-do list during sweeps. Future idea (parked in backlog): /api/inbox `?project=Tasks` param so the Shortcut can route directly without a sweep step.",
+    "tags": [
+      "notepad",
+      "ux",
+      "workflow",
+      "tasks",
+      "javascript"
+    ],
+    "intensity": "quick",
+    "real_world_use": true,
+    "energy_in": "low",
+    "artifact": "index.html",
+    "wonder": "How a single new option string in a dropdown can unlock a whole productivity layer — composability through convention rather than code.",
+    "mood": "🕺🏻"
   }
 ]

@@ -2044,7 +2044,8 @@
       const prev = sel.value;
       const opts = loadedProjects.map(p => `<option value="${esc(p.repo)}">${esc(p.displayName)}</option>`).join('');
       const tbd = `<option value="__tbd__">— Ideas / TBD —</option>`;
-      sel.innerHTML = id === 'np-project' ? `<option value="">Select project…</option>${tbd}${opts}` : `${tbd}${opts || ''}`;
+      const tasks = `<option value="Tasks">Tasks</option>`;
+      sel.innerHTML = id === 'np-project' ? `<option value="">Select project…</option>${tbd}${tasks}${opts}` : `${tbd}${tasks}${opts || ''}`;
       if (prev && [...sel.options].some(o => o.value === prev)) sel.value = prev;
     });
     updateAddBtn();
