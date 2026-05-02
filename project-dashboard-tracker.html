@@ -221,7 +221,7 @@
     <div class="logo">Project Dashboard<em>.</em></div>
     <div class="meta">
       <span>Driver-cyber / project-dashboard</span>
-      <span>Updated 2026-05-01 · Phase 4</span>
+      <span>Updated 2026-05-02 · Phase 4</span>
     </div>
   </div>
   <div class="mode-toggle" role="group" aria-label="Theme">
@@ -348,7 +348,7 @@
 {
   "project": "der Hain",
   "description": "Personal command center — cross-project dashboard fetching live tracker data from GitHub",
-  "updated": "2026-05-01",
+  "updated": "2026-05-02",
   "phase": "4",
   "columns": [
     {
@@ -356,20 +356,19 @@
       "sub": "Cloudflare Pages · GitHub API · Vanilla JS · WKWebView (iOS)",
       "priorities": [
         {
-          "title": "Widget v2 — Inbox count + shipped-today on medium size",
-          "note": "Swift code is ready in ios/DerHainWidget/DerHainWidget.swift. Open Xcode, ⌘R to rebuild and reinstall on phone. Adds an extra fetch to /api/gist + counts shipped[] entries with today's date. Small widget unchanged."
-        },
-        {
           "title": "Auto-discovery of tracker files",
           "note": "Scan Driver-cyber repos for *-tracker.html — no manual projects.json entry needed."
         },
         {
+          "title": "Staleness alert on quiet projects",
+          "note": "Stronger visual signal when a project hasn't updated in 14+ days. Data already there — just needs UI."
+        },
+        {
           "title": "Retire der.hain. redirect at Cloudflare",
-          "note": "After ~2 weeks of muscle-memory grace (mid-May 2026), remove the old der.hain.chadstewartcpa.com custom domain from Cloudflare Pages. derhain. is now canonical."
+          "note": "After ~2 weeks of muscle-memory grace (mid-May 2026), remove the old der.hain.chadstewartcpa.com custom domain from Cloudflare Pages. derhain. is now canonical. Scheduled remote agent fires 2026-05-15."
         }
       ],
       "backlog": [
-        "Staleness alert on quiet projects — stronger visual signal when a project hasn't updated in 14+ days; data already there, just needs UI",
         "Cross-repo learned-log: session-end protocol for other repos (kasette, garden-app, etc.) should append entries to project-dashboard's learned-log.json with correct `repo` field — so Galaxy shows the full learning story, not just dashboard sessions",
         "Year-in-review generator from learned-log.json",
         "Lock screen widget for iOS (.accessoryRectangular family)",
@@ -381,6 +380,8 @@
         "Custom categories in notepad selector (parked, may revisit)"
       ],
       "shipped": [
+        { "date": "2026-05-02", "what": "Widget v2 — Inbox count + shipped-today footer on medium size, with WidgetCenter.reloadAllTimelines() on app launch so opening der Hain forces a fresh widget fetch instead of waiting 45 min", "tags": ["ios", "widgetkit", "swiftui", "widget", "real-time"], "learned": "WidgetCenter.shared.reloadAllTimelines() called from .onAppear gives a 'force-refresh' gesture for free — opening the parent app nudges the widget. Sub-second feedback loop instead of 45-min OS-controlled timeline." },
+        { "date": "2026-05-02", "what": "Session-end protocol upgraded — interactive Inbox sweep is now default (Claude reads each note aloud and asks Chad per-item: priority/backlog/shipped/re-route/delete). Bulk opt-in via 'sweep all' / 'session-end automated' for when Chad wants to hand over editorial control. Codified in CLAUDE.md + saved as durable feedback memory.", "tags": ["protocol", "workflow", "memory"] },
         { "date": "2026-05-01", "what": "Inbox capture pipeline — iOS Shortcut (Action Button + Siri) dictates text → POSTs to /api/inbox Pages Function → appends Inbox-tagged note to the notepad Gist → swept into tracker on next session-end", "tags": ["ios", "shortcuts", "siri", "cloudflare-pages", "voice-capture", "api"], "learned": "iOS Shortcuts is a no-code automation runtime in the OS — paired with a Cloudflare Pages Function it gives voice-controlled API endpoints with zero auth UX (token stays server-side)." },
         { "date": "2026-05-01", "what": "Single-source tracker — visual lists (priorities/backlog/shipped) hydrate from #tracker-data JSON on page load. Editing the JSON is now the only place to change the tracker; visual auto-syncs.", "tags": ["architecture", "single-source", "javascript"], "learned": "Inline <script> blocks execute as the parser hits them — getElementById can't find later sibling elements that haven't been parsed yet. Hydration scripts that read embedded JSON must come AFTER the JSON block." },
         { "date": "2026-05-01", "what": "Session-end protocol upgraded — trigger phrases (\"shipped X, next Y\" / \"session-end\" / \"sweep inbox\") + notepad-Inbox sweep step + \"edit JSON only\" rule documented in CLAUDE.md", "tags": ["protocol", "docs", "workflow"] },

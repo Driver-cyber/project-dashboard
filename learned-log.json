@@ -261,5 +261,25 @@
     "real_world_use": true,
     "energy_in": "high",
     "wonder": "The full capture loop runs in maybe 800ms — phone dictates, HTTPS POSTs to Cloudflare's edge, Pages Function fetches the gist from GitHub, modifies it, PATCHes back, returns 200, phone shows notification. Four network hops across three services, voice-to-persisted-note in the time it takes to lower the phone."
+  },
+  {
+    "date": "2026-05-02",
+    "project": "der Hain",
+    "repo": "project-dashboard",
+    "completed": "Widget v2 shipped to phone — Inbox count + shipped-today footer renders on medium size when either count > 0. Added WidgetCenter.reloadAllTimelines() to DerHainApp.onAppear so opening der Hain force-refreshes the widget instead of waiting on the 45-min OS timeline. Codified the interactive Inbox sweep as default protocol behavior with a 'sweep all' / 'session-end automated' opt-in for bulk mode, and saved as durable feedback memory across all future Claude sessions.",
+    "learned": "WidgetCenter.shared.reloadAllTimelines() is the WidgetKit escape hatch from the OS-managed 45-min refresh cycle — call it from the parent app's .onAppear and you get a 'force-refresh' gesture for free (just open the app). Also: when proxying GitHub Gist PATCHes through a Cloudflare Pages Function, the WAF blocks default Python-urllib User-Agent — must set an explicit User-Agent string (curl -A or http.client headers) or requests get 403'd silently.",
+    "session_note": "Continued from a 'how do I update the tracker?' question into a full home-screen feature: the widget now shows live Inbox + shipped-today counts, and reloads on app launch. Halfway through, Chad noticed I'd unilaterally swept his first Inbox captures earlier in the session and gave clear feedback: interactive review is the default; he wants to be the editorial hand. Saved as durable feedback memory + bulk-mode opt-in trigger added so the protocol respects autonomy without losing the option for hands-off sweeps. Whole loop is now visible on glass — voice → Inbox → widget badge → session-end review → tracker → push → widget reflects.",
+    "tags": ["ios", "widgetkit", "swiftui", "real-time", "session-protocol", "memory", "feedback-loop", "editorial-control"],
+    "struggle": "Xcode scheme picker dropped DerHain (the app scheme) from the visible list after we added the widget extension target — only DerHainWidgetExtension showed, blocking ⌘R from rebuilding the parent app. Took a Manage Schemes detour and Xcode quit/reopen to surface DerHain again.",
+    "artifact": "ios/DerHain/DerHain/DerHainApp.swift",
+    "intensity": "deep_dive",
+    "mood": "🪩",
+    "aha": "Seeing the widget on the home screen render '✓ 6 shipped today' for the first time — proof that the JSON I'd been editing in the terminal a minute earlier had propagated through Cloudflare to the OS widget timeline to the glass on Chad's lock screen. Sub-minute feedback loop from `git push` to phone display.",
+    "frustration_peak": "Scheme picker showed only DerHainWidgetExtension — pressing ⌘R built/ran the widget extension scheme which has no installable app, so nothing happened on the phone. Had to walk Chad through Manage Schemes... to surface the DerHain scheme that should have been there by default.",
+    "curiosity_trail": "What's the smallest unit of time between 'I had this thought' and 'it's reflected on glass?' Today: voice → ~800ms to gist → next session-end → push → 30s Cloudflare deploy → 45min widget timeline (or instant on app reopen). Could the gap shrink further with WidgetKit push (Live Activities) or a server-side webhook that nudges the widget directly?",
+    "first_ever": "First time seeing my own work surfaced on a home-screen widget badge that updated in real time off a git push",
+    "real_world_use": true,
+    "energy_in": "high",
+    "wonder": "The widget is just rendering JSON from a Cloudflare Pages deploy that came from a git push that came from an Edit tool call ten seconds before — but on the phone it feels alive, like the system is watching you. The illusion comes from collapsing four normally-asynchronous layers (commit, deploy, fetch, render) into a single sub-minute pulse."
   }
 ]

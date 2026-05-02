@@ -12,6 +12,25 @@ Phase 3 wrapped 2026-04-28: rebrand → der Hain, iOS WKWebView + widget skeleto
 
 ## 📝 Decision Log
 
+### [2026-05-02] — Widget v2 · interactive Inbox sweep as default
+
+**Widget v2 — Inbox count + shipped-today + force-refresh on app launch**
+- Widget now shows a footer line on medium size when there's something to surface: `📥 N in Inbox · ✓ N shipped today`. Hidden when both counts are 0 — keeps the widget clean during quiet periods.
+- New network call from the widget timeline: `GET /api/gist` + filter notes for `project === "Inbox"`. Tracker shipped count is computed from the existing tracker JSON fetch (no new network).
+- `WidgetCenter.shared.reloadAllTimelines()` added to `DerHainApp.onAppear` — opening the parent app force-refreshes the widget. Sub-second feedback loop instead of waiting on the OS-managed 45-min timeline.
+- Small widget unchanged — stays minimal (project + top priority + relative time).
+
+**Interactive Inbox sweep is now the default; bulk mode is opt-in**
+- Behavioral protocol decision triggered by Chad's feedback: earlier today I unilaterally swept his first three Inbox captures (re-routed two garden-app ideas to the garden-app category, dropped a "Now listening" test note). Chad's explicit response: *"I prefer interactive but may want the option to choose text based session end."*
+- New default: at session-end (or "sweep inbox" trigger), Claude reads each Inbox note aloud and asks Chad per-item — *priority? backlog? shipped? re-route to a different project's notepad? delete?* Editorial control stays with Chad; Claude is the typing layer.
+- Bulk opt-in trigger phrases added: *"sweep all"*, *"session-end automated"*, *"process them yourself"* — for that one sweep, Claude takes editorial control. Default reverts to interactive on the next session unless Chad re-states the override.
+- Encoded in CLAUDE.md (Session-End Protocol step 1 + Trigger Phrases section) and saved as durable feedback memory at `~/.claude/projects/.../memory/feedback_inbox_sweep_interactive.md` so it persists across all future Claude sessions, not just this conversation.
+
+**Operational note: Cloudflare WAF + default Python User-Agent**
+- The first attempt to PATCH the gist via Python's `urllib.request` got 403'd silently — Cloudflare's WAF blocks default `Python-urllib/3.x` User-Agent strings. Fix: always set an explicit User-Agent header (curl `-A "..."` or set in code). Added as a note to CLAUDE.md so future Claude sessions don't repeat the diagnostic detour.
+
+---
+
 ### [2026-05-01] — Inbox capture pipeline · single-source tracker hydration
 
 **Inbox capture pipeline (iOS Shortcut → Pages Function → Gist → session-end sweep)**
