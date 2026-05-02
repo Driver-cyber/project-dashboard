@@ -281,5 +281,23 @@
     "real_world_use": true,
     "energy_in": "high",
     "wonder": "The widget is just rendering JSON from a Cloudflare Pages deploy that came from a git push that came from an Edit tool call ten seconds before — but on the phone it feels alive, like the system is watching you. The illusion comes from collapsing four normally-asynchronous layers (commit, deploy, fetch, render) into a single sub-minute pulse."
+  },
+  {
+    "date": "2026-05-02",
+    "project": "der Hain",
+    "repo": "project-dashboard",
+    "completed": "Inbox capture Shortcut now supports dual-mode — Choose from Menu prompts 'Speak' or 'Type' on launch; Speak runs Dictate Text, Type runs Ask for Input, both flow through a captureText variable into the same /api/inbox POST. Lets Chad capture silently in public spaces where talking to a phone is awkward.",
+    "learned": "Choose from Menu's branch-result passthrough is finicky — the magic-variable handoff after End Menu can drop or default to a sibling action's output. Explicitly Set Variable to a named slot ('captureText') in each branch keeps the downstream POST step path-agnostic and reliable.",
+    "session_note": "Tight follow-on session. Chad noted he doesn't always want to talk to his phone in public (the original Action Button shortcut was dictate-only) so we walked through editing the Shortcut in-place — added Choose from Menu above the existing actions, moved Dictate into the Speak branch, added Ask for Input under Type, and rewired the URL body. Tested both paths, both landed in the gist. Inbox swept at session-end.",
+    "tags": ["ios", "shortcuts", "ux", "voice-capture", "ergonomics"],
+    "struggle": "Walking through Shortcut edits over text without seeing the screen — small UI words like 'Provided Input' vs 'Dictated Text' as magic variables matter a lot, and getting the drag-into-branch step right is hard to describe without a video.",
+    "artifact": "ios Shortcut: der Hain Inbox",
+    "intensity": "quick",
+    "mood": "🕺🏻",
+    "aha": "The right pattern wasn't 'detect cancellation' (fragile — Dictate Text doesn't cleanly distinguish silence from cancel) — it was 'ask the user upfront which mode they want.' Two taps to get explicit intent beats one tap with a guess.",
+    "curiosity_trail": "What other modes might want a Choose from Menu wrapper? Photo capture (camera vs library)? URL capture (clipboard vs share sheet)? The pattern is: short menu of capture sources → Set Variable → unified POST.",
+    "real_world_use": true,
+    "energy_in": "medium",
+    "wonder": "The Action Button on iPhone is becoming a personal dispatcher — one physical button, n possible intents, branched at the Shortcut layer. The hardware is dumb; the routing is in software I wrote in ten minutes."
   }
 ]
