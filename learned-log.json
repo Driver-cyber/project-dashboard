@@ -356,5 +356,30 @@
     "artifact": "index.html",
     "wonder": "How a single new option string in a dropdown can unlock a whole productivity layer — composability through convention rather than code.",
     "mood": "🕺🏻"
+  },
+  {
+    "date": "2026-05-02",
+    "project": "der Hain",
+    "repo": "project-dashboard",
+    "completed": "Cross-project session-end skill system: chad-wiki canonical docs + two user-level Claude Code skills (/session-end-protocol, /new-project-bootstrap) + project-dashboard CLAUDE.md trimmed to hooks-only. Saying 'session-end' in any equipped project now runs the protocol via the skill.",
+    "learned": "Inline-snapshot + WIKI:BEGIN/END markers reconcile single-source-of-truth with offline reliability — the skill body carries a copy of the canonical doc and a --resync sub-command refreshes it. The wiki is its own example of the pattern.",
+    "session_note": "Phased build: (a) wiki canonical, (b) skills, (c) CLAUDE.md trim. Inaugural protocol run is this session itself — manually, since skills don't load mid-session. detect→propose→confirm generalized from inbox-specific memory to a wiki-canonical pattern.",
+    "tags": [
+      "meta",
+      "skills",
+      "wiki",
+      "infrastructure",
+      "single-source",
+      "workflow",
+      "claude-code"
+    ],
+    "intensity": "deep_dive",
+    "artifact": "https://chadwiki.chadstewartcpa.com",
+    "first_ever": "First user-level Claude Code skills",
+    "aha": "Inline-snapshot + resync markers collapse the trade-off between canonical-authority and offline-reliability into a single self-updating file.",
+    "wonder": "How a small handful of files plus two skills can compress 'recite the protocol from memory' down to a single trigger phrase — and the wiki being its own example of the single-source pattern.",
+    "real_world_use": false,
+    "energy_in": "medium",
+    "mood": "🌠"
   }
 ]
