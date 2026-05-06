@@ -381,5 +381,31 @@
     "real_world_use": false,
     "energy_in": "medium",
     "mood": "🌠"
+  },
+  {
+    "date": "2026-05-06",
+    "project": "Chad-Wiki",
+    "repo": "chad-wiki",
+    "completed": "Wiki shipped v1.2.0 — new inbox-source.md (canonical spec for the shared Inbox: endpoint, required User-Agent, JSON shape, PATCH mutation contract, archive-don't-delete convention); session-end-protocol.md rewritten to v1.1.0 with two-dimensional disposition (project + bucket), batches of 3, NOTE/PROPOSE/why per-entry rendering, locked bucket vocabulary, override-syntax confirmation grammar, pointer to inbox-source.md, and a 'Running this without the skill' section. Local /session-end-protocol skill resynced. New /sweep-inbox skill at ~/.claude/skills/ as a thin wrapper running step 1 only. Two browser-handoff prompt files added to project-dashboard/prompts/ (full session-end + inbox-only). Browser session shipped Links tab integration with copy-prompt support over a clean handoff (commits 4f3ceda, 1a823f6).",
+    "learned": "The disposition options in step 1 (priority/backlog/shipped/task/re-route/delete) were a flat list hiding a two-dimensional choice — destination project AND bucket within that project. Naming the dimensions explicitly fixed both the semantic gap and the visual confusion that fell out of it. Also: shipping a v1 doesn't mean the architecture is closed — today's analog of the workflow-misplacement bug from 4/29 was a missing canonical spec for the Inbox mutation contract. 'How to write back' was as load-bearing as 'what to write,' and inferring it from per-project CLAUDE.md files was a re-derivation surface that had to become canonical.",
+    "session_note": "Long architectural session that started from Chad's instinct that the inbox sweep 'didn't quite look like what we designed.' That observation cascaded into a real semantic gap (project + bucket as separate dimensions), a missing canonical spec (inbox-source.md), and a propagation discovery (inline-snapshotted skills don't auto-update — mid-flight sessions on stale v1.0.0 hit gaps the wiki had already solved). Three concurrent Claude Code sessions in flight at peak: this one (wiki author), browser session (Links tab implementer via handoff), and a third that hit the missing-mutation-contract bug live. The architecture's surface-aware loading worked as designed: the browser handoff shipped clean; the stalled session was discarded cleanly because another session running on the upgraded protocol had already done its work.",
+    "tags": [
+      "wiki",
+      "architecture",
+      "session-end-protocol",
+      "inbox",
+      "skills",
+      "infrastructure",
+      "single-source"
+    ],
+    "artifact": "https://chadwiki.chadstewartcpa.com/inbox-source.md",
+    "intensity": "deep_dive",
+    "mood": "📐",
+    "aha": "The disposition options were a flat list hiding a two-dimensional choice. Naming the dimensions (project + bucket) explicitly is what made the override grammar possible.",
+    "wonder": "Three sessions running in parallel against the same canonical wiki source, two of them hitting the same architecture seam within minutes of each other. The wiki's job is exactly to be the thing that doesn't drift between them — and today it caught the drift live.",
+    "first_ever": "First time concurrent sessions exposed a wiki-version-skew issue (mid-flight on v1.0.0 while a parallel session ships on v1.1.0)",
+    "real_world_use": true,
+    "energy_in": "medium",
+    "curiosity_trail": "Should /session-end-protocol auto-check the manifest at invocation and warn if the inline body version is behind? Could prevent stale-skill-body propagation issues like today's."
   }
 ]
