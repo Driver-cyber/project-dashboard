@@ -2310,6 +2310,8 @@
     { label: 'Project Dashboard', url: 'https://projects.chadstewartcpa.com', note: 'This app' },
     { label: 'WSH Prep',          url: 'https://learn.chadstewartcpa.com/app',   note: 'Wild Stewart Homeschool — student prep' },
     { label: 'WSH Learn',         url: 'https://learn.chadstewartcpa.com/learn', note: 'Wild Stewart Homeschool — learning portal' },
+    { label: 'Session-end (browser)', url: '/prompts/session-end-from-browser.md', note: 'Copy prompt to run full session-end in any Claude surface', type: 'prompt' },
+    { label: 'Inbox sweep (browser)', url: '/prompts/inbox-sweep-from-browser.md', note: 'Copy prompt to triage the Inbox without a full session-end', type: 'prompt' },
   ];
 
   let activeLink = null;
@@ -2338,7 +2340,8 @@
     activeLink = lk;
     document.getElementById('link-sheet-label').textContent = lk.label;
     document.getElementById('link-sheet-url').textContent = lk.url;
-    document.getElementById('link-sheet-copy').textContent = 'Copy URL';
+    document.getElementById('link-sheet-copy').textContent = lk.type === 'prompt' ? 'Copy prompt' : 'Copy URL';
+    document.getElementById('link-sheet-open').style.display = lk.type === 'prompt' ? 'none' : '';
     document.getElementById('link-sheet').style.display = 'flex';
     document.body.style.overflow = 'hidden';
   }
@@ -2359,7 +2362,15 @@
     if (!activeLink) return;
     const btn = document.getElementById('link-sheet-copy');
     try {
-      await navigator.clipboard.writeText(activeLink.url);
+      let textToCopy = activeLink.url;
+      if (activeLink.type === 'prompt') {
+        const r = await fetch(activeLink.url);
+        if (!r.ok) throw new Error('fetch failed');
+        const md = await r.text();
+        const m = md.match(/<!-- PROMPT:BEGIN -->([\s\S]*?)<!-- PROMPT:END -->/);
+        textToCopy = m ? m[1].trim() : md;
+      }
+      await navigator.clipboard.writeText(textToCopy);
       btn.textContent = '✓ Copied!';
     } catch {
       btn.textContent = 'Copy failed';
