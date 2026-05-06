@@ -348,7 +348,7 @@
 {
   "project": "der Hain",
   "description": "Personal command center — cross-project dashboard fetching live tracker data from GitHub",
-  "updated": "2026-05-02",
+  "updated": "2026-05-06",
   "phase": "4",
   "columns": [
     {
@@ -381,6 +381,7 @@
         "Custom categories in notepad selector (parked, may revisit)"
       ],
       "shipped": [
+        { "date": "2026-05-06", "what": "Links tab gains 'Copy prompt' support — two new entries (/prompts/session-end-from-browser.md, /prompts/inbox-sweep-from-browser.md) fetch the .md, extract the body between <!-- PROMPT:BEGIN/END --> markers, and copy just the prompt to clipboard. Open button hidden for prompt entries. Initial implementation broke on iOS Safari because await fetch() severs the user-gesture context required by clipboard.writeText — fixed with ClipboardItem-with-Promise pattern (Safari's blessed API for async clipboard content).", "tags": ["links", "ui", "clipboard", "ios", "safari", "browser-quirks"], "learned": "iOS Safari refuses navigator.clipboard.writeText if any await intervenes between the user tap and the clipboard call — gesture context dies at the first microtask boundary. ClipboardItem({ 'text/plain': promiseOfBlob }) is the workaround Safari shipped in 13.4 specifically for async clipboard content; Chrome/Firefox accept it too." },
         { "date": "2026-05-02", "what": "Cross-project session-end skill system shipped — chad-wiki gets 3 canonical docs (session-end-protocol, project-checklist, collaboration-patterns); two user-level Claude Code skills (/session-end-protocol and /new-project-bootstrap) consume them with --resync via WIKI:BEGIN/END markers; project-dashboard CLAUDE.md trimmed to a per-project hooks table linking the wiki canonical. One phrase ('session-end') now runs the protocol in any equipped project.", "tags": ["meta", "skills", "wiki", "infrastructure", "single-source", "workflow"], "learned": "Inline-snapshot + resync markers gives single-source-of-truth without sacrificing offline reliability — the skill works without the wiki online, and a one-command refresh keeps it from drifting. Pattern reusable for any future skill." },
         { "date": "2026-05-02", "what": "Tasks category added to notepad — virtual non-project category for to-do capture. Appears in compose + export dropdowns right below Ideas/TBD; doesn't show in Galaxy (no projects.json entry, no learned-log repo key). Inbox sweep flow now offers 'task' as a routing destination alongside priority/backlog/shipped/delete.", "tags": ["notepad", "ux", "workflow", "tasks"], "learned": "Virtual non-project categories are nearly free to add — chip filter, projName() fallback, and dropdown JSON were already extension points. No schema or Galaxy changes needed." },
         { "date": "2026-05-02", "what": "Inbox capture Shortcut now supports dual-mode — Choose from Menu offers Speak (Dictate Text) or Type (Ask for Input), both routed through a captureText variable to the same /api/inbox POST. Silent capture for public spaces.", "tags": ["ios", "shortcuts", "voice-capture", "ux"], "learned": "Choose from Menu's branch-result passthrough is fragile — Set Variable in each branch keeps the downstream POST path-agnostic." },

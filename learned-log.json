@@ -1,5 +1,28 @@
 [
   {
+    "date": "2026-05-06",
+    "project": "Project Dashboard",
+    "repo": "project-dashboard",
+    "completed": "Links tab gains Copy-prompt support — two new entries for /prompts/session-end-from-browser.md and /prompts/inbox-sweep-from-browser.md fetch the .md, extract the body between PROMPT:BEGIN/END markers, and copy just the prompt to clipboard. Open button hidden for prompt-type entries.",
+    "learned": "iOS Safari refuses navigator.clipboard.writeText if any await intervenes between the user tap and the clipboard call — gesture context dies at the first microtask boundary. ClipboardItem({ 'text/plain': promiseOfBlob }) is the workaround Safari shipped in 13.4 specifically for async clipboard content.",
+    "session_note": "Browser-quirk-driven session — feature shipped clean on the first try, but a Copy-failed report from Chad on iOS exposed the gesture-context constraint. Fix was a textbook ClipboardItem-with-Promise replacement; instructive that the 'right' Safari API is genuinely different from the 'right' Chrome API for this exact case.",
+    "tags": [
+      "links",
+      "clipboard",
+      "ios",
+      "safari",
+      "browser-quirks",
+      "ui"
+    ],
+    "artifact": "index.html",
+    "intensity": "quick",
+    "mood": "😵‍💫",
+    "aha": "ClipboardItem-with-Promise is Safari's blessed pattern for async clipboard — solves the gesture-context-vs-await collision elegantly.",
+    "real_world_use": true,
+    "energy_in": "medium",
+    "wonder": "The Web Platform actually has a clean answer for this — most browser quirks are workarounds; this is a real API designed for the constraint."
+  },
+  {
     "date": "2026-04-22",
     "project": "Project Dashboard",
     "repo": "project-dashboard",
