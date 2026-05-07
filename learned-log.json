@@ -430,5 +430,28 @@
     "real_world_use": true,
     "energy_in": "medium",
     "curiosity_trail": "Should /session-end-protocol auto-check the manifest at invocation and warn if the inline body version is behind? Could prevent stale-skill-body propagation issues like today's."
+  },
+  {
+    "date": "2026-05-06",
+    "project": "der Hain",
+    "repo": "project-dashboard",
+    "completed": "Captured 10 ultrareview findings for the Notepad GitHub Gist sync feature to `gist-sync-review.md` at repo root, committed and pushed (3f7b959). 5 normal-severity issues (unstyled sync UI from class/id selector mismatch; gistPush race producing duplicate orphan gists; pull/push race in initSync that can wipe remote-only notes; reconnect-with-local-notes leaves gist stale; merge silently loses archives/edits/deletes due to no updatedAt and no tombstones) and 5 nits (>1MB truncation, token-persisted-before-validation, generic 'check token' error, 'private vs secret' wording, syncInitialized-set-too-early). Each finding includes file/line refs and a concrete patch. Backlog entry added pointing to the file so it surfaces from the dashboard. No fixes applied — Chad's call to defer until the gist-sync feature is actively being worked.",
+    "learned": "/ultrareview <PR#> resolves the PR number against the current working directory's repo, not the PR you intended. Ran from project-dashboard cwd against `wild-stewart-homeschool#8` and got `project-dashboard#8` reviewed instead — burning a free credit on the wrong target. To target a specific repo's PR, cd into that repo first. The findings still landed real bugs in project-dashboard's gist-sync layer, so the credit wasn't wasted, but the targeting model is a sharp edge worth remembering.",
+    "session_note": "Session continued from compaction. Mostly close-out work: helped Chad think through ultrareview targeting (PR mode vs local-mode tradeoffs across machines), surfaced the misdirected review's findings, captured them to a standalone file rather than scope-creeping into fixes, verified the user-level skills were already current vs the manifest (no resync needed — der Hain session's note about both being at v1.0.0 was based on stale info from before this session's earlier work). Clean close — no panic, no scope creep, no over-engineering.",
+    "tags": [
+      "meta",
+      "review",
+      "gist-sync",
+      "ultrareview",
+      "docs",
+      "tooling-quirks"
+    ],
+    "artifact": "gist-sync-review.md",
+    "intensity": "session",
+    "mood": "📋",
+    "frustration_peak": "Realizing the ultrareview ran against project-dashboard#8 instead of wild-stewart-homeschool#8 because of the cwd-resolves-the-repo behavior — a wasted free credit before the kasette iOS-native review.",
+    "real_world_use": true,
+    "energy_in": "low",
+    "curiosity_trail": "Worth a one-liner in user-level Claude Code instructions or somewhere durable: '/ultrareview targets the cwd repo — cd into the right one first.' Is there an iso surface for this kind of tooling gotcha that doesn't belong in chad-wiki but should follow Chad across machines?"
   }
 ]
