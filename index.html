@@ -1509,7 +1509,7 @@
   <div id="notepad-main" style="padding:20px 22px; max-width:800px; margin:0 auto;">
     <div class="np-title">Notepad</div>
     <p class="np-sub">Capture ideas, bugs, and prompts per project. Export them to paste into Claude Code.</p>
-    <div id="np-sync-bar">
+    <div id="np-sync-bar" class="np-sync-bar">
       <span class="np-sync-dot" id="np-sync-dot"></span>
       <span id="np-sync-text"></span>
     </div>
@@ -1976,28 +1976,33 @@
     }
   }
 
+  let pushChain = Promise.resolve();
   async function gistPush(notes) {
-    setSyncState('busy');
-    try {
-      const r = await fetch('/api/gist', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(notes, null, 2) } } })
-      });
-      if (!r.ok) throw new Error();
-      setSyncState('ok');
-    } catch { setSyncState('err'); }
+    const run = async () => {
+      setSyncState('busy');
+      try {
+        const r = await fetch('/api/gist', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(notes, null, 2) } } })
+        });
+        if (!r.ok) throw new Error();
+        setSyncState('ok');
+      } catch { setSyncState('err'); }
+    };
+    pushChain = pushChain.then(run, run);
+    return pushChain;
   }
 
   async function gistPull() {
     try {
       const r = await fetch('/api/gist');
-      if (!r.ok) return null;
+      if (!r.ok) return { kind: 'err' };
       const data = await r.json();
-      if (data.configured === false) return null;
+      if (data.configured === false) return { kind: 'unconfigured' };
       const content = data.files?.[GIST_FILE]?.content;
-      return content ? JSON.parse(content) : [];
-    } catch { return null; }
+      return { kind: 'ok', notes: content ? JSON.parse(content) : [] };
+    } catch { return { kind: 'err' }; }
   }
 
   async function syncSave(notes) {
@@ -2008,8 +2013,10 @@
   async function initSync() {
     if (syncInitialized) return;
     syncInitialized = true;
-    const gistNotes = await gistPull();
-    if (gistNotes === null) return;
+    const result = await gistPull();
+    if (result.kind === 'unconfigured') return;
+    if (result.kind === 'err') { setSyncState('err'); return; }
+    const gistNotes = result.notes;
     syncEnabled = true;
     const local = loadNotes();
     const gistIds = new Set(gistNotes.map(n => n.id));

@@ -356,20 +356,20 @@
       "sub": "Cloudflare Pages · GitHub API · Vanilla JS · WKWebView (iOS)",
       "priorities": [
         {
+          "title": "Apply gist-sync review fixes",
+          "note": "Three real bugs + retry-on-pull-fail. #1 sync bar class attribute, #2 PATCH-ordering serialization via pushChain, #5 per-note updatedAt + tombstones for delete (UI already filters status!=='active'/'archived' so 'deleted' is invisible for free), bonus: surface initial pull failures with retry. Findings #3 and #4 don't apply to current proxy architecture; nits #6–#10 deferred. See gist-sync-review.md."
+        },
+        {
           "title": "Auto-discovery of tracker files",
           "note": "Scan Driver-cyber repos for *-tracker.html — no manual projects.json entry needed."
         },
         {
           "title": "Staleness alert on quiet projects",
           "note": "Stronger visual signal when a project hasn't updated in 14+ days. Data already there — just needs UI."
-        },
-        {
-          "title": "Retire der.hain. redirect at Cloudflare",
-          "note": "After ~2 weeks of muscle-memory grace (mid-May 2026), remove the old der.hain.chadstewartcpa.com custom domain from Cloudflare Pages. derhain. is now canonical. Scheduled remote agent fires 2026-05-15."
         }
       ],
       "backlog": [
-        "Apply gist-sync ultrareview findings — 10 issues (5 normal: unstyled sync UI, push race / duplicate gists, reconnect-no-push, init pull/push race, merge loses archives+edits+deletes; 5 nits). See `gist-sync-review.md` at repo root.",
+        "Retire der.hain. redirect at Cloudflare — scheduled remote agent fires 2026-05-15. derhain. is now canonical; keep the legacy redirect until ~2 weeks past cutover.",
         "Inbox API: accept `?project=Tasks` (or JSON `project`) param so iOS Shortcut can capture directly to the Tasks category, skipping the Inbox→Tasks sweep step. Default still 'Inbox' if param absent.",
         "Cross-repo learned-log: session-end protocol for other repos (kasette, garden-app, etc.) should append entries to project-dashboard's learned-log.json with correct `repo` field — so Galaxy shows the full learning story, not just dashboard sessions",
         "Year-in-review generator from learned-log.json",
