@@ -1014,6 +1014,47 @@
     .link-item-arrow { color: var(--ink-3); font-size: 18px; flex-shrink: 0; line-height: 1; transition: color 0.15s; }
     .link-item:hover .link-item-arrow { color: var(--sage-deep); }
 
+    /* SECTIONS (collapsible) */
+    .links-section { margin-bottom: 4px; }
+    .links-section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      cursor: pointer;
+      padding: 14px 4px;
+      border-bottom: 1px solid var(--line);
+      user-select: none;
+      -webkit-user-select: none;
+      transition: border-color 0.15s;
+    }
+    .links-section-header:hover { border-color: var(--sage-soft); }
+    .links-section-header:hover .links-section-title { color: var(--sage-deep); }
+    .links-section-chevron {
+      font-size: 20px;
+      color: var(--ink-3);
+      line-height: 1;
+      transition: transform 0.2s ease, color 0.15s;
+      transform-origin: 50% 55%;
+      align-self: center;
+    }
+    .links-section.is-open .links-section-chevron { transform: rotate(90deg); color: var(--sage-deep); }
+    .links-section-title {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 24px;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      transition: color 0.15s;
+      flex: 1;
+    }
+    .links-section-count {
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 11px;
+      color: var(--ink-3);
+    }
+    .links-section-body { display: none; padding-top: 14px; padding-bottom: 6px; }
+    .links-section.is-open .links-section-body { display: block; }
+
     /* ACTION SHEET */
     #link-sheet {
       position: fixed;
@@ -1584,8 +1625,6 @@
 
 <section id="panel-links" class="tab-panel">
   <div style="padding:20px 22px; max-width:600px; margin:0 auto;">
-    <div class="links-title">Quick Links</div>
-    <p class="links-sub">Tap a link to open in browser or copy to clipboard.</p>
     <div id="links-list"></div>
   </div>
 </section>
@@ -2313,12 +2352,18 @@
   }
 
   /* ---------- LINKS ---------- */
-  const LINKS = [
-    { label: 'Project Dashboard', url: 'https://projects.chadstewartcpa.com', note: 'This app' },
-    { label: 'WSH Prep',          url: 'https://learn.chadstewartcpa.com/app',   note: 'Wild Stewart Homeschool — student prep' },
-    { label: 'WSH Learn',         url: 'https://learn.chadstewartcpa.com/learn', note: 'Wild Stewart Homeschool — learning portal' },
-    { label: 'Session-end (browser)', url: '/prompts/session-end-from-browser.md', note: 'Copy prompt to run full session-end in any Claude surface', type: 'prompt' },
-    { label: 'Inbox sweep (browser)', url: '/prompts/inbox-sweep-from-browser.md', note: 'Copy prompt to triage the Inbox without a full session-end', type: 'prompt' },
+  const LINK_SECTIONS = [
+    { name: 'Quick Links', items: [
+      { label: 'Project Dashboard', url: 'https://projects.chadstewartcpa.com', note: 'This app' },
+      { label: 'WSH Prep',          url: 'https://learn.chadstewartcpa.com/app',   note: 'Wild Stewart Homeschool — student prep' },
+      { label: 'WSH Learn',         url: 'https://learn.chadstewartcpa.com/learn', note: 'Wild Stewart Homeschool — learning portal' },
+      { label: 'Session-end (browser)', url: '/prompts/session-end-from-browser.md', note: 'Copy prompt to run full session-end in any Claude surface', type: 'prompt' },
+      { label: 'Inbox sweep (browser)', url: '/prompts/inbox-sweep-from-browser.md', note: 'Copy prompt to triage the Inbox without a full session-end', type: 'prompt' },
+    ]},
+    { name: 'Learning', items: [
+      { label: 'cli-cards',    url: 'https://cli.chadstewartcpa.com', note: 'Interactive CLI learning app — flashcards + sandbox (coming soon)' },
+      { label: 'ai-explained', url: 'https://github.com/robennals/ai-explained', note: 'Ground-up interactive explainer for how LLMs work — the inspiration' },
+    ]},
   ];
 
   let activeLink = null;
@@ -2326,19 +2371,42 @@
   function renderLinks() {
     const list = document.getElementById('links-list');
     if (!list || list.children.length) return;
-    list.innerHTML = LINKS.map((lk, i) => `
-      <div class="link-item" role="button" tabindex="0" data-link-idx="${i}">
-        <div class="link-item-left">
-          <div class="link-item-label">${esc(lk.label)}</div>
-          <div class="link-item-url">${esc(lk.url)}</div>
-          ${lk.note ? `<div class="link-item-note">${esc(lk.note)}</div>` : ''}
+    list.innerHTML = LINK_SECTIONS.map((sec, sIdx) => `
+      <div class="links-section" data-section-idx="${sIdx}">
+        <div class="links-section-header" role="button" tabindex="0" aria-expanded="false">
+          <span class="links-section-chevron">›</span>
+          <span class="links-section-title">${esc(sec.name)}</span>
+          <span class="links-section-count">${sec.items.length}</span>
         </div>
-        <span class="link-item-arrow">›</span>
+        <div class="links-section-body">
+          ${sec.items.map((lk, iIdx) => `
+            <div class="link-item" role="button" tabindex="0" data-section-idx="${sIdx}" data-item-idx="${iIdx}">
+              <div class="link-item-left">
+                <div class="link-item-label">${esc(lk.label)}</div>
+                <div class="link-item-url">${esc(lk.url)}</div>
+                ${lk.note ? `<div class="link-item-note">${esc(lk.note)}</div>` : ''}
+              </div>
+              <span class="link-item-arrow">›</span>
+            </div>`).join('')}
+        </div>
       </div>`).join('');
+
+    list.querySelectorAll('.links-section-header').forEach(hdr => {
+      const toggle = () => {
+        const open = hdr.parentElement.classList.toggle('is-open');
+        hdr.setAttribute('aria-expanded', open ? 'true' : 'false');
+      };
+      hdr.addEventListener('click', toggle);
+      hdr.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
+
+    const lookup = el => LINK_SECTIONS[+el.dataset.sectionIdx].items[+el.dataset.itemIdx];
     list.querySelectorAll('.link-item').forEach(el => {
-      el.addEventListener('click', () => showLinkSheet(LINKS[+el.dataset.linkIdx]));
+      el.addEventListener('click', () => showLinkSheet(lookup(el)));
       el.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showLinkSheet(LINKS[+el.dataset.linkIdx]); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showLinkSheet(lookup(el)); }
       });
     });
   }
