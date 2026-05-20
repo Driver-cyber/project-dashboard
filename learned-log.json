@@ -453,5 +453,30 @@
     "real_world_use": true,
     "energy_in": "low",
     "curiosity_trail": "Worth a one-liner in user-level Claude Code instructions or somewhere durable: '/ultrareview targets the cwd repo — cd into the right one first.' Is there an iso surface for this kind of tooling gotcha that doesn't belong in chad-wiki but should follow Chad across machines?"
+  },
+  {
+    "date": "2026-05-19",
+    "project": "Project Dashboard",
+    "repo": "project-dashboard",
+    "completed": "Links tab → collapsible Quick Links + new Learning section (both collapsed by default for a clean two-row landing view); gist-sync race + retry-UX hardening (fixes #1+#2 + structured gistPull return as groundwork for retry UI; fix #5 tombstones still WIP); cli-cards (new sibling repo) registered in projects.json so it shows up as a dashboard card.",
+    "learned": "Two-fix-commit pattern: when a working tree has mixed in-flight WIP + ready-to-ship work in the same file, revert the WIP locally (via Edit with old/new flipped), commit the unblocked work as its own clean diff, then re-apply the WIP. Keeps each commit independently revertable instead of bundling unrelated concerns. Non-destructive because the revert path uses the same Edit tool that wrote the changes.",
+    "session_note": "Most of the session was actually building cli-cards (whole new sibling repo — see its learned-log for the substance) — dashboard work was bookended at the start (Chad's Links collapse request that opened the session) and at the end (register the new project once it existed). Chad's gist-sync WIP that had been sitting on his working tree from a prior session got committed cleanly along the way, even though fix #5 isn't done — partial shippable state was strictly better than what was on origin/main.",
+    "tags": [
+      "links",
+      "ui",
+      "accordion",
+      "notepad",
+      "gist-sync",
+      "registry",
+      "cli-cards",
+      "session-end"
+    ],
+    "artifact": "https://projects.chadstewartcpa.com",
+    "intensity": "marathon",
+    "mood": "🌱",
+    "aha": "The Edit-with-flipped-old/new-strings revert pattern made the two-fix-commit clean — no stash gymnastics, no patch files, no hunks-by-line-number. The same tool that writes the change reverses it.",
+    "real_world_use": true,
+    "energy_in": "high",
+    "curiosity_trail": "Should the cross-repo learned-log backlog item (capturing cli-cards / kasette / garden-app sessions into project-dashboard's log with correct `repo` field) be the next priority now that cli-cards is the first non-dashboard project with its own learned-log? Galaxy would tell a more complete story."
   }
 ]

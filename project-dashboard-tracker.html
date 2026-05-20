@@ -348,7 +348,7 @@
 {
   "project": "der Hain",
   "description": "Personal command center — cross-project dashboard fetching live tracker data from GitHub",
-  "updated": "2026-05-06",
+  "updated": "2026-05-19",
   "phase": "4",
   "columns": [
     {
@@ -356,8 +356,8 @@
       "sub": "Cloudflare Pages · GitHub API · Vanilla JS · WKWebView (iOS)",
       "priorities": [
         {
-          "title": "Apply gist-sync review fixes",
-          "note": "Three real bugs + retry-on-pull-fail. #1 sync bar class attribute, #2 PATCH-ordering serialization via pushChain, #5 per-note updatedAt + tombstones for delete (UI already filters status!=='active'/'archived' so 'deleted' is invisible for free), bonus: surface initial pull failures with retry. Findings #3 and #4 don't apply to current proxy architecture; nits #6–#10 deferred. See gist-sync-review.md."
+          "title": "Finish gist-sync fix #5 (tombstones + per-note updatedAt) + wire retry UI",
+          "note": "Fixes #1 (sync bar styled) and #2 (PATCH serialization via pushChain) shipped 2026-05-19. Structured gistPull return ({kind: ok|unconfigured|err}) is in place — still needs the actual retry button + error UI wired to it. Fix #5 still WIP: per-note updatedAt + tombstones for delete (UI already filters status!=='active'/'archived' so 'deleted' is invisible for free). Findings #3/#4 don't apply to current proxy architecture; nits #6–#10 deferred. See gist-sync-review.md."
         },
         {
           "title": "Auto-discovery of tracker files",
@@ -382,6 +382,9 @@
         "Custom categories in notepad selector (parked, may revisit)"
       ],
       "shipped": [
+        { "date": "2026-05-19", "what": "Links tab gains a collapsible Learning section — Quick Links + Learning both collapsed by default for a clean two-row landing view; chevron rotates 90° on expand, sage tint on hover. Learning section seeded with cli-cards (new sibling site) and ai-explained (the inspiration repo).", "tags": ["links", "ui", "accordion"], "learned": "Reused the existing .links-title typography for section headers and chained event handlers per-section instead of per-item lookup arrays — cleaner than a flat global index when grouping flat data into sections." },
+        { "date": "2026-05-19", "what": "Notepad gist-sync race + retry-UX hardening — fix #1 (sync bar now styled via class attribute), fix #2 (PATCH calls serialize through pushChain so concurrent saves can't race and create duplicate gists), structured gistPull return ({kind: ok|unconfigured|err}) so initSync can distinguish 'not configured' from real fetch errors. Fix #5 (tombstones + per-note updatedAt) still WIP.", "tags": ["notepad", "gist-sync", "race-fix"], "learned": "Two-fix-commit pattern: revert the WIP, commit the unblocked fix, re-apply WIP — keeps each commit independently revertable when partial work is mixed with shippable work." },
+        { "date": "2026-05-19", "what": "Registered cli-cards (new sibling repo) in projects.json — appears as a dashboard card fetching from Driver-cyber/cli-cards via the GitHub Contents API, and shows up in the notepad category dropdown. Single-line registration, no other dashboard code changes needed.", "tags": ["registry", "cli-cards"], "learned": "projects.json doing double duty as both dashboard-cards source AND notepad-category source means new projects light up everywhere with one edit — the unified registry pays compounding dividends." },
         { "date": "2026-05-06", "what": "Captured 10 ultrareview findings for the Notepad gist-sync feature to `gist-sync-review.md` at repo root — 5 normal-severity races/merge bugs and 5 nits, with line numbers and concrete patches. Stored as a standalone reference doc to revisit when the gist-sync work is picked up; backlog entry added pointing to the file.", "tags": ["meta", "review", "gist-sync", "ultrareview", "docs"], "learned": "/ultrareview <PR#> resolves the PR number against the current working directory's repo, not the PR you intended — running it from project-dashboard for `wild-stewart-homeschool#8` reviewed `project-dashboard#8` instead. To target a specific repo, cd into it first." },
         { "date": "2026-05-06", "what": "Links tab gains 'Copy prompt' support — two new entries (/prompts/session-end-from-browser.md, /prompts/inbox-sweep-from-browser.md) fetch the .md, extract the body between <!-- PROMPT:BEGIN/END --> markers, and copy just the prompt to clipboard. Open button hidden for prompt entries. Initial implementation broke on iOS Safari because await fetch() severs the user-gesture context required by clipboard.writeText — fixed with ClipboardItem-with-Promise pattern (Safari's blessed API for async clipboard content).", "tags": ["links", "ui", "clipboard", "ios", "safari", "browser-quirks"], "learned": "iOS Safari refuses navigator.clipboard.writeText if any await intervenes between the user tap and the clipboard call — gesture context dies at the first microtask boundary. ClipboardItem({ 'text/plain': promiseOfBlob }) is the workaround Safari shipped in 13.4 specifically for async clipboard content; Chrome/Firefox accept it too." },
         { "date": "2026-05-02", "what": "Cross-project session-end skill system shipped — chad-wiki gets 3 canonical docs (session-end-protocol, project-checklist, collaboration-patterns); two user-level Claude Code skills (/session-end-protocol and /new-project-bootstrap) consume them with --resync via WIKI:BEGIN/END markers; project-dashboard CLAUDE.md trimmed to a per-project hooks table linking the wiki canonical. One phrase ('session-end') now runs the protocol in any equipped project.", "tags": ["meta", "skills", "wiki", "infrastructure", "single-source", "workflow"], "learned": "Inline-snapshot + resync markers gives single-source-of-truth without sacrificing offline reliability — the skill works without the wiki online, and a one-command refresh keeps it from drifting. Pattern reusable for any future skill." },
