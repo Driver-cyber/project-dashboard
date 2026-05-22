@@ -336,6 +336,17 @@
       letter-spacing: 0.08em;
     }
     .np-note-date { font-size: 10px; color: var(--ink-3); }
+    .np-note-route {
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 10px;
+      color: var(--ink-3);
+      margin-left: 6px;
+      padding: 1px 6px;
+      border: 1px solid var(--ink-3);
+      border-radius: 8px;
+      opacity: 0.75;
+    }
+    .np-note-route::before { content: '→ '; opacity: 0.6; }
     .np-note-text {
       font-size: 13px;
       color: var(--ink-2);
@@ -2193,7 +2204,14 @@
     document.getElementById('np-archive-count').textContent = archived.length;
     archEl.style.display = archived.length ? 'block' : 'none';
     if (archived.length) {
-      archBody.innerHTML = archived.map(n => `<div class="np-note"><div class="np-note-head"><span class="np-note-proj">${esc(projName(n.project))}</span><span class="np-note-date">${esc(fmtDate(n.createdAt))}</span></div><div class="np-note-text">${esc(n.text)}</div><div class="np-note-actions"><button data-act="restore" data-id="${n.id}">Restore</button><button data-act="delete" data-id="${n.id}">Delete</button></div></div>`).join('');
+      const archSorted = [...archived].sort((a, b) =>
+        (b.archivedAt || b.createdAt || '').localeCompare(a.archivedAt || a.createdAt || '')
+      );
+      archBody.innerHTML = archSorted.map(n => {
+        const dateShown = n.archivedAt || n.createdAt;
+        const routeBadge = n.routedTo ? `<span class="np-note-route">${esc(n.routedTo)}</span>` : '';
+        return `<div class="np-note"><div class="np-note-head"><span class="np-note-proj">${esc(projName(n.project))}${routeBadge}</span><span class="np-note-date">${esc(fmtDate(dateShown))}</span></div><div class="np-note-text">${esc(n.text)}</div><div class="np-note-actions"><button data-act="restore" data-id="${n.id}">Restore</button><button data-act="delete" data-id="${n.id}">Delete</button></div></div>`;
+      }).join('');
       archBody.querySelectorAll('button[data-act]').forEach(b => b.addEventListener('click', () => noteAction(b.dataset.act, b.dataset.id)));
     }
   }
@@ -2202,8 +2220,15 @@
     if (act === 'edit') { startEditNote(id); return; }
     const notes = loadNotes(), idx = notes.findIndex(n => n.id === id);
     if (idx < 0) return;
-    if (act === 'archive') notes[idx].status = 'archived';
-    else if (act === 'restore') notes[idx].status = 'active';
+    if (act === 'archive') {
+      notes[idx].status = 'archived';
+      notes[idx].archivedAt = new Date().toISOString();
+    }
+    else if (act === 'restore') {
+      notes[idx].status = 'active';
+      delete notes[idx].archivedAt;
+      delete notes[idx].routedTo;
+    }
     else if (act === 'delete') notes.splice(idx, 1);
     syncSave(notes);
     renderNotes();
