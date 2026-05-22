@@ -1,5 +1,32 @@
 [
   {
+    "date": "2026-05-22",
+    "project": "Project Dashboard",
+    "repo": "project-dashboard",
+    "completed": "Closed three discoverability gaps in one session, all sharing the same shape (work happens, gets recorded somewhere, but the surface that should surface it lags). (1) Notepad archive view now shows archivedAt + routedTo per entry — fixes the gap that started the session, where a forensic git-log across 4 repos was needed to trace where 8 swept inbox notes had landed. Spec bumped at the chad-wiki layer (inbox-source.md v1.0.0 → v1.1.0, session-end-protocol.md v1.1.0 → v1.2.0); UI change downstream in project-dashboard/index.html. (2) Cross-repo edit etiquette added to collaboration-patterns.md v1.1.0 — every session anchored in repo A now must annotate other-repo edits with a `cross-repo:` line in A's commit body. (3) SessionStart hook + new /wiki-sync skill: ~/.claude/hooks/chad-wiki-check.sh auto-discovers wiki-inlined skills and prints a one-line notification when any are behind canonical; /wiki-sync resyncs the stale ones. Plus a quick audit pass locked the canonical tracker schema (project-checklist v1.1.0) and documented the manifest-CI push-race in map.md v1.4.1.",
+    "learned": "When something feels broken but every individual layer works correctly, the failure is in the *seams* between layers — not in any layer itself. Today's symptom (inbox notes 'disappeared') was actually three different seam-gaps producing similar invisibility: gist→tracker (no archivedAt/routedTo), repo→repo (no cross-repo: line), wiki→skill (snapshot drift). Each fix lives at the seam, not at either endpoint. The diagnostic instinct (forensic git-log) is itself a symptom — the system was forcing manual reconstruction work that the surfaces should provide passively.",
+    "session_note": "Day-long arc that started with 'where did my inbox notes go?' and turned into 4 commits to chad-wiki, 4 commits to project-dashboard, 2 new user-level skill files, 1 new SessionStart hook script, and an honest audit of the whole cross-repo setup. Spans two calendar days due to crossing midnight; commits stamped 2026-05-21 in git. Anchored session-end in project-dashboard (chad-wiki has no tracker by design — it's the meta-project). Used the brand-new cross-repo etiquette in our own commit messages — eating our own dog food immediately.",
+    "tags": [
+      "infrastructure",
+      "wiki",
+      "notepad",
+      "discoverability",
+      "skills",
+      "hooks",
+      "meta",
+      "audit",
+      "cross-repo"
+    ],
+    "artifact": "index.html",
+    "intensity": "marathon",
+    "mood": "🛠️",
+    "aha": "Drift is the real risk in a convention-load-bearing system, not complexity. Mechanizing the drift checks (SessionStart hook, freshness Preflight, routedTo metadata, cross-repo annotations) is the single highest-leverage durable investment — it converts 'wait, where did that go' forensics into passive visibility.",
+    "first_ever": "First SessionStart hook in Chad's ~/.claude config; first user-level skill (/wiki-sync) born to mechanize the staleness of other skills.",
+    "real_world_use": true,
+    "energy_in": "high",
+    "wonder": "The system actually gets healthier the more it's used, as long as the conventions get mechanized faster than they drift. Today every fix made the next 'wait, where did that go' debugging session less likely to ever happen."
+  },
+  {
     "date": "2026-05-06",
     "project": "Project Dashboard",
     "repo": "project-dashboard",
