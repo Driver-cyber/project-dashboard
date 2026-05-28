@@ -1826,6 +1826,44 @@
     </article>`;
   }
 
+  /* ---------- TRACKER SCHEMA ----------
+     One funnel for every tracker's #tracker-data, whatever shape it ships in.
+     Canonical form (the only shape the rest of the app reads):
+       { project, description, updated, phase,
+         columns: [ { name, sub, priorities: [{ title, ... }], backlog: [...], shipped: [...] } ] }
+     The legacy flat form (columns as section-name strings + top-level
+     priorities/backlog/shipped arrays) is folded into a single column here.
+     A tracker can migrate to the nested form on its own schedule — once it
+     does, passing it through this function is a no-op. */
+  function toPriority(p) {
+    return typeof p === 'string' ? { title: p } : (p || {});
+  }
+  function toColumn(col, fallbackName) {
+    return {
+      name: col.name || fallbackName,
+      sub: col.sub || '',
+      priorities: (col.priorities || []).map(toPriority),
+      backlog: col.backlog || [],
+      shipped: col.shipped || [],
+    };
+  }
+  function normalizeTracker(raw, repo) {
+    const t = raw || {};
+    const project = t.project || repo || '';
+    const hasNestedColumns = Array.isArray(t.columns)
+      && t.columns.some(c => c && typeof c === 'object');
+    const columns = hasNestedColumns
+      ? t.columns.filter(c => c && typeof c === 'object').map(c => toColumn(c, project))
+      : [toColumn({ priorities: t.priorities, backlog: t.backlog, shipped: t.shipped }, project)];
+    return {
+      project,
+      description: t.description || '',
+      updated: t.updated || '',
+      phase: t.phase || '',
+      columns,
+    };
+  }
+
   /* ---------- FETCH ---------- */
   async function fetchTracker({ repo, tracker }) {
     const url = `https://api.github.com/repos/${ORG}/${repo}/contents/${tracker}.html`;
@@ -1837,7 +1875,7 @@
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const el = doc.querySelector('#tracker-data');
     if (!el) throw new Error('No #tracker-data block');
-    return JSON.parse(el.textContent);
+    return normalizeTracker(JSON.parse(el.textContent), repo);
   }
 
   /* ---------- FILTER ---------- */
