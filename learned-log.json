@@ -505,5 +505,23 @@
     "real_world_use": true,
     "energy_in": "high",
     "curiosity_trail": "Should the cross-repo learned-log backlog item (capturing cli-cards / kasette / garden-app sessions into project-dashboard's log with correct `repo` field) be the next priority now that cli-cards is the first non-dashboard project with its own learned-log? Galaxy would tell a more complete story."
+  },
+  {
+    "date": "2026-07-24",
+    "project": "Chiaro Tinker Tools",
+    "repo": "chiaro-tinker-tools",
+    "completed": "Shipped the Closing tab (v0.4.0) and first dogfood iteration (v0.5.0): read-only held-day ledger (intentions met/entrusted, hours given, shelf grove, tomorrow glance) over a chiaroscuro night field cannibalized from garden-app's calm screen, the optional per-date 'It was enough.' check, closing prompt pool, Blueprint daily-notes drawer, and the field raised behind all windows. CTT's Opening -> work -> Closing arc is complete.",
+    "learned": "Cannibalize the mechanism, not the material: garden's traveling-wave blade field ported to CTT as ~20 lines of vanilla JS, but re-skinned amber-on-walnut; the palette is the app's soul and doesn't transfer.",
+    "session_note": "Phase-gate red team landed Confirmed/Confirmed/Scheduled; carry-to-tomorrow on unmet intentions deliberately deferred by Chad pending wear-in.",
+    "tags": [
+      "css-animation",
+      "cdp-testing",
+      "anti-engagement",
+      "single-file"
+    ],
+    "struggle": "The absolutely-positioned night field measures against the pane, not the viewport - adding padding to the enough-check silently pushed the grass 50px down; caught by asserting geometry via getBoundingClientRect in the CDP test instead of eyeballing screenshots.",
+    "artifact": "src/index.html",
+    "intensity": "session",
+    "real_world_use": true
   }
 ]
