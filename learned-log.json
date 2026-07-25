@@ -523,5 +523,43 @@
     "artifact": "src/index.html",
     "intensity": "session",
     "real_world_use": true
+  },
+  {
+    "date": "2026-07-24",
+    "project": "CTT Mobile",
+    "repo": "chiaro-tinker-tools-mobile",
+    "completed": "Founded the mobile-surface repo: CTT forked verbatim at v0.5.0 and made a true installable PWA (manifest, shell-only service worker with silent network-first updates, mask-glyph icon set, iOS standalone chrome + safe areas), live at chiaromobile.chadstewartcpa.com.",
+    "learned": "PWA installs, localStorage, and sync config are all per-origin, so the custom domain must be the canonical door; and a green Cloudflare check plus a white page means the build output directory is wrong (a dark-material app that reaches the browser always paints dark).",
+    "session_note": "The surface split: desktop and mobile repos share one soul and one synced schema (lockstep is now a constitution rule in both). Offline reload verified headlessly before ship; Chad had it synced on his iPhone the same morning.",
+    "tags": [
+      "pwa",
+      "service-worker",
+      "cloudflare",
+      "ios",
+      "repo-split"
+    ],
+    "first_ever": "First installable PWA shipped end-to-end",
+    "real_world_use": true,
+    "intensity": "deep_dive"
+  },
+  {
+    "date": "2026-07-25",
+    "project": "Chiaro Tinker Tools",
+    "repo": "chiaro-tinker-tools",
+    "completed": "CTT v0.6.0-0.6.2: the tinker's bell (ember-field timer, block-linked durations via a per-row bell button, one soft ring muted by default, pulse-until-noticed, pop-out into an always-on-top Document Picture-in-Picture window) plus derived code hints in the time-log dropdown.",
+    "learned": "Inline onclick attributes resolve against the document a node currently lives in - controls that move into a PiP window go dead unless wired with addEventListener, which travels with the node across documents.",
+    "struggle": "The CDP test harness called bell functions directly and completely missed the dead-button class of bug; Chad found it in his first five minutes of dogfooding.",
+    "aha": "Chad's 'weird limited mini window' had a name - Document Picture-in-Picture - and it fit the tinker's bell exactly: always-on-top over other apps, which is where the pulse actually gets seen.",
+    "session_note": "Code hints derived from linked step names at render time (no schema change, can't go stale). Fix verified by dispatching clicks inside the PiP target's own JS context - the test scripts click like a human now.",
+    "tags": [
+      "timer",
+      "document-pip",
+      "webaudio",
+      "ux",
+      "dogfooding"
+    ],
+    "mood": "🔔",
+    "real_world_use": true,
+    "intensity": "deep_dive"
   }
 ]
