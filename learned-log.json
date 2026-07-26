@@ -561,5 +561,42 @@
     "mood": "🔔",
     "real_world_use": true,
     "intensity": "deep_dive"
+  },
+  {
+    "date": "2026-07-26",
+    "project": "CTT Mobile",
+    "repo": "chiaro-tinker-tools-mobile",
+    "completed": "CTT Mobile v0.2.0: the tinker's bell and code hints backported from desktop, plus a mobile-native full-screen mode - a button grows the bell face to fill the phone, an X (safe-area aware) shrinks it back without stopping the timer - and a Screen Wake Lock that keeps the phone awake while full-screen and running.",
+    "learned": "Screen Wake Lock is released silently by the OS on backgrounding and must be re-armed on visibilitychange; and a wall-clock endAt timestamp means a suspended PWA timer never drifts - it catches up the instant the app reopens.",
+    "session_note": "Full-screen implemented as a pure CSS state on the same DOM nodes, deliberately avoiding the cross-document handler scar from the desktop PiP round.",
+    "tags": [
+      "pwa",
+      "wake-lock",
+      "css",
+      "mobile"
+    ],
+    "intensity": "session",
+    "mood": "🔔",
+    "real_world_use": true
+  },
+  {
+    "date": "2026-07-26",
+    "project": "Chiaro Tinker Tools",
+    "repo": "chiaro-tinker-tools",
+    "completed": "CTT v0.7.0 + CTT Mobile v0.3.0, shipped in lockstep: the timer visual system - the bell's pixel grid became a swappable renderer registry with six countdown visuals (Ember grid, Balance, Moon, The Thinker, Lantern, Sundial), a random draw per timer, and a dropdown that hot-swaps visuals mid-run while preserving timer state.",
+    "learned": "The renderer-contract pattern: visuals as pure functions of elapsed fraction (render(p) -> SVG) own nothing - no clocks, no state, no sound - so adding a visual is appending one object, and hot-swapping is just re-rendering at the current p.",
+    "session_note": "Geometry lifted verbatim from a prototype built in a separate claude.ai planning chat - first time a design handoff between two Claude sessions went straight to production. Harness scar: a timer left running by an earlier test step repainted over staged screenshot states; stop the brain before staging views.",
+    "tags": [
+      "svg",
+      "architecture",
+      "renderer-registry",
+      "cross-session-handoff"
+    ],
+    "struggle": "A phantom bug that was just the live 1 Hz tick winning a race against staged test states.",
+    "aha": "A visual that owns nothing can be swapped mid-run for free - state preservation falls out of the architecture instead of being a feature.",
+    "first_ever": "Design handoff from a claude.ai planning session built to production in Claude Code",
+    "intensity": "deep_dive",
+    "mood": "🌗",
+    "real_world_use": true
   }
 ]
