@@ -598,5 +598,26 @@
     "intensity": "deep_dive",
     "mood": "🌗",
     "real_world_use": true
+  },
+  {
+    "date": "2026-07-26",
+    "project": "Chiaro Tinker Tools",
+    "repo": "chiaro-tinker-tools",
+    "completed": "The scratch sheet: an 8x25 formula grid living behind a dim glyph in the appbar, summonable over any room. Shipped v0.8.0 then iterated live through v0.8.3 - arrow-key navigation, Excel-style point-to-refer (click cells mid-formula to build references), accounting number format, and a wide composition bar with source-cell highlighting - each in same-day lockstep with the mobile sibling.",
+    "learned": "A hand-rolled recursive-descent expression parser is about 80 lines and needs no library - and cycle detection is just a visiting-set threaded through the memo. Also: the pocket-tool pattern (tabs are rooms, glyphs are tools) keeps a growing app's header from becoming a junk drawer.",
+    "session_note": "The first real schema addition since the repo split, so the lockstep rule finally bit for real: db.scratch landed in both repos the same hour, verified by staging a pre-scratch database and cold-booting it with a canary field.",
+    "tags": [
+      "parser",
+      "spreadsheet",
+      "schema-migration",
+      "ux-patterns"
+    ],
+    "struggle": "A phantom 'nothing persists' bug that was the test harness, not the app - unfocused headless browsers move activeElement without firing focus/blur events.",
+    "aha": "Excel's point-to-refer is really just 'is the caret after an operator?' - one regex decides between inserting a reference and committing the cell.",
+    "artifact": "src/index.html",
+    "intensity": "marathon",
+    "mood": "▦",
+    "real_world_use": true,
+    "energy_in": "high"
   }
 ]
