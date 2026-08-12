@@ -619,5 +619,56 @@
     "mood": "▦",
     "real_world_use": true,
     "energy_in": "high"
+  },
+  {
+    "date": "2026-08-12",
+    "project": "Chiaro Tinker Tools",
+    "repo": "chiaro-tinker-tools",
+    "completed": "Shipped Gertie — a 1966 Volvo P1800S restoration log — co-hosted inside CTT at /gertie/ with her own PWA layer, then hardened her save path after notes vanished on the iPhone.",
+    "learned": "A service worker's scope is its own directory: a worker at /gertie/sw.js cannot reach up and intercept the app at the origin root — which is what makes co-hosting a second app inside one repo safe.",
+    "session_note": "The vanishing notes could not be reproduced in Chromium at phone size, so instead of guessing at Safari the three genuinely fragile things were fixed outright: a dead window.storage branch that would have swallowed reads and writes silently, a 260ms debounce that iOS kills along with a backgrounded page, and swallowed storage errors. Chad confirmed persistence afterwards.",
+    "tags": [
+      "service-worker",
+      "pwa",
+      "localstorage",
+      "ios",
+      "safari",
+      "debounce"
+    ],
+    "struggle": "Chasing a bug on a device I cannot see, with a browser that behaves differently from the one I can test.",
+    "artifact": "src/gertie/index.html",
+    "intensity": "deep_dive",
+    "mood": "🔦",
+    "aha": "When you cannot reproduce a bug, you can still delete every place it could be hiding — and make the next failure announce itself instead of being silent.",
+    "curiosity_trail": "iOS keeps separate storage jars for a home-screen PWA and the same page in Safari — how many 'my data vanished' reports are actually that?",
+    "real_world_use": true,
+    "energy_in": "high",
+    "wonder": "The save receipt started in the footer, below 49 tasks. Chad asked where the save button was, and the honest answer turned out to be that there shouldn't be one — but the reassurance had to come find him. It floats now."
+  },
+  {
+    "date": "2026-08-12",
+    "project": "Chiaro Tinker Tools",
+    "repo": "chiaro-tinker-tools",
+    "completed": "Audited PJT v4.0.0's handoff against CTT and fixed the data-destroying import bug it surfaced: applyImport now takes a one-step undo snapshot before overwriting anything, on both surfaces.",
+    "learned": "Documentation that tells the user to perform a safety step the code could perform itself is a bug report written in prose — a pattern worth grepping any project's guide text for.",
+    "session_note": "PJT found this in its own pre-release audit; CTT had inherited the same defect and worse, because backupNow() is Tauri-only so the web/PWA build had no file backup at all, and the result syncs — a wrong file on the phone would reach the desktop. Merge needed guarding too, which PJT's own fix had not covered: days are combined with Object.assign, so any date in both files is silently overwritten.",
+    "tags": [
+      "data-safety",
+      "import",
+      "undo",
+      "localstorage",
+      "sync",
+      "code-review"
+    ],
+    "struggle": "The first attempt warned about a failed snapshot with a transient flash — which save() overwrote a moment later, making the one warning that actually mattered invisible. Caught it in testing, not in review.",
+    "artifact": "src/index.html",
+    "intensity": "session",
+    "mood": "🛟",
+    "aha": "A guard that cannot report its own failure is not a guard, it is the appearance of one. When the snapshot cannot be written the import now blocks and asks.",
+    "first_ever": "First time a handoff document from one of my own projects found a live bug in another",
+    "curiosity_trail": "CTT has no tests at all, and the schema lockstep between the two sibling repos is enforced by nothing but memory — a corpus test run through both repos' normalize() is next.",
+    "real_world_use": true,
+    "energy_in": "high",
+    "wonder": "Two projects, built months apart, sharing a lineage and therefore sharing a bug. Writing the first one's lessons down is what caught the second one."
   }
 ]
