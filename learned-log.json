@@ -670,5 +670,32 @@
     "real_world_use": true,
     "energy_in": "high",
     "wonder": "Two projects, built months apart, sharing a lineage and therefore sharing a bug. Writing the first one's lessons down is what caught the second one."
+  },
+  {
+    "date": "2026-08-12",
+    "project": "Chiaro Tinker Tools",
+    "repo": "chiaro-tinker-tools",
+    "completed": "Built CTT's first test suite — a jsdom harness that runs a corpus of legacy-shaped save files through BOTH sibling repos' normalize() and asserts they agree, wired to GitHub Actions on both sides.",
+    "learned": "A test harness isn't the fake browser — it's the rigging you write to strap YOUR app into it; and a guard must be proven to fail, not just to pass, or it retires the vigilance it hasn't replaced.",
+    "session_note": "Schema lockstep between the two CTT surfaces had been enforced by nothing but Claude remembering. Chad asked what a harness and a GitHub Action actually were, mid-build — the explanation is now in test/README.md.",
+    "tags": [
+      "testing",
+      "jsdom",
+      "ci",
+      "github-actions",
+      "schema-migration",
+      "node-test-runner"
+    ],
+    "struggle": "The suite went fully red on its first real run in the repo because it had been verified under jsdom 30 but pinned to ^26, which doesn't put TextEncoder on window.",
+    "artifact": "test/lockstep.test.js",
+    "intensity": "deep_dive",
+    "mood": "🕸️",
+    "aha": "The forward-compat path isn't normalize() — it's normalize() THEN runMigrations(); testing the obvious-looking half would have missed most of the surface it was built to guard.",
+    "frustration_peak": "Nine tests failing at once with 'cancelled by parent' — which turned out to be one setup error wearing nine masks.",
+    "curiosity_trail": "jsdom parses the stylesheet, so the CSS shorthand-flattens-longhand trap that has bitten three times could become an actual lint rule instead of a fourth note in a decisions file.",
+    "first_ever": "First automated test suite and first CI test gate across two repos",
+    "real_world_use": true,
+    "energy_in": "medium",
+    "wonder": "It found a latent boot crash on its very first run — a guard sitting one line away from an identical unguarded call, where somebody's knowledge that a field could be missing had stopped just short."
   }
 ]
