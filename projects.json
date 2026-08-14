@@ -1,6 +1,8 @@
 [
   { "repo": "project-dashboard", "tracker": "project-dashboard-tracker" },
   { "repo": "cli-cards",         "tracker": "cli-cards-tracker"         },
+  { "repo": "chiaro-tinker-tools", "tracker": "chiaro-tinker-tools-tracker" },
+  { "repo": "chiaro-tinker-tools-mobile", "tracker": "chiaro-tinker-tools-mobile-tracker" },
   { "repo": "kasette",           "tracker": "cassette-tracker"          },
   { "repo": "tiny-path",         "tracker": "tiny-path-tracker"         },
   { "repo": "cadence",           "tracker": "cadence-tracker"           },
