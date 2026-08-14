@@ -6,5 +6,6 @@
   { "repo": "cadence",           "tracker": "cadence-tracker"           },
   { "repo": "ORDOBook",          "tracker": "ordobook-tracker"          },
   { "repo": "wild-stewart-homeschool", "tracker": "wild-stewart-tracker"  },
-  { "repo": "garden-app",        "tracker": "garden-app-tracker"        }
+  { "repo": "garden-app",        "tracker": "garden-app-tracker"        },
+  { "repo": "glass-ball",        "tracker": "glass-ball-tracker"        }
 ]
